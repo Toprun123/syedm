@@ -2013,11 +2013,7 @@ document.getElementById('author').innerText = quote.author;
 document.getElementById('search').addEventListener('keydown', function(event) {
     if (event.key === 'Enter') {
         var query = document.getElementById('search').value;
-        if (query.startsWith('/')) {
-            window.location.href = `file://${query}`;
-        } else {
-            window.location.href = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
-        }
+        window.location.href = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
     }
 });
 
