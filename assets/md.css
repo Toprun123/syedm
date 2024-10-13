@@ -54,11 +54,11 @@ body {
   
   /*Links*/
   a {
-    color:            #6392c2;
+    color:            #9dc4eb;
     text-decoration:  none;}
   a:hover{
     /* text-decoration: underline; */
-    color:            #4183C4;
+    color:            #639dd8;
   }
   a.absent {
     color:            #cc0000; }
