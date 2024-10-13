@@ -38,7 +38,9 @@ body {
     padding-top:      10px;
     padding-bottom:   10px;
     padding-left:     25px;
-    padding-right:    25px; }
+    padding-right:    25px;
+    overflow-x: hidden;
+  }
   
   body > *:first-child {
     margin-top:   0 !important; }
@@ -560,11 +562,32 @@ body {
       -webkit-print-color-adjust: exact;
       print-color-adjust: exact;
   }
-  @media screen and (min-width: 914px) {
+  .alt {
+    display: none;
+  }
+  @media screen and (min-width: 840px) {
       body {
-          width:              854px;
+          width:              840px;
           margin:             0 auto;
       }
+  }
+  @media screen and (max-width: 839px) {
+    .matrix {
+      display: none;
+    }
+    .img {
+      width: 50%;
+      min-width: 318px;
+      margin-left: 10%;
+    }
+  }
+  @media screen and (max-width: 700px) {
+    .hoplin {
+      display: none;
+    }
+    .alt {
+      display: block;
+    }
   }
   @media print {
       table, pre {
