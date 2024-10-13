@@ -29,9 +29,17 @@ SOFTWARE.
  */
 
 /*Main body*/
+
+@font-face {
+  font-family: 'Fantasque Sans Mono';
+  src: url('https://cdn.jsdelivr.net/gh/ryanoasis/nerd-fonts@3.2.1/patched-fonts/FantasqueSansMono/Regular/FantasqueSansMNerdFont-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 body {
-    font-family:      Helvetica, arial, sans-serif;
-    font-size:        18px;
+    font-family:      "Fantasque Sans Mono", Helvetica, arial, sans-serif;
+    font-size:        20px;
     line-height:      1.4em;
     background-color: #080014;
     color: white;
@@ -86,6 +94,9 @@ body {
   .spaceless {
     margin: 0 !important;
   }
+  .matrix {
+    margin-top: 30px;
+  }
   h3 {
     position: relative;
     left: -10px;
@@ -109,7 +120,8 @@ body {
     font-size: inherit; }
   
   h1 {
-    font-size: 32px;
+    font-size: 34px;
+    margin: 0;
     color: white; }
   
   h2 {
@@ -389,6 +401,7 @@ body {
     margin-left: 15px;
   }
   .line {
+    margin: 0 !important;
     width: 110%;
     max-width: 110%;
     position: relative;
