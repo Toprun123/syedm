@@ -2013,7 +2013,16 @@ document.getElementById('author').innerText = quote.author;
 document.getElementById('search').addEventListener('keydown', function(event) {
     if (event.key === 'Enter') {
         var query = document.getElementById('search').value;
-        window.location.href = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+        const urlRegex = /^(https?:\/\/)?([a-zA-Z0-9.-]+)(\.[a-zA-Z]{2,})(:[0-9]{1,5})?(\/\S*)?$/;
+        if (urlRegex.test(query)) {
+            if (!/^https?:\/\//i.test(query)) {
+                query = 'http://' + query;
+            }
+            window.location.href = query;
+        } else {
+            const searchQuery = encodeURIComponent(query);
+            window.location.href = 'https://www.google.com/search?q=' + searchQuery;
+        }
     }
 });
 
