@@ -68,8 +68,8 @@ body::before {
     display: block;
     font-size: 20px;
     font-family: Operator Mono Lig;
-    width: 100%;
     font-style: italic;
+    width: 100%;
     font-weight: bold;
     padding-bottom: 10px;
 }
