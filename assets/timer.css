@@ -18,7 +18,9 @@ body {
     place-items: center;
     height: 100%;
     background-color: #190d37;
-    background-image: url(assets/timer_bg.gif);
+    background-image: url(../assets/timer_bg.gif);
+    background-size: 100% auto;
+    background-repeat: no-repeat;
 }
 
 body::before {
@@ -28,7 +30,7 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: #090020b7;
+    background-color: #0900208a;
     z-index: -1;
 }
 

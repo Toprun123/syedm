@@ -45,7 +45,7 @@ function prettify(ms) {
 }
 
 function play() {
-    const audio = new Audio('assets/timer.wav');
+    const audio = new Audio('../assets/timer.wav');
     audio.play();
 }
 
