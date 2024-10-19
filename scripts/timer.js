@@ -13,7 +13,7 @@ reload();
 update();
 
 function reload() {
-    fetch("http://api.aladhan.com/v1/timingsByCity/"
+    fetch("https://api.aladhan.com/v1/timingsByCity/"
         +today
         +"?city=Jeddah&country=Saudi+Arabia&method=4&adjustment=1")
        .then(response => response.json())
