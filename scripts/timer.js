@@ -50,11 +50,11 @@ function update() {
         } else {
             elem("prayer-time", "No prayers left for today!");
         }
-        if (time_past_prayer > 7 && time_past_prayer < 8) {
+        if (timer.running && time_past_prayer > 7 && time_past_prayer < 8) {
             timer.pause();
             play();
         }
-        if (timer.get(1)==1200) {
+        if (timer.running && timer.get(1)==1200) {
             timer.pause();
             play();
         }
