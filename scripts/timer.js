@@ -45,7 +45,7 @@ function update() {
         ];
         var time_to_next_prayer = prettify(Math.min(...times_rel_prayer.filter(x=>x>0))||0);
         var time_past_prayer    = (Math.abs(Math.max(...times_rel_prayer.filter(x=>x<0)))||0)/60000;
-        if (time_to_next_prayer != "Infinity:Infinity:Infinity.N") {
+        if (time_to_next_prayer != "Infinity:NaN:NaN.N") {
             elem("prayer-time", "Time to next prayer: "+time_to_next_prayer);
         } else {
             elem("prayer-time", "No prayers left for today!");
