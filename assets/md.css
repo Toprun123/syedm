@@ -3,8 +3,11 @@
 Based on Chris Patuzzo's github.css (https://gist.github.com/tuzz/3331384).
 
 
-author: Fabrizio Musacchio (https://www.fabriziomusacchio.com)
+original author: Fabrizio Musacchio (https://www.fabriziomusacchio.com)
 date: 03.01.2020
+
+edited by: Syed Daanish (https://www.sixzix.com)
+date: 20.10.2024
 
 License:
 
@@ -30,15 +33,10 @@ SOFTWARE.
 
 /*Main body*/
 
-@font-face {
-  font-family: 'Fantasque Sans Mono';
-  src: url('https://cdn.jsdelivr.net/gh/ryanoasis/nerd-fonts@3.2.1/patched-fonts/FantasqueSansMono/Regular/FantasqueSansMNerdFont-Regular.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}
+@import url('./fonts.css');
 
 body {
-    font-family:      "Fantasque Sans Mono", Helvetica, arial, sans-serif;
+    font-family:      "FantasqueSansMNerdFont", monospace;
     font-size:        20px;
     line-height:      1.4em;
     background-color: #080014;
@@ -171,6 +169,7 @@ body {
   ul li,ol li{
     margin-top:     .15em;
     margin-bottom:  .15em;
+    font-family: "HurmitNerdFont", monospace;
   }
   ul li li{
     margin-left:    -15px;

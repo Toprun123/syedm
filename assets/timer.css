@@ -1,5 +1,7 @@
+@import url('./fonts.css');
+
 * {
-    font-family: FantasqueSansM Nerd Font Mono;
+    font-family: "FantasqueSansMNerdFontMono";
     color: white;
     font-size: 25px;
     line-height: 97%;
@@ -54,7 +56,7 @@ body::before {
 }
 
 table * {
-    font-family: Operator Mono Lig;
+    font-family: "OperatorMonoLig";
     font-style: italic;
 }
 
