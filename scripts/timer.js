@@ -13,9 +13,9 @@ reload();
 update();
 
 function reload() {
-    fetch("https://api.aladhan.com/v1/timingsByCity/"
-        +today
-        +"?city=Jeddah&country=Saudi+Arabia&method=4&adjustment=1")
+    fetch(  "https://api.aladhan.com/v1/timingsByCity/"
+            +today
+            +"?city=Jeddah&country=Saudi+Arabia&method=4&adjustment=1")
        .then(response => response.json())
        .then(data => {
            pub_data = data.data;
@@ -54,7 +54,7 @@ function update() {
             timer.pause();
             play();
         }
-        if (timer.running && timer.get(1)==1200) {
+        if (timer.running && timer.get(1)>1200) {
             timer.pause();
             play();
         }
