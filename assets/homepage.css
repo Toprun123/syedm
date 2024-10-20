@@ -29,6 +29,18 @@ body::before {
     z-index: -1;
 }
 
+.main-container {
+    height: 100%;
+    width: 100%;
+    display: grid;
+    place-items: center;
+}
+
+label {
+    height: 99vh;
+    width: 99vw;
+}
+
 .center {
     width: 745px;
     padding: 25px;
