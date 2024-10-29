@@ -574,6 +574,11 @@ body {
       -webkit-print-color-adjust: exact;
       print-color-adjust: exact;
   }
+
+  hr {
+    color: #0000;
+  }
+
   .alt {
     display: none;
   }
