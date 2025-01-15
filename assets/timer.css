@@ -1,114 +1,115 @@
-@import url('./fonts.css');
+@import url("./fonts.css");
 
 * {
-    font-family: "FantasqueSansMNerdFontMono";
-    color: white;
-    font-size: 25px;
-    line-height: 97%;
-    overflow: hidden;
-    text-align: center;
+  font-family: "FantasqueSansMNerdFontMono";
+  color: white;
+  font-size: 25px;
+  line-height: 97%;
+  overflow: hidden;
+  text-align: center;
 }
 
-
 html {
-    height: 100%;
-    overflow: hidden;
+  height: 100%;
+  overflow: hidden;
 }
 
 body {
-    display: grid;
-    place-items: center;
-    height: 100%;
-    background-color: #190d37;
-    background-image: url(../assets/timer_bg.gif);
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
+  display: grid;
+  place-items: center;
+  height: 100%;
+  background-color: #190d37;
+  background-image: url(../assets/timer_bg.gif);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
 }
 
 body::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #0900208a;
-    z-index: -1;
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #0900208a;
+  z-index: -1;
 }
 
 .center {
-    width: 680px;
-    padding: 25px;
-    display: grid;
-    place-items: center;
-    background-color: #09002085;
-    border-radius: 30px;
-    margin-bottom: 20px;
+  width: 680px;
+  padding: 25px;
+  display: grid;
+  place-items: center;
+  background-color: #09002085;
+  border-radius: 30px;
+  margin-bottom: 20px;
 }
 
 .container {
-    display: grid;
-    place-items: center;
+  display: grid;
+  place-items: center;
 }
 
-.prayer-container, .prayer-times, tbody {
-    width: 350px;
+.prayer-container,
+.prayer-times,
+tbody {
+  width: 350px;
 }
 
 table * {
-    font-family: "OperatorMonoLig";
-    font-style: italic;
+  font-family: "OperatorMonoLig";
+  font-style: italic;
 }
 
 td {
-    width: 50%;
-    padding: 5px;
-    text-align: center;
+  width: 50%;
+  padding: 5px;
+  text-align: center;
 }
 
 a {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 #total-time {
-    font-size: 40px;
-    background-color: #190d37;
-    border-radius: 30px;
-    padding: 20px;
-    margin: 10px;
+  font-size: 40px;
+  background-color: #190d37;
+  border-radius: 30px;
+  padding: 20px;
+  margin: 10px;
 }
 
 #run-time {
-    font-size: 30px;
-    margin-bottom: 10px;
+  font-size: 30px;
+  margin-bottom: 10px;
 }
 
 .controls {
-    margin: 20px;
+  margin: 20px;
 }
 
 .btn {
-    background-color: #b848ae;
-    color: #ffffff;
-    border: none;
-    padding: 20px 30px;
-    font-size: 50px;
-    cursor: pointer;
-    border-radius: 50px;
+  background-color: #b848ae;
+  color: #ffffff;
+  border: none;
+  padding: 20px 30px;
+  font-size: 50px;
+  cursor: pointer;
+  border-radius: 50px;
 }
 
 .setting-inp {
-    background-color: #00000000;
-    border: none;
-    text-align: left;
-    width: 150px;
-    margin-left: 7px;
+  background-color: #00000000;
+  border: none;
+  text-align: left;
+  width: 150px;
+  margin-left: 7px;
 }
 
 .setting-inp:focus {
-    outline: none;
+  outline: none;
 }
 
 .time {
-    padding-bottom: 5px;
+  padding-bottom: 5px;
 }

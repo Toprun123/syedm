@@ -1,88 +1,165 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>New Tab</title>
-        <link rel="stylesheet" href="../assets/homepage.css">
-    </head>
-    <body>
-        <label for="search">
-            <div class="main-container">
-                <div class="main">
-                    <div class="banner">
-                        Welcome <span class="styled-pink">$USER.</span>
-                    </div>
-    
-                    <div class="center">
-                        <div class="quote-container">
-                            <span id="quote" class="quote">There is no programming language, no matter how structured, that will prevent programmers from making bad programs.</span>
-                            <span class="author" id="author">Lawrence Flon</span>
-                        </div>
-                        <div class="searchbar">
-                            <div class="prompt">
-                                <span class="ln">╭─</span> <span class="uname">sixzix-admin</span>@<span class="hostname">nixos</span> in <span class="repo"> internet</span> on <span class="branch"> google.com</span><br>
-                                <span class="ln">╰─</span> <span class="branch">λ</span> <input autofocus type="text" id="search" class="search" placeholder=" Search the 󰖟 web, or type a  URL…">
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="links-container">
-                        <table class="links">
-                            <tr>
-                                <th>~/dev</th>
-                                <th>~/general</th>
-                                <th>~/fun</th>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <a href="https://github.com/Toprun123/"><img height="40px" src="https://img.shields.io/badge/Github-000?style=for-the-badge&logo=github&logoColor=white" alt="󰊤 github"></a>
-                                </td>
-                                <td>
-                                    <a href="https://chatgpt.com/"><img height="40px" src="https://img.shields.io/badge/ChatGPT-412991?style=for-the-badge&logo=openai&logoColor=white" alt="chatgpt"></a>
-                                </td>
-                                <td>
-                                    <a href="https://nerdfonts.com/cheat-sheet"><img height="40px" src="https://img.shields.io/badge/nerdfonts-F2712B?style=for-the-badge&logo=adobefonts&logoColor=white" alt="󰛖 nerdfonts"></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <a href="https://app.daily.dev/"><img height="40px" src="https://img.shields.io/badge/daily.dev-CE3DF3?style=for-the-badge&logo=dailydotdev&logoColor=white" alt="daily.dev"></a>
-                                </td>
-                                <td>
-                                    <a href="https://reddit.com/"><img height="40px" src="https://img.shields.io/badge/reddit-FF4500?style=for-the-badge&logo=reddit&logoColor=white" alt="󰑍 reddit"></a>
-                                </td>
-                                <td>
-                                    <a href="https://sixzix.com/"><img height="40px" src="https://img.shields.io/badge/sixzix-1875F3?style=for-the-badge&logo=sellfy&logoColor=white" alt=" sixzix"></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <a href="https://search.nixos.org/"><img height="40px" src="https://img.shields.io/badge/nixos-5277C3?style=for-the-badge&logo=nixos&logoColor=white" alt=" nixpkgs"></a>
-                                </td>
-                                <td>
-                                    <a href="https://classroom.google.com/u/1/"><img height="40px" src="https://img.shields.io/badge/classroom-0F9D58?style=for-the-badge&logo=googleclassroom&logoColor=white" alt="classroom"></a>
-                                </td>
-                                <td>
-                                    <a href="https://openguessr.com/"><img height="40px" src="https://img.shields.io/badge/openguessr-FF0000?style=for-the-badge&logo=maplibre&logoColor=white" alt="openguessr"></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <a href="http://localhost:8080"><img height="40px" src="https://img.shields.io/badge/localhost-000?style=for-the-badge&logo=codecrafters&logoColor=white" alt="󰖟 localhost"></a>
-                                </td>
-                                <td>
-                                    <a href="https://mail.zoho.com/"><img height="40px" src="https://img.shields.io/badge/zoho mail-FF9E0F?style=for-the-badge&logo=maildotru&logoColor=white" alt=" zoho mail"></a>
-                                </td>
-                                <td>
-                                    <a href="https://orteil.dashnet.org/cookieclicker/"><img height="40px" src="https://img.shields.io/badge/CookieClicker-84563c?style=for-the-badge&logo=cookiecutter&logoColor=white" alt="cookieclicker"></a>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>New Tab</title>
+    <link rel="stylesheet" href="../assets/homepage.css" />
+  </head>
+  <body>
+    <label for="search">
+      <div class="main-container">
+        <div class="main">
+          <div class="banner">
+            Welcome <span id="user" class="styled-pink">$USER</span>.
+          </div>
+
+          <div class="center">
+            <div class="quote-container">
+              <span id="quote" class="quote"
+                >There is no programming language, no matter how structured,
+                that will prevent programmers from making bad programs.</span
+              >
+              <span class="author" id="author">Lawrence Flon</span>
             </div>
-        </label>
-        <script src="../scripts/homepage.js"></script>
-    </body>
+            <div class="searchbar">
+              <div class="prompt">
+                <span class="ln">╭─</span>
+                <span id="uname" class="uname">sixzix-admin</span>@<span
+                  id="hostname"
+                  class="hostname"
+                  >hippo</span
+                >
+                in <span class="repo"> internet</span> on
+                <span id="se" class="branch"> google.com</span><br />
+                <span class="ln">╰─</span> <span class="branch">λ</span>
+                <input
+                  autofocus
+                  type="text"
+                  id="search"
+                  class="search"
+                  placeholder=" Search the 󰖟 web, or type a  URL…"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="links-container">
+            <table class="links">
+              <tr>
+                <th>~/dev</th>
+                <th>~/general</th>
+                <th>~/fun</th>
+              </tr>
+              <tr>
+                <td>
+                  <a href="https://github.com/Toprun123/"
+                    ><img
+                      height="40px"
+                      src="https://img.shields.io/badge/Github-000?style=for-the-badge&logo=github&logoColor=white"
+                      alt="󰊤 github"
+                  /></a>
+                </td>
+                <td>
+                  <a href="https://chatgpt.com/"
+                    ><img
+                      height="40px"
+                      src="https://img.shields.io/badge/ChatGPT-412991?style=for-the-badge&logo=openai&logoColor=white"
+                      alt="chatgpt"
+                  /></a>
+                </td>
+                <td>
+                  <a href="https://nerdfonts.com/cheat-sheet"
+                    ><img
+                      height="40px"
+                      src="https://img.shields.io/badge/nerdfonts-F2712B?style=for-the-badge&logo=fortran&logoColor=white"
+                      alt="󰛖 nerdfonts"
+                  /></a>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a href="https://app.daily.dev/"
+                    ><img
+                      height="40px"
+                      src="https://img.shields.io/badge/daily.dev-CE3DF3?style=for-the-badge&logo=dailydotdev&logoColor=white"
+                      alt="daily.dev"
+                  /></a>
+                </td>
+                <td>
+                  <a href="https://reddit.com/"
+                    ><img
+                      height="40px"
+                      src="https://img.shields.io/badge/reddit-FF4500?style=for-the-badge&logo=reddit&logoColor=white"
+                      alt="󰑍 reddit"
+                  /></a>
+                </td>
+                <td>
+                  <a href="https://sixzix.com/"
+                    ><img
+                      height="40px"
+                      src="https://img.shields.io/badge/sixzix-1875F3?style=for-the-badge&logo=sellfy&logoColor=white"
+                      alt=" sixzix"
+                  /></a>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a href="https://wiki.archlinux.org/"
+                    ><img
+                      height="40px"
+                      src="https://img.shields.io/badge/ArchWiki-1793D1?style=for-the-badge&logo=archlinux&logoColor=white"
+                      alt="󰣇 ArchWiki"
+                  /></a>
+                </td>
+                <td>
+                  <a href="https://classroom.google.com/u/1/"
+                    ><img
+                      height="40px"
+                      src="https://img.shields.io/badge/classroom-0F9D58?style=for-the-badge&logo=googleclassroom&logoColor=white"
+                      alt="classroom"
+                  /></a>
+                </td>
+                <td>
+                  <a href="https://openguessr.com/"
+                    ><img
+                      height="40px"
+                      src="https://img.shields.io/badge/openguessr-FF0000?style=for-the-badge&logo=maplibre&logoColor=white"
+                      alt="openguessr"
+                  /></a>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a href="http://localhost:8080"
+                    ><img
+                      height="40px"
+                      src="https://img.shields.io/badge/localhost-000?style=for-the-badge&logo=codecrafters&logoColor=white"
+                      alt="󰖟 localhost"
+                  /></a>
+                </td>
+                <td>
+                  <a href="https://mail.zoho.com/"
+                    ><img
+                      height="40px"
+                      src="https://img.shields.io/badge/zoho mail-FF9E0F?style=for-the-badge&logo=maildotru&logoColor=white"
+                      alt=" zoho mail"
+                  /></a>
+                </td>
+                <td>
+                  <a href="https://orteil.dashnet.org/cookieclicker/"
+                    ><img
+                      height="40px"
+                      src="https://img.shields.io/badge/CookieClicker-84563c?style=for-the-badge&logo=cookiecutter&logoColor=white"
+                      alt="cookieclicker"
+                  /></a>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </label>
+    <script src="../scripts/homepage.js"></script>
+  </body>
 </html>
