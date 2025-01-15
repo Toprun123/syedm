@@ -2439,7 +2439,7 @@ var param = p => {
 document.getElementById("user").innerHTML = param("user") ?? "$USER";
 document.getElementById("uname").innerHTML = param("uname") ?? "sixzix-admin";
 document.getElementById("hostname").innerHTML = param("hname") ?? "hippo";
-document.getElementById("se").innerHTML = " " + param("se") + ".com" ?? " google.com";
+document.getElementById("se").innerHTML = ` ${param("se") ?? "google"}.com`;
 
 document.getElementById("search").addEventListener("keydown", function(event) {
   if (event.key === "Enter") {
