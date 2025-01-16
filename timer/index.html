@@ -1,60 +1,69 @@
-<!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Timer</title>
-        <link rel="icon" href="../assets/timer.svg" type="image/svg+xml">
-        <link rel="stylesheet" href="../assets/timer.css">
-    </head>
-    <body>
-        <div class="container">
-            <div class="settings">
-                <span class="setting-title">Run time:</span><input type="text" name="setting-inp" id="run-time-inp" class="setting-inp" value="20" placeholder="in minutes"><br>
-            </div>
-            <div class="center">
-                <div class="time-container">
-                    <div class="datetime">
-                        <span class="time" id="date-text"></span> /
-                        <span class="time" id="date"></span>
-                    </div>
-                    <div class="time" id="total-time"></div>
-                    <div class="time" id="run-time"></div>
-                    <div class="time" id="prayer-time"></div>
-                </div>
-                <div class="controls">
-                    <button class="btn" id="start-btn"></button>
-                    <button class="btn" id="restart-btn"></button>
-                </div>
-            </div>
-            <div class="prayer-container">
-                <table class="prayer-times">
-                    <tbody>
-                        <tr>
-                            <td>Fajr</td>
-                            <td id="fajr-time"></td>
-                        </tr>
-                        <tr>
-                            <td>Zuhr</td>
-                            <td id="dhuhr-time"></td>
-                        </tr>
-                        <tr>
-                            <td>Asr</td>
-                            <td id="asr-time"></td>
-                        </tr>
-                        <tr>
-                            <td>Maghrib</td>
-                            <td id="maghrib-time"></td>
-                        </tr>
-                        <tr>
-                            <td>Isha</td>
-                            <td id="isha-time"></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Timer</title>
+    <link rel="icon" href="../assets/timer.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../assets/timer.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="settings">
+        <span class="setting-title">Run time:</span
+        ><input
+          type="text"
+          name="setting-inp"
+          id="run-time-inp"
+          class="setting-inp"
+          value="20"
+          placeholder="in minutes"
+        /><br />
+      </div>
+      <div class="center">
+        <div class="time-container">
+          <div class="datetime">
+            <span class="time" id="date-text"></span> /
+            <span class="time" id="date"></span>
+          </div>
+          <div class="time" id="total-time"></div>
+          <div class="time" id="run-time"></div>
+          <div class="time" id="prayer-time"></div>
         </div>
-        <script src="../scripts/timer_declarations.js"></script>
-        <script src="../scripts/timer.js"></script>
-    </body>
+        <div class="controls">
+          <button class="btn" id="start-btn"></button>
+          <button class="btn" id="restart-btn"></button>
+        </div>
+      </div>
+      <div class="prayer-container">
+        <table class="prayer-times">
+          <tbody>
+            <tr>
+              <td>Fajr</td>
+              <td id="fajr-time"></td>
+            </tr>
+            <tr>
+              <td>Zuhr</td>
+              <td id="dhuhr-time"></td>
+            </tr>
+            <tr>
+              <td>Asr</td>
+              <td id="asr-time"></td>
+            </tr>
+            <tr>
+              <td>Maghrib</td>
+              <td id="maghrib-time"></td>
+            </tr>
+            <tr>
+              <td>Isha</td>
+              <td id="isha-time"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <script src="../scripts/timer_declarations.js"></script>
+    <script src="../scripts/timer.js"></script>
+  </body>
 </html>
+
