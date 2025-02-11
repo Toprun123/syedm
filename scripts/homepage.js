@@ -2429,19 +2429,21 @@ const quote = quotes[rand];
 document.getElementById("quote").innerText = quote.quote;
 document.getElementById("author").innerText = quote.author;
 
-var param = p => {
-  var regex = new RegExp('[?&]' + p.replace(/[\[\]]/g, '\\$&') + '(=([^&#]*)|&|#|$)'),
+var param = (p) => {
+  var regex = new RegExp(
+      "[?&]" + p.replace(/[\[\]]/g, "\\$&") + "(=([^&#]*)|&|#|$)",
+    ),
     results = regex.exec(window.location.href);
   if (!results || !results[2]) return null;
-  return decodeURIComponent(results[2].replace(/\+/g, ' '));
-}
+  return decodeURIComponent(results[2].replace(/\+/g, " "));
+};
 
 document.getElementById("user").innerHTML = param("user") ?? "$USER";
 document.getElementById("uname").innerHTML = param("uname") ?? "sixzix-admin";
 document.getElementById("hostname").innerHTML = param("hname") ?? "hippo";
 document.getElementById("se").innerHTML = ` ${param("se") ?? "google"}.com`;
 
-document.getElementById("search").addEventListener("keydown", function(event) {
+document.getElementById("search").addEventListener("keydown", function (event) {
   if (event.key === "Enter") {
     var query = document.getElementById("search").value;
     const urlRegex =
@@ -2456,7 +2458,8 @@ document.getElementById("search").addEventListener("keydown", function(event) {
       if (param("se") == "DDG" || param("se") == "duckduckgo") {
         window.location.href = `https://www.duckduckgo.com/` + searchQuery;
       } else {
-        window.location.href = `https://www.${param("se") ?? "google"}.com/search?q=` + searchQuery;
+        window.location.href =
+          `https://www.${param("se") ?? "google"}.com/search?q=` + searchQuery;
       }
     }
   }
