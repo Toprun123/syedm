@@ -702,3 +702,100 @@ hr {
     padding: 2cm;
   }
 }
+
+.projects {
+  margin: 0px;
+  height: 250px;
+  width: 480px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+a.project {
+  display: block;
+  width: 200px;
+  height: 80px;
+  padding: 10px;
+  border: 1px solid #e8f2f8;
+  border-radius: 10px;
+  cursor: pointer;
+  color: #e8f2f8;
+  text-decoration: none;
+  transition: all 0.25s ease-in-out;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+a.project:hover {
+  background-color: #e8f2f8;
+  color: #080014;
+}
+
+a h3 {
+  text-align: center;
+  font-size: 16px;
+  margin: 0;
+  padding: 0;
+  cursor: inherit;
+}
+
+a p {
+  text-align: center;
+  font-size: 14px;
+  margin: 0;
+  padding: 0;
+  line-height: 1.4em;
+  cursor: inherit;
+}
+
+.pro_icon {
+  font-family: "HurmitNerdFont";
+  white-space: pre;
+  position: relative;
+  top: -2px;
+}
+
+ul {
+  margin-top: 0;
+}
+
+.pic {
+  color: #c5a3ff !important;
+  border-color: #c5a3ff !important;
+}
+
+.pic:hover {
+  background-color: #c5a3ff !important;
+  color: #080014 !important;
+}
+
+.udi {
+  color: #b0e57c !important;
+  border-color: #b0e57c !important;
+}
+
+.udi:hover {
+  background-color: #b0e57c !important;
+  color: #080014 !important;
+}
+
+.mine {
+  color: #8cdcff !important;
+  border-color: #8cdcff !important;
+}
+
+.mine:hover {
+  background-color: #8cdcff !important;
+  color: #080014 !important;
+}
+
+.part {
+  color: #f5c97f !important;
+  border-color: #f5c97f !important;
+}
+
+.part:hover {
+  background-color: #f5c97f !important;
+  color: #080014 !important;
+}
