@@ -93,6 +93,25 @@ document.addEventListener("mousemove", function (e) {
   moveLogos(x, y);
 });
 
+document.addEventListener("mouseout", function () {
+  for (const { el } of originalPos_fg) {
+    el.style.opacity = `0`;
+  }
+  for (const { el } of originalPos_bg) {
+    el.style.opacity = `0`;
+  }
+});
+
+document.addEventListener("mouseover", function () {
+  setLogos();
+  for (const { el } of originalPos_fg) {
+    el.style.opacity = `1`;
+  }
+  for (const { el } of originalPos_bg) {
+    el.style.opacity = `1`;
+  }
+});
+
 window.addEventListener("resize", setLogos);
 
 /* End of Logos part */

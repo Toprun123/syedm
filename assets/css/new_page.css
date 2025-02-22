@@ -8,6 +8,10 @@
   --color3: #f5004f;
   --sup1: #1e1e1e;
   --sup2: #191825;
+  --alt-bg1: #1c1230; /* Deep purple tint, complements --color1 */
+  --alt-bg2: #102720; /* Dark teal green, complements --color2 */
+  --alt-bg3: #2a0917; /* Deep reddish tint, complements --color3 */
+  --alt-bg4: #261a40; /* Muted violet shade, blends with --color1 */
 }
 
 html {
@@ -142,8 +146,29 @@ body {
   width: 100vw;
   min-height: 750px;
   position: absolute;
-  top: 0;
-  left: 0;
+}
+
+.page2 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  min-height: 750px;
+  background-color: var(--alt-bg4);
+  color: var(--fg);
+}
+
+.skills-text {
+  font-size: 5rem;
+  font-family: "Kachika", sans-serif, "Hurmit";
+  color: var(--fg);
+  margin-bottom: 10px;
+}
+
+.skill-key-cursor {
+  animation: blink-animation 1s steps(1, end) infinite;
 }
 
 .logo {
@@ -163,7 +188,7 @@ body {
   opacity: 0.8;
   backdrop-filter: blur(5px);
   transition:
-    opacity 0.25s ease-in-out,
+    opacity 0.7s ease-in-out,
     background-color 0.25s ease-in-out;
   cursor: default;
 }
