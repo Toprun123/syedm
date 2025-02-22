@@ -1,0 +1,214 @@
+@import url("./fonts.css");
+
+:root {
+  --bg: #100f18;
+  --fg: #ffffff;
+  --color1: #9f81ff;
+  --color2: #15f5ba;
+  --color3: #f5004f;
+  --sup1: #1e1e1e;
+  --sup2: #191825;
+}
+
+html {
+  font-size: 16px;
+  font-family: "Changa", sans-serif, "Hurmit";
+}
+
+body {
+  padding: 0;
+  margin: 0;
+}
+
+::selection {
+  background-color: var(--color2);
+  color: var(--bg);
+}
+
+::-moz-selection {
+  background-color: var(--color2);
+  color: var(--bg);
+}
+
+.page {
+  height: 100vh;
+  width: 100vw;
+  min-height: 750px;
+  font-size: 1rem;
+}
+
+.page1 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg);
+  color: var(--fg);
+}
+
+.name {
+  padding: 5px;
+}
+
+.firstname {
+  font-size: 10rem;
+  font-family: "Kachika", sans-serif;
+  font-style: italic;
+  color: var(--fg);
+  padding-right: 20px;
+  cursor: pointer;
+  position: relative;
+  left: -10px;
+}
+
+.firstname:hover::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 10px;
+  width: calc(100% - 10px);
+  height: 10px;
+  background: url("../images/wavy-line-1.svg") repeat-x;
+  background-size: contain;
+  z-index: 99;
+}
+
+.lastname {
+  font-size: 6rem;
+  width: max-content;
+  font-family: "impacto", sans-serif;
+  text-shadow:
+    4px 4px 0 var(--bg),
+    -4px -4px 0 var(--bg),
+    4px -4px 0 var(--bg),
+    -4px 4px 0 var(--bg);
+  color: var(--color3);
+  cursor: pointer;
+  position: relative;
+  background-image: url("../images/caution-bg.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.lastname:hover::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 20px;
+  background: url("../images/dashed-line-3.svg") repeat-x;
+  background-size: contain;
+  z-index: 99;
+}
+
+.scroll-tip {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: translateX(-50%);
+  cursor: pointer;
+}
+
+.scroll-tip .icon-nerd {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  background-color: var(--color1);
+  text-align: center;
+  font-size: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scroll-tip .tip {
+  font-size: 1.5rem;
+  line-height: 1;
+  font-family: "Changa", sans-serif, "Hurmit";
+  text-shadow:
+    0 0 5px var(--color3),
+    0 0 10px var(--color2);
+  color: var(--fg);
+  margin-bottom: 10px;
+}
+
+.bg-logos {
+  height: 100vh;
+  width: 100vw;
+  min-height: 750px;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.logo {
+  position: absolute;
+  border-radius: 14px;
+  height: 50px;
+  width: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: bold;
+  transform: translate(-50%, -50%);
+  background-color: color-mix(in srgb, var(--logo-color) 40%, transparent);
+  box-shadow: 0 0 40px 0 color-mix(in srgb, var(--logo-color) 50%, transparent);
+  opacity: 0.8;
+  backdrop-filter: blur(5px);
+  transition:
+    opacity 0.25s ease-in-out,
+    background-color 0.25s ease-in-out;
+  cursor: default;
+}
+
+.logo:hover {
+  opacity: 1;
+  background-color: color-mix(in srgb, var(--logo-color) 70%, transparent);
+}
+
+.logo.bg {
+  height: 40px;
+  width: 40px;
+}
+
+.logo .icon {
+  fill: var(--fg);
+  height: 30px;
+  width: 30px;
+}
+
+.logo.bg .icon {
+  height: 20px;
+  width: 20px;
+}
+
+.what-i-am {
+  float: right;
+  font-size: 3rem;
+  font-family: "Changa", sans-serif, "Hurmit";
+  text-shadow:
+    0 0 2.5px var(--color3),
+    0 0 5px var(--color2);
+  color: var(--fg);
+}
+
+#what-i-am {
+  padding-right: 3px;
+}
+
+@keyframes blink-animation {
+  50% {
+    opacity: 0;
+  }
+}
+
+.key-cursor {
+  animation: blink-animation 1s steps(1, end) infinite;
+}
