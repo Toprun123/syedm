@@ -131,3 +131,11 @@
   font-weight: normal;
   font-style: normal;
 }
+
+/* publica.otf */
+@font-face {
+  font-family: "Publica";
+  src: url("https://sixzix.com/assets/fonts/publica.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
