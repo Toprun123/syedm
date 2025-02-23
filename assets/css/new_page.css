@@ -1,38 +1,4 @@
-@import url("./fonts.css");
-
-:root {
-  --bg: #100f18;
-  --fg: #ffffff;
-  --color1: #9f81ff;
-  --color2: #15f5ba;
-  --color3: #f5004f;
-  --sup1: #1e1e1e;
-  --sup2: #191825;
-  --alt-bg1: #1c1230; /* Deep purple tint, complements --color1 */
-  --alt-bg2: #102720; /* Dark teal green, complements --color2 */
-  --alt-bg3: #2a0917; /* Deep reddish tint, complements --color3 */
-  --alt-bg4: #261a40; /* Muted violet shade, blends with --color1 */
-}
-
-html {
-  font-size: 16px;
-  font-family: "Changa", sans-serif, "Hurmit";
-}
-
-body {
-  padding: 0;
-  margin: 0;
-}
-
-::selection {
-  background-color: var(--color2);
-  color: var(--bg);
-}
-
-::-moz-selection {
-  background-color: var(--color2);
-  color: var(--bg);
-}
+@import "root.css";
 
 .page {
   height: 100vh;
@@ -44,6 +10,7 @@ body {
 
 .page1 {
   display: flex;
+  position: relative;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -51,14 +18,369 @@ body {
   color: var(--fg);
 }
 
+.divider-page1-2 {
+  height: 170px;
+  width: 100vw;
+  display: block;
+  background:
+    linear-gradient(to bottom, var(--bg) 15%, var(--alt-bg1) 100%),
+    url("../images/wavy-line-1.svg");
+  background-blend-mode: overlay;
+  background-repeat: repeat-x;
+  background-size:
+    cover,
+    auto 50px;
+}
+
+.page2 {
+  background-color: var(--alt-bg1);
+  color: var(--fg);
+  padding: 0 5vw;
+  padding-top: 70px;
+  width: calc(100% - 10vw);
+  height: calc(100vh - 170px);
+  overflow: hidden;
+}
+
+.page2-card {
+  display: flex;
+  float: left;
+  flex-direction: row;
+  width: 550px;
+  height: 200px;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(to bottom, var(--color3) 20%, var(--alt-bg4) 20%);
+  color: var(--fg);
+  padding: 40px 20px;
+  border-radius: 20px;
+  margin-right: 50px;
+  margin-bottom: 30px;
+}
+
+.page2-content {
+  font-size: 1.6rem;
+  line-height: 1.7;
+  word-spacing: 7px;
+  font-family: "Publica", sans-serif;
+}
+
+.pg2.hurmit {
+  font-family: "Hurmit", sans-serif;
+  font-size: 2rem;
+  line-height: 1;
+  margin-right: 14px;
+}
+
+.pg2.go {
+  font-size: 3.9rem;
+  line-height: 0.2;
+  position: relative;
+  top: 10px;
+  margin-right: 3px;
+}
+
+.pg2.tech {
+  font-family: "Changa", sans-serif;
+  font-size: 2rem;
+  line-height: 0.2;
+  color: var(--tech);
+}
+
+.pg2.web {
+  font-family: "Fantasque", sans-serif;
+  word-spacing: 0;
+  font-size: 1.8rem;
+  line-height: 0.2;
+  color: var(--color3);
+}
+
+.pg2.tui {
+  font-family: "Terminal", monospace;
+  word-spacing: 0;
+  font-size: 1.6rem;
+  text-transform: uppercase;
+  line-height: 0.2;
+  color: var(--color4);
+}
+
+.pg2.bash {
+  font-family: "Terminal", monospace;
+  word-spacing: 0;
+  font-size: 1.5rem;
+  line-height: 0.2;
+  color: var(--fg);
+  background-color: var(--bashbg);
+}
+
+.pg2.linux {
+  font-family: "GelDotica", monospace;
+  word-spacing: 0;
+  font-size: 1.7rem;
+  line-height: 0.2;
+  margin-right: 3px;
+  color: var(--linux);
+}
+
+.pg2.coder {
+  font-family: "Terminal", monospace;
+  word-spacing: 0;
+  font-size: 1.6rem;
+  line-height: 0.2;
+  margin-right: 3px;
+  color: var(--color4);
+}
+
+.pg2.batch {
+  font-family: "Segoe UI", sans-serif;
+  word-spacing: 0;
+  font-size: 1.6rem;
+  line-height: 0.2;
+  padding: 0 7px;
+  background-color: var(--win);
+}
+
+.pg2.old {
+  font-family: "Jockes", "Times New Roman", Times, serif;
+  word-spacing: 0;
+  font-size: 2rem;
+  line-height: 0.2;
+}
+
+.pg2.book {
+  font-family: "Beercus", "Times New Roman", Times, serif;
+  word-spacing: 0;
+  font-size: 1.6rem;
+  line-height: 0.2;
+  color: var(--linux);
+}
+
+.pg2.hours {
+  font-family: "Beercus", "Times New Roman", Times, serif;
+  word-spacing: 0;
+  font-size: 1.6rem;
+  line-height: 0.2;
+  padding: 0 7px;
+  color: var(--bg);
+  background-color: var(--go);
+}
+
+.pg2.distros {
+  font-family: "Terminal", monospace;
+  word-spacing: 0;
+  font-size: 1.6rem;
+  line-height: 0.2;
+  color: var(--alt-bg3);
+  background-color: var(--color3);
+}
+
+.pg2.ror {
+  font-family: "Changa", sans-serif;
+  word-spacing: 0;
+  font-size: 1.2rem;
+  padding: 0 7px;
+  line-height: 0.2;
+  color: var(--alt-bg3);
+  background-color: var(--ror);
+}
+
+.pg2.go {
+  color: var(--go);
+}
+
+.pg2.murder {
+  font-family: "Were-Beast", sans-serif;
+  color: var(--ror);
+}
+
+.pg2.detective {
+  font-family: "Veteran Typewriter", serif;
+  color: var(--df);
+}
+
+.pg2.ac {
+  color: var(--linux);
+}
+
+.pg2.ls {
+  font-family: "Funky Foodie Doodie", sans-serif;
+  font-weight: bold;
+  color: var(--color3);
+}
+
+.pg2.ms {
+  font-family: "Minesweeper", monospace;
+  word-spacing: 0;
+  font-size: 1.6rem;
+  line-height: 0.2;
+  margin-right: 3px;
+  color: var(--ror);
+}
+
+.page2-content p {
+  margin-top: 0;
+}
+
+.card-icon {
+  font-size: 9rem;
+  margin: 0 20px;
+  padding: 0;
+  padding-right: 20px;
+  border-right: 1px solid var(--fg);
+}
+
+.card-elems {
+  display: flex;
+  flex-direction: column;
+  padding-top: 55px;
+  gap: 6px;
+}
+
+.page2-card-elem {
+  font-size: 1.2rem;
+  width: 100%;
+  height: 100%;
+}
+
+.card-elem-title {
+  font-weight: bold;
+  color: var(--color3);
+  font-family: "Publica", sans-serif;
+}
+
+.card-elem-data {
+  text-transform: uppercase;
+  font-family: "Changa", sans-serif;
+}
+
+.header {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 999;
+  font-size: 3rem;
+  top: 0px;
+  left: 0px;
+  width: calc(100% - 40px);
+  transition: all 0.5s ease-in-out;
+  height: 80px;
+  background-color: var(--bg);
+  padding: 0 20px;
+  color: var(--fg);
+}
+
+.header.scrolled {
+  backdrop-filter: blur(10px);
+  top: 20px;
+  left: 40px;
+  width: calc(100% - 120px);
+  height: 80px;
+  padding: 0 20px;
+  background-color: color-mix(in srgb, var(--fg) 5%, transparent);
+  border-radius: 50px;
+}
+
+.links {
+  display: flex;
+  float: right;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.waves-container {
+  position: absolute;
+  top: 50px;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 50px);
+  overflow: hidden;
+}
+
+.wave {
+  height: 60px;
+  margin-top: 40px;
+  background-repeat: repeat-x;
+  animation: move-wave-left 5s linear infinite;
+  background-size: auto 10px;
+  background-position: bottom;
+}
+
+.wave1 {
+  background-image: url("../images/wavy-line-1.svg");
+}
+
+.wave2 {
+  background-image: url("../images/dashed-line-3.svg");
+  animation: move-wave-right 5s linear infinite;
+}
+
+.wave3 {
+  background-image: url("../images/wavy-line-2.svg");
+}
+
+.wave4 {
+  background-image: url("../images/wavy-line-3.svg");
+  animation: move-wave-right 5s linear infinite;
+}
+
+@keyframes move-wave-left {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: -354px 0;
+  }
+}
+
+@keyframes move-wave-right {
+  0% {
+    background-position: -354px 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}
+
 .name {
   padding: 5px;
 }
 
-.firstname {
-  font-size: 10rem;
-  font-family: "impacto", sans-serif;
+.name-txt {
+  width: 500px;
+  z-index: 99;
+  background-color: color-mix(in srgb, var(--color1) 5%, transparent);
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  padding: 20px;
+  text-align: center;
+}
+
+.greeting {
+  font-size: 2rem;
+  font-family: "Publica", sans-serif;
   color: var(--fg);
+  width: 100%;
+  text-align: left;
+  padding-left: 30px;
+  line-height: 1.3;
+}
+
+.firstname {
+  margin-left: 10px;
+  font-size: 10rem;
+  height: 178px;
+  display: flex;
+  justify-content: center;
+  color: var(--color4);
+  align-items: center;
+  gap: 30px;
+}
+
+.firstname .name {
+  font-family: "impacto", sans-serif, "Hurmit";
   width: max-content;
   cursor: pointer;
   position: relative;
@@ -70,15 +392,16 @@ body {
   background-image: url("../images/caution-bg.svg");
   background-position: center;
   background-repeat: no-repeat;
-  color: var(--color1);
+  color: var(--color2);
+  line-height: 0.9;
 }
 
-.firstname:hover::after {
+.firstname .name:hover::after {
   content: "";
   position: absolute;
   left: 0;
   bottom: 10px;
-  width: calc(100% - 10px);
+  width: 100%;
   height: 10px;
   background: url("../images/wavy-line-1.svg") repeat-x;
   background-size: contain;
@@ -86,9 +409,11 @@ body {
 }
 
 .lastname {
-  font-size: 4.5rem;
+  margin-left: 40px;
+  line-height: 0.9;
+  font-size: 6rem;
   width: max-content;
-  font-family: "Kachika", sans-serif;
+  font-family: "Publica", sans-serif;
   text-shadow:
     4px 4px 0 var(--bg),
     -4px -4px 0 var(--bg),
@@ -103,7 +428,7 @@ body {
   content: "";
   position: absolute;
   left: 0;
-  bottom: 0;
+  bottom: -10px;
   width: 100%;
   height: 20px;
   background: url("../images/dashed-line-3.svg") repeat-x;
@@ -136,24 +461,26 @@ body {
 }
 
 .scroll-tip .tip {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   line-height: 1;
-  font-family: "Changa", sans-serif, "Hurmit";
-  text-shadow:
-    0 0 5px var(--color3),
-    0 0 10px var(--color2);
+  font-family: "Publica", sans-serif, "Hurmit";
   color: var(--fg);
+  background-color: color-mix(in srgb, var(--color1) 5%, transparent);
+  padding: 10px;
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
   margin-bottom: 10px;
 }
 
 .bg-logos {
-  height: 100vh;
+  height: calc(100vh - 60px);
   width: 100vw;
   min-height: 750px;
   position: absolute;
+  top: calc(200vh + 60px + 70px);
 }
 
-.page2 {
+.page3 {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -172,15 +499,103 @@ body {
   margin-bottom: 10px;
 }
 
-.skill-key-cursor {
-  animation: blink-animation 1s steps(1, end) infinite;
+.exp-tooltip {
+  position: fixed;
+  top: 20px;
+  left: 0;
+  width: max-content;
+  height: min-content;
+  display: flex;
+  background-color: color-mix(in srgb, var(--alt-bg1) 70%, transparent);
+  backdrop-filter: blur(10px);
+  border-radius: 10px;
+  padding: 10px 15px;
+  border: 2px solid var(--color3);
+  gap: 10px;
+  text-shadow: none;
+  text-align: left;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  font-size: 1rem;
+  line-height: 1;
+  color: var(--fg);
+  z-index: 9999;
+  cursor: default;
+  transition: opacity 0.5s ease-in-out;
+  font-family: "Changa", sans-serif, "Hurmit";
+}
+
+.exp-tooltip.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.tooltip-flex-1 {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: row;
+  margin-left: 15px;
+  margin-bottom: 7px;
+  gap: 30px;
+}
+
+.exp-tooltip ol {
+  margin: 7px;
+}
+
+.exp-tooltip-text {
+  margin-left: 15px;
+}
+
+.dict-icon {
+  font-size: 3rem;
+  color: var(--color3);
+}
+
+.dict-type {
+  font-family: "Publica", sans-serif, "Hurmit";
+  margin: 0;
+  color: var(--fg);
+}
+
+.arabic {
+  font-family: "Noto Sans Arabic", serif, "Hurmit";
+}
+
+.persian {
+  font-family: "Noto Nastaliq Urdu", serif, "Hurmit";
+}
+
+.title-title {
+  font-family: "Changa", sans-serif, "Hurmit";
+  font-size: 2rem;
+  text-align: left;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.exp-tooltip-divider {
+  width: 100%;
+  height: 2px;
+  background-color: var(--color3);
+  color: var(--color3);
+}
+
+.exp-tooltip-title {
+  font-family: "Operator", sans-serif, "Hurmit";
+  font-size: 1.2rem;
+  text-align: left;
+  margin: 0;
+  color: var(--fg);
 }
 
 .logo {
   position: absolute;
   border-radius: 14px;
-  height: 50px;
-  width: 50px;
+  height: 70px;
+  width: 70px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -204,32 +619,30 @@ body {
 }
 
 .logo.bg {
-  height: 40px;
-  width: 40px;
+  height: 50px;
+  width: 50px;
 }
 
 .logo .icon {
   fill: var(--fg);
+  height: 50px;
+  width: 50px;
+}
+
+.logo.bg .icon {
   height: 30px;
   width: 30px;
 }
 
-.logo.bg .icon {
-  height: 20px;
-  width: 20px;
-}
-
 .what-i-am {
   float: right;
-  font-size: 3rem;
+  font-size: 2.4rem;
   font-family: "Changa", sans-serif, "Hurmit";
-  text-shadow:
-    0 0 2.5px var(--color3),
-    0 0 5px var(--color2);
   color: var(--fg);
 }
 
 #what-i-am {
+  text-decoration: underline;
   padding-right: 3px;
 }
 

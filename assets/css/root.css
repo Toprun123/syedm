@@ -1,0 +1,43 @@
+@import url("./fonts.css");
+
+:root {
+  --bg: #100f18;
+  --fg: #ffffff;
+  --color1: #d1a7ff;
+  --color2: #00ff9a;
+  --color3: #ff0087;
+  --color4: #00ff00;
+  --sup1: #1e1e1e;
+  --sup2: #191825;
+  --alt-bg1: #1c1230;
+  --alt-bg2: #102720;
+  --alt-bg3: #2a0917;
+  --alt-bg4: #261a40;
+  --tech: #ffff00;
+  --bashbg: #000000;
+  --linux: #fcc624;
+  --win: #08a1f7;
+  --go: #43d9ff;
+  --ror: #ff0000;
+  --df: #ff5f1f;
+}
+
+html {
+  font-size: 16px;
+  font-family: "Changa", sans-serif, "Hurmit";
+}
+
+body {
+  padding: 0;
+  margin: 0;
+}
+
+::selection {
+  background-color: var(--color2);
+  color: var(--bg);
+}
+
+::-moz-selection {
+  background-color: var(--color2);
+  color: var(--bg);
+}
