@@ -36,7 +36,7 @@ SOFTWARE.
 @import url("./fonts.css");
 
 body {
-  font-family: "FantasqueSansMNerdFont", monospace;
+  font-family: "Fantasque", monospace;
   font-size: 20px;
   line-height: 1.4em;
   background-color: #080014;
@@ -225,7 +225,7 @@ ul li,
 ol li {
   margin-top: 0.15em;
   margin-bottom: 0.15em;
-  font-family: "HurmitNerdFont", monospace;
+  font-family: "Hurmit", monospace;
 }
 ul li li {
   margin-left: -15px;
@@ -750,7 +750,7 @@ a p {
 }
 
 .pro_icon {
-  font-family: "HurmitNerdFont";
+  font-family: "Hurmit";
   white-space: pre;
   position: relative;
   top: -2px;

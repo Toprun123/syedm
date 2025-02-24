@@ -1,7 +1,7 @@
 @import url("./fonts.css");
 
 * {
-  font-family: "FantasqueSansMNerdFontMono";
+  font-family: "Fantasque";
   color: white;
   font-size: 25px;
   line-height: 97%;
@@ -81,7 +81,7 @@ label {
   text-align: center;
   display: block;
   font-size: 20px;
-  font-family: "OperatorMonoLig";
+  font-family: "Operator";
   font-style: italic;
   width: 100%;
   font-weight: bold;
@@ -174,7 +174,7 @@ label {
 }
 
 table * {
-  font-family: "HurmitNerdFont";
+  font-family: "Hurmit";
 }
 
 th {

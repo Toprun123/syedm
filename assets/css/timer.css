@@ -1,7 +1,7 @@
 @import url("./fonts.css");
 
 * {
-  font-family: "FantasqueSansMNerdFontMono";
+  font-family: "Fantasque";
   color: white;
   font-size: 25px;
   line-height: 97%;
@@ -57,7 +57,7 @@ tbody {
 }
 
 table * {
-  font-family: "OperatorMonoLig";
+  font-family: "Operator";
   font-style: italic;
 }
 
