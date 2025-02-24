@@ -12,8 +12,7 @@
 /* Minesweeper */
 @font-face {
   font-family: "Minesweeper";
-  src: url("https://sixzix.com/assets/fonts/mine-sweeper.otf")
-    format("opentype");
+  src: url("https://syedm.dev/assets/fonts/mine-sweeper.otf") format("opentype");
   font-weight: normal;
   font-style: normal;
 }
@@ -21,7 +20,7 @@
 /* Fantasque */
 @font-face {
   font-family: "Fantasque";
-  src: url("https://sixzix.com/assets/fonts/FantasqueSansMNerdFontMono-Regular.ttf")
+  src: url("https://syedm.dev/assets/fonts/FantasqueSansMNerdFontMono-Regular.ttf")
     format("truetype");
   font-weight: normal;
   font-style: normal;
@@ -29,7 +28,7 @@
 
 @font-face {
   font-family: "Fantasque";
-  src: url("https://sixzix.com/assets/fonts/FantasqueSansMNerdFontMono-Bold.ttf")
+  src: url("https://syedm.dev/assets/fonts/FantasqueSansMNerdFontMono-Bold.ttf")
     format("truetype");
   font-weight: bold;
   font-style: normal;
@@ -37,7 +36,7 @@
 
 @font-face {
   font-family: "Fantasque";
-  src: url("https://sixzix.com/assets/fonts/FantasqueSansMNerdFontMono-Italic.ttf")
+  src: url("https://syedm.dev/assets/fonts/FantasqueSansMNerdFontMono-Italic.ttf")
     format("truetype");
   font-weight: normal;
   font-style: italic;
@@ -45,7 +44,7 @@
 
 @font-face {
   font-family: "Fantasque";
-  src: url("https://sixzix.com/assets/fonts/FantasqueSansMNerdFontMono-BoldItalic.ttf")
+  src: url("https://syedm.dev/assets/fonts/FantasqueSansMNerdFontMono-BoldItalic.ttf")
     format("truetype");
   font-weight: bold;
   font-style: italic;
@@ -54,7 +53,7 @@
 /* Hurmit */
 @font-face {
   font-family: "Hurmit";
-  src: url("https://sixzix.com/assets/fonts/HurmitNerdFontMono-Regular.otf")
+  src: url("https://syedm.dev/assets/fonts/HurmitNerdFontMono-Regular.otf")
     format("opentype");
   font-weight: normal;
   font-style: normal;
@@ -62,7 +61,7 @@
 
 @font-face {
   font-family: "Hurmit";
-  src: url("https://sixzix.com/assets/fonts/HurmitNerdFontMono-Bold.otf")
+  src: url("https://syedm.dev/assets/fonts/HurmitNerdFontMono-Bold.otf")
     format("opentype");
   font-weight: bold;
   font-style: normal;
@@ -70,7 +69,7 @@
 
 @font-face {
   font-family: "Hurmit";
-  src: url("https://sixzix.com/assets/fonts/HurmitNerdFontMono-Italic.otf")
+  src: url("https://syedm.dev/assets/fonts/HurmitNerdFontMono-Italic.otf")
     format("opentype");
   font-weight: normal;
   font-style: italic;
@@ -78,7 +77,7 @@
 
 @font-face {
   font-family: "Hurmit";
-  src: url("https://sixzix.com/assets/fonts/HurmitNerdFontMono-BoldItalic.otf")
+  src: url("https://syedm.dev/assets/fonts/HurmitNerdFontMono-BoldItalic.otf")
     format("opentype");
   font-weight: bold;
   font-style: italic;
@@ -86,7 +85,7 @@
 
 @font-face {
   font-family: "Hurmit";
-  src: url("https://sixzix.com/assets/fonts/HurmitNerdFontMono-Light.otf")
+  src: url("https://syedm.dev/assets/fonts/HurmitNerdFontMono-Light.otf")
     format("opentype");
   font-weight: 300;
   font-style: normal;
@@ -94,7 +93,7 @@
 
 @font-face {
   font-family: "Hurmit";
-  src: url("https://sixzix.com/assets/fonts/HurmitNerdFontMono-LightItalic.otf")
+  src: url("https://syedm.dev/assets/fonts/HurmitNerdFontMono-LightItalic.otf")
     format("opentype");
   font-weight: 300;
   font-style: italic;
@@ -103,7 +102,7 @@
 /* Operator */
 @font-face {
   font-family: "Operator";
-  src: url("https://sixzix.com/assets/fonts/OperatorMonoLig-Book.otf")
+  src: url("https://syedm.dev/assets/fonts/OperatorMonoLig-Book.otf")
     format("opentype");
   font-weight: normal;
   font-style: normal;
@@ -111,7 +110,7 @@
 
 @font-face {
   font-family: "Operator";
-  src: url("https://sixzix.com/assets/fonts/OperatorMonoLig-BookItalic.otf")
+  src: url("https://syedm.dev/assets/fonts/OperatorMonoLig-BookItalic.otf")
     format("opentype");
   font-weight: normal;
   font-style: italic;
@@ -119,7 +118,7 @@
 
 @font-face {
   font-family: "Operator";
-  src: url("https://sixzix.com/assets/fonts/OperatorMonoLig-Light.otf")
+  src: url("https://syedm.dev/assets/fonts/OperatorMonoLig-Light.otf")
     format("opentype");
   font-weight: 300;
   font-style: normal;
@@ -127,7 +126,7 @@
 
 @font-face {
   font-family: "Operator";
-  src: url("https://sixzix.com/assets/fonts/OperatorMonoLig-LightItalic.otf")
+  src: url("https://syedm.dev/assets/fonts/OperatorMonoLig-LightItalic.otf")
     format("opentype");
   font-weight: 300;
   font-style: italic;
@@ -136,7 +135,7 @@
 /* Kachika.ttf */
 @font-face {
   font-family: "Kachika";
-  src: url("https://sixzix.com/assets/fonts/KACHIKA.ttf") format("truetype");
+  src: url("https://syedm.dev/assets/fonts/KACHIKA.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
@@ -144,7 +143,7 @@
 /* impacto */
 @font-face {
   font-family: "Impacto";
-  src: url("https://sixzix.com/assets/fonts/impacto.otf") format("opentype");
+  src: url("https://syedm.dev/assets/fonts/impacto.otf") format("opentype");
   font-weight: normal;
   font-style: normal;
 }
@@ -152,7 +151,7 @@
 /* publica.otf */
 @font-face {
   font-family: "Publica";
-  src: url("https://sixzix.com/assets/fonts/publica.otf") format("opentype");
+  src: url("https://syedm.dev/assets/fonts/publica.otf") format("opentype");
   font-weight: normal;
   font-style: normal;
 }
