@@ -8,7 +8,7 @@
    version="1.1"
    id="svg1"
    inkscape:version="1.4 (e7c3feb100, 2024-10-09)"
-   sodipodi:docname="dashed-line-3.svg"
+   sodipodi:docname="wavy-line-4.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -23,16 +23,15 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="px"
-     inkscape:zoom="4.3792607"
-     inkscape:cx="110.86346"
-     inkscape:cy="69.075586"
+     inkscape:zoom="2.1896304"
+     inkscape:cx="41.787874"
+     inkscape:cy="99.788531"
      inkscape:window-width="1920"
      inkscape:window-height="1080"
      inkscape:window-x="0"
      inkscape:window-y="600"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer1"
-     showgrid="false" />
+     inkscape:current-layer="layer1" />
   <defs
      id="defs1" />
   <g
@@ -40,8 +39,9 @@
      inkscape:groupmode="layer"
      id="layer1">
     <path
-       style="fill:#fcc624;stroke:#43d9ff;stroke-width:9.75458;stroke-linecap:round;paint-order:fill markers stroke;fill-opacity:1;stroke-opacity:1"
-       d="M 14.734312,14.281168 H 38.155447"
-       id="path1-2" />
+       style="fill:none;stroke:#ff0087;stroke-width:9;stroke-linecap:square;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
+       d="M -2.7389918,13.305275 C 7.4639042,24.073662 16.199504,27.722263 26.615644,14.2952 35.560854,2.532972 41.304028,4.2016516 54.746996,17.388775"
+       id="path1"
+       sodipodi:nodetypes="ccc" />
   </g>
 </svg>

@@ -51,7 +51,7 @@
         </div>
         <div class="firstname">
           <span class="symbol"> </span>
-          <span class="name hover" id="fname">
+          <span class="name hover-name" id="fname">
             $yed
             <div class="exp-tooltip hidden">
               <div class="exp-tooltip-content">
@@ -85,7 +85,7 @@
           </span>
         </div>
         <div class="lastname">
-          <span class="name hover">
+          <span class="name hover-name">
             <span id="lname"></span
             ><span class="key-cursor" id="lname-key-cursor">|</span>
             <div class="exp-tooltip hidden">
@@ -114,7 +114,7 @@
           </span>
         </div>
         <div class="what-i-am">
-          A <span id="what-i-am"></span><span class="key-cursor">_</span>
+          A <span id="what-i-am"></span><span class="key-cursor">▁</span>
         </div>
       </div>
       <div class="scroll-tip">
@@ -130,13 +130,10 @@
       <div class="page2-card">
         <div class="card-icon"></div>
         <div class="card-elems">
-          <div class="page2-card-elem">
-            <span class="card-elem-title">Name:</span>
-            <span class="card-elem-data">Syed Daanish</span>
-          </div>
+          <span class="card-name">Syed Daanish</span>
           <div class="page2-card-elem">
             <span class="card-elem-title">Age:</span>
-            <span class="card-elem-data">16</span>
+            <span class="card-elem-data">16 years</span>
           </div>
           <div class="page2-card-elem">
             <span class="card-elem-title">Gender:</span>
@@ -147,76 +144,120 @@
             <span class="card-elem-data">Student (High School)</span>
           </div>
           <div class="page2-card-elem">
-            <span class="card-elem-title">Living in:</span>
-            <span class="card-elem-data"
-              >Jeddah, Saudi Arabia 🇸🇦 (9 years)</span
-            >
+            <span class="card-elem-title">Residing in:</span>
+            <span class="card-elem-data">Jeddah, Saudi Arabia 🇸🇦</span>
           </div>
         </div>
       </div>
       <span class="page2-content">
         <p>
-          Hi, there 👋! I'm Syed, a <span class="pg2 hover">student</span> and
-          <span class="pg2 tech">tech</span> enthusiast—I love anything
+          Hi, there 👋! I'm Syed, a
+          <span
+            class="pg2 hover hover-lined student hror"
+            data-hover="I'm Studiying Cambridge AS Level"
+            >student</span
+          >
+          and <span class="pg2 tech">tech</span> enthusiast—I love anything
           programming-related:
-          <span class="pg2 web"><span class="pg2 hurmit"></span>web dev</span>,
-          <span class="pg2 tui"><span class="pg2 hurmit"></span>TUI apps</span
+          <span class="pg2 web"><span class="pg2 hurmit"></span>web-dev</span>,
+          <a
+            href="https://github.com/Toprun123?tab=repositories&language=go"
+            class="pg2 tui hover hover-lined htui"
+            data-hover="  Terminal User Interface"
+            target="_blank"
+            ><span class="pg2 hurmit"></span>TUI apps</a
           >,
-          <span class="pg2 bash"
-            ><span class="pg2 hurmit"></span>bash scripts</span
+          <a
+            href="https://github.com/Toprun123/dotfiles"
+            class="pg2 bash hover-lined hb"
+            target="_blank"
+            ><span class="pg2 hurmit"></span>bash scripts</a
           >,
-          <span class="pg2 linux"
-            ><span class="pg2 hurmit"></span>Linux ricing</span
+          <a
+            href="https://github.com/Toprun123/dotfiles"
+            class="pg2 linux hover-lined hb"
+            target="_blank"
+            ><span class="pg2 hurmit"></span>Linux ricing</a
           >—literally anything.
         </p>
         <p>
           I'm a self-taught <span class="pg2 coder">👨‍💻 coder</span>; I started
           off with
-          <span class="pg2 batch"><span class="pg2 hurmit"></span>batch</span>
+          <span
+            class="pg2 batch hover hover-lined hwin"
+            data-hover="The Windows  scripting language"
+            ><span class="pg2 hurmit"></span>batch</span
+          >
           from an
           <span class="pg2 old book"
             ><span class="pg2 hurmit"></span>old school book</span
           >
-          in 5th grade, then a new phase of my life began.
+          in 6th grade, then a new phase of my life began.
         </p>
         <p>
           Discovering
           <span class="pg2 linux"><span class="pg2 hurmit"></span>Linux</span>
           was a game changer for me—now I just can't stop spending
-          <span class="pg2 hours"><span class="pg2 hurmit"></span>hours</span>
+          <span class="pg2 hours old"
+            ><span class="pg2 hurmit"></span>hours</span
+          >
           trying out new
-          <span class="pg2 distros hover"
+          <span
+            class="pg2 distros hover hover-lined hl"
+            data-hover="Currently 󰣇  Arch Linux"
             ><span class="pg2 hurmit">󱛟</span>distros</span
-          >, ricing them, and playing sysadmin until I get bored and move on to
-          the next one.
+          >, ricing them, and playing
+          <a
+            href="https://xkcd.com/705"
+            class="pg2 sysadmin hover-sys hover-lined hror"
+            target="_blank"
+            ><span class="pg2 hurmit"></span>sysadmin</a
+          >
+          until I get bored and move on to the next one.
         </p>
         <p>
           You'll mostly find me building websites in
           <span class="pg2 ror"
             ><span class="pg2 hurmit">󰫏</span>Ruby on Rails</span
-          >, TUI apps in <span class="pg2 hurmit go">󰟓</span>, or writing
+          >, TUI apps in <span class="pg2 hurmit go">󰟓</span>, writing
           <span class="pg2 bash"
             ><span class="pg2 hurmit"></span>bash scripts</span
           >
-          for my new Linux setup. But if not, you'll find me enjoying books. I
-          love reading novels—
-          <span class="pg2 murder">🔪 murder mysteries</span>
-          and <span class="pg2 detective">🔍 detective fiction</span> are my
-          go-to genres (with <span class="pg2 old ac">Agatha Christie</span>,
-          <span class="pg2 new ls">Louis Sachar</span>, and
-          <span class="pg2 old ac">Sir Arthur Conan Doyle</span> among my
+          for my new Linux setup, or configuring
+          <a
+            href="https://neovim.io/"
+            class="pg2 nvim hover hover-lined htui"
+            data-hover=" The best editor of all time"
+            target="_blank"
+            ><span class="pg2 hurmit"></span>NeoVim</a
+          >. But if not, you'll find me enjoying books. I love reading novels—
+          <span
+            class="pg2 murder hover hover-lined hror"
+            data-hover="Especially Hercule Poirot"
+            >🔪 murder mysteries</span
+          >
+          and
+          <span
+            class="pg2 detective hover hover-lined hb"
+            data-hover="Especially Sherlock Holmes"
+            >🔍 detective fiction</span
+          >
+          are my go-to genres (with
+          <span class="pg2 old ac">Agatha Christie</span>,
+          <span
+            class="pg2 new ls hover hover-lined hl"
+            data-hover="Best book: Holes"
+            >Louis Sachar</span
+          >, and <span class="pg2 old ac">Sir Arthur Conan Doyle</span> among my
           favorites), or playing
-          <span class="pg2 ms"
-            ><span class="pg2 hurmit">󰷚</span>Minesweeper</span
+          <a
+            href="https://minesweeper.online/"
+            class="pg2 ms hover hover-lined hwin"
+            data-hover="The best game of all time"
+            target="_blank"
+            ><span class="pg2 ms-star">*</span> Minesweeper</a
           >
           for hours.
-        </p>
-        <p>
-          I'm also into languages in general; although my native language is
-          Urdu, I can fluently read, write, and speak English and Hindi as I
-          learned them in school. I've learned some Arabic at school, but I'm
-          not fluent yet. I'm currently learning Turkish as a hobby online and
-          from books, and I've gotten pretty proficient at it.
         </p>
       </span>
     </div>

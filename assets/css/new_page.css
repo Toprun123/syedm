@@ -35,10 +35,9 @@
 .page2 {
   background-color: var(--alt-bg1);
   color: var(--fg);
-  padding: 0 5vw;
-  padding-top: 70px;
-  width: calc(100% - 10vw);
-  height: calc(100vh - 170px);
+  padding: 100px 10vw;
+  height: auto;
+  width: calc(100% - 20vw);
   overflow: hidden;
 }
 
@@ -50,12 +49,14 @@
   height: 200px;
   align-items: center;
   gap: 10px;
-  background: linear-gradient(to bottom, var(--color3) 20%, var(--alt-bg4) 20%);
+  background: linear-gradient(to bottom, var(--color3) 25%, var(--alt-bg4) 25%);
   color: var(--fg);
   padding: 40px 20px;
   border-radius: 20px;
   margin-right: 50px;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
+  margin-top: 30px;
+  box-shadow: 0 0 20px 0 var(--bg);
 }
 
 .page2-content {
@@ -67,6 +68,7 @@
 
 .pg2.hurmit {
   font-family: "Hurmit", sans-serif;
+  text-shadow: none;
   font-size: 2rem;
   line-height: 1;
   margin-right: 14px;
@@ -133,6 +135,7 @@
 
 .pg2.batch {
   font-family: "Segoe UI", sans-serif;
+  --color-hover: var(--win);
   word-spacing: 0;
   font-size: 1.6rem;
   line-height: 0.2;
@@ -141,25 +144,18 @@
 }
 
 .pg2.old {
-  font-family: "Jockes", "Times New Roman", Times, serif;
+  font-family: "Beercus", "Times New Roman", Times, serif;
   word-spacing: 0;
-  font-size: 2rem;
+  font-size: 1.6rem;
   line-height: 0.2;
 }
 
 .pg2.book {
-  font-family: "Beercus", "Times New Roman", Times, serif;
-  word-spacing: 0;
-  font-size: 1.6rem;
-  line-height: 0.2;
   color: var(--linux);
 }
 
 .pg2.hours {
-  font-family: "Beercus", "Times New Roman", Times, serif;
-  word-spacing: 0;
   font-size: 1.6rem;
-  line-height: 0.2;
   padding: 0 7px;
   color: var(--bg);
   background-color: var(--go);
@@ -171,11 +167,13 @@
   font-size: 1.6rem;
   line-height: 0.2;
   color: var(--alt-bg3);
+  --color-hover: var(--win);
   background-color: var(--color3);
 }
 
 .pg2.ror {
   font-family: "Changa", sans-serif;
+  font-weight: bold;
   word-spacing: 0;
   font-size: 1.2rem;
   padding: 0 7px;
@@ -191,11 +189,13 @@
 .pg2.murder {
   font-family: "Were-Beast", sans-serif;
   color: var(--ror);
+  --color-hover: var(--ror);
 }
 
 .pg2.detective {
   font-family: "Veteran Typewriter", serif;
   color: var(--df);
+  --color-hover: var(--df);
 }
 
 .pg2.ac {
@@ -206,15 +206,59 @@
   font-family: "Funky Foodie Doodie", sans-serif;
   font-weight: bold;
   color: var(--color3);
+  --color-hover: var(--color3);
 }
 
-.pg2.ms {
-  font-family: "Minesweeper", monospace;
+.pg2.nvim {
+  font-family: "Terminal", monospace;
+  word-spacing: 0;
+  font-size: 1.6rem;
+  line-height: 0.2;
+  margin-right: 3px;
+  color: var(--nvim);
+}
+
+.pg2.sysadmin {
+  font-family: "Terminal", monospace;
   word-spacing: 0;
   font-size: 1.6rem;
   line-height: 0.2;
   margin-right: 3px;
   color: var(--ror);
+}
+
+.pg2.ms {
+  font-family: "Minesweeper", monospace;
+  word-spacing: 0;
+  font-size: 1.2rem;
+  line-height: 0.2;
+  margin-right: 3px;
+  text-shadow:
+    3px 3px 0 var(--color2),
+    -3px -3px 0 var(--color2),
+    3px -3px 0 var(--color2),
+    -3px 3px 0 var(--color2);
+  color: var(--ms);
+  --color-hover: var(--color2);
+}
+
+.pg2.ms-star {
+  text-shadow: none;
+  color: var(--color2);
+}
+
+.pg2.student {
+  font-family: "Beercus", "Times New Roman", Times, serif;
+  word-spacing: 0;
+  font-size: 1.6rem;
+  line-height: 0.2;
+  margin-right: 3px;
+  color: var(--ror);
+  --color-hover: var(--ror);
+}
+
+.pg2.ms .pg2.hurmit {
+  color: var(--fg);
 }
 
 .page2-content p {
@@ -229,11 +273,164 @@
   border-right: 1px solid var(--fg);
 }
 
+.hover {
+  position: relative;
+  cursor: pointer;
+  text-decoration: none;
+  --color-hover: var(--color4);
+}
+
+.pg2.hror::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -5px;
+  width: 100%;
+  height: 7px;
+  background: url("../images/wavy-line-1.svg") repeat-x;
+  background-size: contain;
+  display: block;
+  z-index: 99;
+}
+
+.pg2.htui::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -5px;
+  width: 100%;
+  height: 7px;
+  background: url("../images/wavy-line-2.svg") repeat-x;
+  background-size: contain;
+  display: block;
+  z-index: 99;
+}
+
+.pg2.hl::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -5px;
+  width: 100%;
+  height: 7px;
+  background: url("../images/wavy-line-4.svg") repeat-x;
+  background-size: contain;
+  display: block;
+  z-index: 99;
+}
+
+.pg2.hb::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -5px;
+  width: 100%;
+  height: 7px;
+  background: url("../images/dashed-line-1.svg") repeat-x;
+  background-size: contain;
+  display: block;
+  z-index: 99;
+}
+
+.pg2.hwin::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -10px;
+  width: 100%;
+  height: 10px;
+  background: url("../images/dashed-line-3.svg") repeat-x;
+  background-size: contain;
+  display: block;
+  z-index: 99;
+}
+
+.hover-lined:hover::after {
+  display: none;
+}
+
+.hover-lined {
+  position: relative;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.hover-sys:hover::before {
+  opacity: 1;
+  visibility: visible;
+}
+
+.hover-sys::before {
+  content: "";
+  height: 230px;
+  width: 600px;
+  background: url("https://imgs.xkcd.com/comics/devotion_to_duty.png");
+  background-size: 610px auto;
+  border-radius: 10px;
+  border: 3px solid var(--ror);
+  visibility: hidden;
+  opacity: 0;
+  background-position: -3px -3px;
+  display: block;
+  position: absolute;
+  bottom: 140%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 99;
+  transition:
+    opacity 0.5s ease,
+    visibility 0.5s ease;
+}
+
+a.pg2 {
+  text-decoration: none;
+}
+
+.hover::before {
+  content: attr(data-hover);
+  position: absolute;
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: color-mix(in srgb, var(--color-hover) 15%, transparent);
+  backdrop-filter: blur(10px);
+  color: var(--fg);
+  padding: 10px;
+  border-radius: 5px;
+  white-space: nowrap;
+  font-size: 1.2rem;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.5s ease,
+    visibility 0.5s ease;
+  z-index: 9999;
+  text-shadow: none;
+  font-family: "Changa", sans-serif, "Hurmit";
+  font-weight: normal;
+  text-transform: none;
+  line-height: 1;
+}
+
+.hover:hover::before {
+  opacity: 1;
+  visibility: visible;
+}
+
 .card-elems {
   display: flex;
   flex-direction: column;
-  padding-top: 55px;
   gap: 6px;
+}
+
+.card-name {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--fg);
+  margin-bottom: 15px;
+  position: relative;
+  top: -10px;
+  font-family: "Kachika", sans-serif;
 }
 
 .page2-card-elem {
@@ -473,17 +670,18 @@
 }
 
 .bg-logos {
-  height: calc(100vh - 60px);
+  height: calc(100vh - 40px);
   width: 100vw;
   min-height: 750px;
   position: absolute;
-  top: calc(200vh + 60px + 70px);
+  top: 70px;
 }
 
 .page3 {
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
   justify-content: center;
   height: 100vh;
   width: 100vw;
@@ -496,6 +694,8 @@
   font-size: 5rem;
   font-family: "Kachika", sans-serif, "Hurmit";
   color: var(--fg);
+  position: relative;
+  top: 30px;
   margin-bottom: 10px;
 }
 
@@ -566,6 +766,7 @@
 
 .persian {
   font-family: "Noto Nastaliq Urdu", serif, "Hurmit";
+  line-height: 0.2;
 }
 
 .title-title {
@@ -636,13 +837,18 @@
 
 .what-i-am {
   float: right;
-  font-size: 2.4rem;
-  font-family: "Changa", sans-serif, "Hurmit";
+  font-size: 1.7rem;
+  padding-top: 15px;
+  height: 30px;
+  font-family: "Terminal", monospace, "Hurmit";
   color: var(--fg);
 }
 
+.what-i-am .key-cursor {
+  font-weight: bold;
+}
+
 #what-i-am {
-  text-decoration: underline;
   padding-right: 3px;
 }
 

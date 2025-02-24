@@ -3,9 +3,9 @@
 :root {
   --bg: #100f18;
   --fg: #ffffff;
-  --color1: #d1a7ff;
-  --color2: #00ff9a;
-  --color3: #ff0087;
+  --color1: #a74ffe;
+  --color2: #00ffff;
+  --color3: #ff2222;
   --color4: #00ff00;
   --sup1: #1e1e1e;
   --sup2: #191825;
@@ -20,6 +20,8 @@
   --go: #43d9ff;
   --ror: #ff0000;
   --df: #ff5f1f;
+  --ms: #323232;
+  --nvim: #69b753;
 }
 
 html {

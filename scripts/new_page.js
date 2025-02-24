@@ -117,10 +117,10 @@ window.onload = function () {
   (async () => {
     const whatIam = [
       { word: " Programmer", color: "#28fe00" },
-      { word: "󰦆 UI/UX Designer", color: "#f05032" },
-      { word: "󰖟 Web Developer", color: "#8475ad" },
-      { word: " CSS Nerd", color: "#4aa6e9" },
-      { word: "󰟓 GO Developer", color: "#00bbea" },
+      { word: "󰦆 UI/UX Designer", color: "#f4846f" },
+      { word: "󰖟 Web Developer", color: "#b0a6ca" },
+      { word: " CSS Nerd", color: "#90c8f1" },
+      { word: "󰟓 GO Developer", color: "#8ae7ff" },
       { word: "󰴭 Ruby Lover", color: "#ff3031" },
       { word: " Linux Enthusiast", color: "#fcc624" },
       { word: " Neovim User", color: "#69b753" },
@@ -138,6 +138,8 @@ window.onload = function () {
       const elem = document.getElementById("what-i-am");
       let currentWord = whatIam[index].word;
       elem.style.color = whatIam[index].color;
+      document.querySelector(".what-i-am .key-cursor").style.color =
+        whatIam[index].color;
       const chars = Array.from(currentWord);
       for (let i = 0; i < chars.length; i++) {
         elem.innerText = chars.slice(0, i + 1).join("");
@@ -186,7 +188,7 @@ window.onload = function () {
 
   /* Hover boxes */
 
-  document.querySelectorAll(".hover").forEach((container) => {
+  document.querySelectorAll(".hover-name").forEach((container) => {
     const tooltip = container.querySelector(".exp-tooltip");
     let mouseX, mouseY;
     let hoverTimeout;
