@@ -19,7 +19,7 @@ body {
   place-items: center;
   height: 100%;
   background-color: #190d37;
-  background-image: url(../assets/images/timer_bg.gif);
+  background-image: url(../images/timer_bg.gif);
   background-size: 100% 100%;
   background-repeat: no-repeat;
 }
