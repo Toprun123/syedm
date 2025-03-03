@@ -275,7 +275,9 @@
 
 .hover {
   position: relative;
-  cursor: pointer;
+  cursor:
+    url("../images/cursor_pointer.svg") 16 16,
+    pointer;
   text-decoration: none;
   --color-hover: var(--color4);
 }
@@ -351,7 +353,9 @@
 
 .hover-lined {
   position: relative;
-  cursor: pointer;
+  cursor:
+    url("../images/cursor_pointer.svg") 16 16,
+    pointer;
   text-decoration: none;
 }
 
@@ -579,7 +583,9 @@ a.pg2 {
 .firstname .name {
   font-family: "impacto", sans-serif, "Hurmit";
   width: max-content;
-  cursor: pointer;
+  cursor:
+    url("../images/cursor_pointer.svg") 16 16,
+    pointer;
   position: relative;
   text-shadow:
     4px 4px 0 var(--bg),
@@ -617,7 +623,9 @@ a.pg2 {
     4px -4px 0 var(--bg),
     -4px 4px 0 var(--bg);
   color: var(--color3);
-  cursor: pointer;
+  cursor:
+    url("../images/cursor_pointer.svg") 16 16,
+    pointer;
   position: relative;
 }
 
@@ -642,7 +650,9 @@ a.pg2 {
   flex-direction: column;
   align-items: center;
   transform: translateX(-50%);
-  cursor: pointer;
+  cursor:
+    url("../images/cursor_pointer.svg") 16 16,
+    pointer;
 }
 
 .scroll-tip .icon-nerd {
@@ -811,7 +821,9 @@ a.pg2 {
   transition:
     opacity 0.7s ease-in-out,
     background-color 0.25s ease-in-out;
-  cursor: pointer;
+  cursor:
+    url("../images/cursor_pointer.svg") 16 16,
+    pointer;
 }
 
 .logo:hover {
