@@ -129,6 +129,7 @@ window.onload = function () {
     whatIam.sort(() => Math.random() - 0.5);
     whatIam.sort(() => Math.random() - 0.5);
     whatIam.sort(() => Math.random() - 0.5);
+    whatIam.unshift({ word: " Indie Dev", color: "#ffff00" });
     let index = 0;
     let delay = (ms) => {
       return new Promise((resolve) => setTimeout(resolve, ms));

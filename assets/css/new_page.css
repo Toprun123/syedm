@@ -599,7 +599,7 @@ a.pg2 {
   line-height: 0.9;
 }
 
-.firstname .name:hover::after {
+.firstname .name::after {
   content: "";
   position: absolute;
   left: 0;
@@ -609,6 +609,10 @@ a.pg2 {
   background: url("../images/wavy-line-1.svg") repeat-x;
   background-size: contain;
   z-index: 99;
+}
+
+.firstname .name:hover::after {
+  background: none;
 }
 
 .lastname {
@@ -629,7 +633,7 @@ a.pg2 {
   position: relative;
 }
 
-.lastname:hover::after {
+.lastname::after {
   content: "";
   position: absolute;
   left: 0;
@@ -639,6 +643,10 @@ a.pg2 {
   background: url("../images/dashed-line-3.svg") repeat-x;
   background-size: contain;
   z-index: 99;
+}
+
+.lastname:hover::after {
+  background: none;
 }
 
 .scroll-tip {
@@ -731,7 +739,9 @@ a.pg2 {
   line-height: 1;
   color: var(--fg);
   z-index: 9999;
-  cursor: default;
+  cursor:
+    url("../images/cursor.svg") 16 16,
+    default;
   transition: opacity 0.5s ease-in-out;
   font-family: "Changa", sans-serif, "Hurmit";
 }
