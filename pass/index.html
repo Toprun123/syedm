@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Password Master</title>
+    <link rel="icon" href="../assets/images/lock.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="../assets/css/pass.css" />
+  </head>
+  <body>
+    <div class="waves-container">
+      <div class="wave wave1"></div>
+      <div class="wave wave2"></div>
+      <div class="wave wave3"></div>
+      <div class="wave wave4"></div>
+      <div class="wave wave1"></div>
+      <div class="wave wave2"></div>
+      <div class="wave wave3"></div>
+      <div class="wave wave4"></div>
+      <div class="wave wave1"></div>
+      <div class="wave wave2"></div>
+      <div class="wave wave3"></div>
+      <div class="wave wave4"></div>
+    </div>
+    <div class="container">
+      <div class="inputs">
+        <label for="pass">Password</label>
+        <div class="pass_i">
+          <input type="password" id="pass" placeholder="Password.." />
+          <button class="show" id="show"></button>
+        </div>
+        <label for="salt">Salt</label>
+        <input type="text" id="salt" placeholder="Salt..." />
+        <div class="hztl">
+          <div class="each">
+            <label for="num">Hash Num</label>
+            <input
+              type="number"
+              id="num"
+              value="20"
+              min="8"
+              max="64"
+              step="1"
+            />
+          </div>
+          <div class="each">
+            <label for="ver">Version</label>
+            <input
+              type="number"
+              id="ver"
+              value="0"
+              min="0"
+              max="256"
+              step="1"
+            />
+          </div>
+        </div>
+        <button class="solve" onclick="gp()">Solve</button>
+        <div class="ans">
+          <span id="f_pass">00000000000000000000</span
+          ><button class="copy" id="copy"></button>
+        </div>
+      </div>
+    </div>
+    <script src="../scripts/pass.js" defer></script>
+  </body>
+</html>

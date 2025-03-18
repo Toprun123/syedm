@@ -1,0 +1,229 @@
+@charset "UTF-8";
+
+@import url("./root.css");
+
+body {
+  height: 100vh;
+  width: 100vw;
+  min-height: 750px;
+  overflow: hidden;
+  font-size: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg);
+  color: var(--fg);
+}
+
+* {
+  font-variant-ligatures: none;
+}
+
+.solve {
+  background-color: var(--df);
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  margin-top: 20px;
+  font-size: 1rem;
+  font-family: "Were-Beast", sans-serif;
+  color: var(--fg);
+  transition: background-color 0.5s ease;
+  cursor:
+    url("../images/cursor_pointer.svg") 16 16,
+    pointer;
+}
+
+.solve:hover {
+  background-color: var(--color3);
+}
+
+input {
+  font-family: "Terminal", monospace;
+  font-size: 1.1rem;
+  letter-spacing: 0.1rem;
+  color: var(--color4);
+  background-color: var(--bg);
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  margin: 0;
+  width: calc(100% - 40px);
+  cursor:
+    url("../images/cursor_pointer.svg") 16 16,
+    text;
+}
+
+input:focus {
+  outline: none;
+}
+
+input[type="number"] {
+  width: 75px;
+}
+
+label {
+  font-family: "Changa", sans-serif;
+  font-size: 1.5rem;
+  margin-top: 20px;
+  color: var(--color3);
+}
+
+.inputs {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 70%;
+}
+
+.hztl {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.each {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.ans {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+#f_pass:empty + .copy {
+  display: none;
+}
+
+.copy {
+  background-color: var(--df);
+  border: none;
+  border-radius: 10px;
+  padding: 3px 13px;
+  margin-left: 10px;
+  font-size: 1.5rem;
+  font-family: "Hurmit", sans-serif;
+  color: var(--fg);
+  transition: background-color 0.5s ease;
+  cursor:
+    url("../images/cursor_pointer.svg") 16 16,
+    pointer;
+}
+
+.copy:hover {
+  background-color: var(--color3);
+}
+
+#f_pass {
+  font-family: "Fantasque", monospace;
+  font-size: 1.5rem;
+  letter-spacing: 0.2rem;
+  color: var(--color4);
+}
+
+.container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 700px;
+  z-index: 99;
+  background-color: color-mix(in srgb, var(--color1) 5%, transparent);
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  padding: 20px;
+  text-align: center;
+}
+
+.pass_i {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.show {
+  background-color: var(--df);
+  border: none;
+  border-radius: 10px;
+  padding: 3px 13px;
+  margin-left: 10px;
+  font-size: 1.5rem;
+  font-family: "Hurmit", sans-serif;
+  color: var(--fg);
+  transition: background-color 0.5s ease;
+  cursor:
+    url("../images/cursor_pointer.svg") 16 16,
+    pointer;
+}
+
+.show:hover {
+  background-color: var(--color3);
+}
+
+.waves-container {
+  position: absolute;
+  top: 50px;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 50px);
+  overflow: hidden;
+}
+
+.wave {
+  height: 60px;
+  margin-top: 40px;
+  background-repeat: repeat-x;
+  animation: move-wave-left 5s linear infinite;
+  background-size: auto 10px;
+  background-position: bottom;
+}
+
+.wave1 {
+  background-image: url("../images/wavy-line-1.svg");
+}
+
+.wave2 {
+  background-image: url("../images/dashed-line-3.svg");
+  animation: move-wave-right 5s linear infinite;
+}
+
+.wave3 {
+  background-image: url("../images/wavy-line-2.svg");
+}
+
+.wave4 {
+  background-image: url("../images/wavy-line-3.svg");
+  animation: move-wave-right 5s linear infinite;
+}
+
+@keyframes move-wave-left {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: -354px 0;
+  }
+}
+
+@keyframes move-wave-right {
+  0% {
+    background-position: -354px 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}

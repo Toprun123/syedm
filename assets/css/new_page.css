@@ -1,4 +1,4 @@
-@import "root.css";
+@import url("./root.css");
 
 .page {
   height: 100vh;
