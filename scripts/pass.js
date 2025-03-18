@@ -43,10 +43,10 @@ const gp = async () => {
   Array.from(fPass).forEach((char, i) => {
     let span = document.createElement("span");
     span.classList.add("pass_s");
-    span.textContent = Math.floor(Math.random() * 10);
+    span.textContent = charset[Math.floor(Math.random() * charset.length)];
     f_pass.appendChild(span);
     let interval = setInterval(() => {
-      span.textContent = Math.floor(Math.random() * 10);
+      span.textContent = charset[Math.floor(Math.random() * charset.length)];
     }, 50);
     setTimeout(
       () => {
