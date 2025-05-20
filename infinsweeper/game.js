@@ -1,20 +1,24 @@
 "use strict";
 
+import { SipHash } from "./siphash.js";
+
 const TILE_STATES = Object.freeze({
   HIDDEN: 0,
   FLAGGED: 1,
   REVEALED: 2,
 });
 
-const COLORS = Object.freeze({
-  BACKGROUND: "#314458",
-  TILE_DEFAULT: "#2c3e50",
-  TILE_REVEALED_NUMBERED: "#e74c3c",
-  TILE_REVEALED_EMPTY: "#d0d0d0",
-  TILE_FLAGGED: "#f1c40f",
+let COLORS = {
+  BACKGROUND_ORIG: "#262521",
+  BACKGROUND: "#262521",
+  TILE_DEFAULT: "#0e4c75",
+  TILE_CLICKABLE: "#115d8f",
+  TILE_REVEALED_NUMBERED: "#1b262c",
+  TILE_REVEALED_EMPTY: "#1b262c",
+  TILE_FLAGGED: "#25353d",
   TEXT: "#ffffff",
-  SECTOR_BORDER: "#bdc3c7",
-});
+  SECTOR_BORDER: "#90bdd9",
+};
 
 const SOLVED = 1;
 const MINE = -1;
@@ -31,6 +35,7 @@ class InfiniteMinesweeper {
   static DETAIL_THRESHOLD = 25;
   static DRAG_THRESHOLD = 20;
   static MAX_TRIES = 50;
+  static ANIMATION_SPEED_BASE = 150;
 
   /**
    * Creates an instance of InfiniteMinesweeper.
@@ -39,7 +44,7 @@ class InfiniteMinesweeper {
    */
   constructor(seed, difficulty) {
     this.board = {};
-    this.frame_id = 0;
+    this.frame_id = undefined;
     this.is_seeded = seed !== undefined;
     this.seed = seed || (Math.floor(Math.random() * 9e15) + 1e15).toString();
     this.difficulty = difficulty || InfiniteMinesweeper.DEFAULT_DIFFICULTY;
@@ -47,6 +52,7 @@ class InfiniteMinesweeper {
     this.canvas.width = window.innerWidth;
     this.canvas.height = window.innerHeight;
     this.ctx = this.canvas.getContext("2d");
+    this.ctx.imageSmoothingEnabled = false;
     this.tile_size = 40;
     this.offset_x =
       this.canvas.width / 2 -
@@ -60,12 +66,16 @@ class InfiniteMinesweeper {
     this.is_mouse_down = false;
     this.drag_start_pos = [0, 0];
     this.border_width = Math.floor(this.tile_size * 0.05);
-    this.font_size = Math.floor(this.tile_size * 0.5);
     this.hide_details = false;
     this.cached_sectors = {};
+    this.animations = {};
+    this.img = new Image();
+    this.is_img_loaded = false;
     this.loop = this.loop.bind(this);
+    this.sip = SipHash;
+    this.key = this.sip.string16_to_key(this.seed);
     this.setupEventListeners();
-    this.start();
+    this.loadImage();
   }
   /** Initializes the event listeners */
   setupEventListeners() {
@@ -153,7 +163,9 @@ class InfiniteMinesweeper {
       this.border_width = this.hide_details
         ? 0
         : Math.floor(this.tile_size * 0.05);
-      this.font_size = Math.max(8, Math.floor(this.tile_size * 0.5));
+      COLORS.BACKGROUND = this.hide_details
+        ? COLORS.TILE_DEFAULT
+        : COLORS.BACKGROUND_ORIG;
       this.cleanSectorCache();
     });
     this.canvas.addEventListener("click", (e) => {
@@ -166,6 +178,25 @@ class InfiniteMinesweeper {
       this.updateCanvasSize();
     });
   }
+  /** Loads the game art image */
+  loadImage() {
+    this.img.onload = () => {
+      this.is_img_loaded = true;
+      this.start();
+    };
+    this.img.onerror = () => {
+      this.is_img_loaded = false;
+      this.ctx.fillStyle = "red";
+      this.ctx.font = "16px Arial";
+      this.ctx.textAlign = "center";
+      this.ctx.fillText(
+        "An error occurred while loading the game art.",
+        this.canvas.width / 2,
+        this.canvas.height / 2,
+      );
+    };
+    this.img.src = "img/minesweeper.png";
+  }
   /**
    * Starts the game and builds a game with better opening conditions
    * @param {number} [tries=0] - The number of tries in an unseeded game
@@ -174,7 +205,7 @@ class InfiniteMinesweeper {
     const CENTRE = (InfiniteMinesweeper.SECTOR_SIZE - 1) / 2;
     if (!this.is_seeded && tries < InfiniteMinesweeper.MAX_TRIES) {
       let revealed = false;
-      revealed = await this.reveal(CENTRE, CENTRE);
+      revealed = await this.reveal(CENTRE, CENTRE, undefined, undefined, true);
       if (!revealed) {
         await this.reset(tries + 1);
         return;
@@ -223,6 +254,7 @@ class InfiniteMinesweeper {
             : BOARD_SECTOR || false;
         for (let y = 0; y < InfiniteMinesweeper.SECTOR_SIZE; y++) {
           for (let x = 0; x < InfiniteMinesweeper.SECTOR_SIZE; x++) {
+            const ANIMATE_KEY = `${s_x}:${s_y}:${x}:${y}`;
             const TILE_X =
               (s_x * InfiniteMinesweeper.SECTOR_SIZE + x) * this.tile_size +
               this.offset_x;
@@ -234,29 +266,108 @@ class InfiniteMinesweeper {
             this.ctx.fillRect(TILE_X, TILE_Y, TILE_SIZE, TILE_SIZE);
             if (!SECTOR) continue;
             const [TILE_NUM, TILE_STATE] = SECTOR[y][x];
+            if (this.animations.hasOwnProperty(ANIMATE_KEY)) {
+              const [TARGET_STATE, START_TIME, SPEED] =
+                this.animations[ANIMATE_KEY];
+              const FRAME_TIME = (Date.now() - START_TIME) / SPEED;
+              if (TARGET_STATE === TILE_STATES.REVEALED) {
+                this.ctx.fillStyle = COLORS.TILE_REVEALED_EMPTY;
+                this.ctx.fillRect(TILE_X, TILE_Y, TILE_SIZE, TILE_SIZE);
+                if (!this.hide_details && TILE_NUM !== 0) {
+                  let animated_progress;
+                  const OVERSHOOT = 1.2;
+                  animated_progress =
+                    FRAME_TIME === 1
+                      ? 1
+                      : FRAME_TIME *
+                        FRAME_TIME *
+                        ((OVERSHOOT + 1) * FRAME_TIME - OVERSHOOT);
+                  let current_scale;
+                  if (FRAME_TIME < 1) {
+                    current_scale =
+                      FRAME_TIME *
+                        FRAME_TIME *
+                        ((OVERSHOOT + 1) * FRAME_TIME - OVERSHOOT) +
+                      1;
+                    let base_progress;
+                    if (FRAME_TIME < 0.5) {
+                      base_progress = 2 * FRAME_TIME * FRAME_TIME;
+                    } else {
+                      base_progress = 1 - Math.pow(-2 * FRAME_TIME + 2, 2) / 2;
+                    }
+                    if (base_progress <= 0.8) {
+                      current_scale = (base_progress / 0.8) * OVERSHOOT;
+                    } else {
+                      const settle_progress = (base_progress - 0.8) / 0.2;
+                      current_scale =
+                        OVERSHOOT -
+                        (OVERSHOOT - 1.0) *
+                          (1 - Math.pow(1 - settle_progress, 3));
+                    }
+                    current_scale = Math.max(current_scale, 0);
+                  } else {
+                    current_scale = 1.0;
+                    delete this.animations[ANIMATE_KEY];
+                  }
+                  const SCALED_WIDTH = ((2 * TILE_SIZE) / 5) * current_scale;
+                  const SCALED_HEIGHT = ((2 * TILE_SIZE) / 3) * current_scale;
+                  this.ctx.drawImage(
+                    this.img,
+                    (TILE_NUM - 1) * 4,
+                    0,
+                    3,
+                    5,
+                    TILE_X +
+                      (3 * TILE_SIZE) / 10 +
+                      ((2 * TILE_SIZE) / 5 - SCALED_WIDTH) / 2,
+                    TILE_Y +
+                      TILE_SIZE / 6 +
+                      ((2 * TILE_SIZE) / 3 - SCALED_HEIGHT) / 2,
+                    SCALED_WIDTH,
+                    SCALED_HEIGHT,
+                  );
+                }
+              }
+              continue;
+            }
             if (TILE_STATE === TILE_STATES.REVEALED && TILE_NUM !== 0) {
               this.ctx.fillStyle = COLORS.TILE_REVEALED_NUMBERED;
+              this.ctx.fillRect(TILE_X, TILE_Y, TILE_SIZE, TILE_SIZE);
             } else if (TILE_STATE === TILE_STATES.REVEALED) {
               this.ctx.fillStyle = COLORS.TILE_REVEALED_EMPTY;
+              this.ctx.fillRect(TILE_X, TILE_Y, TILE_SIZE, TILE_SIZE);
             } else if (TILE_STATE === TILE_STATES.FLAGGED) {
               this.ctx.fillStyle = COLORS.TILE_FLAGGED;
-            }
-            if (TILE_STATE !== TILE_STATES.HIDDEN) {
               this.ctx.fillRect(TILE_X, TILE_Y, TILE_SIZE, TILE_SIZE);
+              if (!this.hide_details) {
+                this.ctx.drawImage(
+                  this.img,
+                  32,
+                  0,
+                  4,
+                  7,
+                  TILE_X + (3 * TILE_SIZE) / 10,
+                  TILE_Y + TILE_SIZE / 6,
+                  (2 * TILE_SIZE) / 5,
+                  (2 * TILE_SIZE) / 3,
+                );
+              }
             }
             if (
               !this.hide_details &&
               TILE_NUM !== 0 &&
               TILE_STATE === TILE_STATES.REVEALED
             ) {
-              this.ctx.fillStyle = COLORS.TEXT;
-              this.ctx.font = `${this.font_size}px Arial`;
-              this.ctx.textAlign = "center";
-              this.ctx.textBaseline = "middle";
-              this.ctx.fillText(
-                TILE_NUM,
-                TILE_X + this.tile_size / 2,
-                TILE_Y + this.tile_size / 2,
+              this.ctx.drawImage(
+                this.img,
+                (TILE_NUM - 1) * 4,
+                0,
+                3,
+                5,
+                TILE_X + (3 * TILE_SIZE) / 10,
+                TILE_Y + TILE_SIZE / 6,
+                (2 * TILE_SIZE) / 5,
+                (2 * TILE_SIZE) / 3,
               );
             }
           }
@@ -301,9 +412,10 @@ class InfiniteMinesweeper {
    * @param {number} y - Y-coordinate of tile
    * @param {number} [s_x] - X-coordinate of sector if `x` is relative
    * @param {number} [s_y] - Y-coordinate of sector if `y` is relative
+   * @param {boolean} [no_animate] - Whether to skip animation
    * @returns {Promise<boolean>} - Whether tiles was recursively revealed
    */
-  async reveal(x, y, s_x, s_y) {
+  async reveal(x, y, s_x, s_y, no_animate = false) {
     let recursed = false;
     [s_x, s_y, x, y] = this.convert(true, x, y, s_x, s_y);
     const SECTOR_KEY = `${s_x}:${s_y}`;
@@ -320,6 +432,16 @@ class InfiniteMinesweeper {
         console.log("lost sector: " + `${s_x}:${s_x}`);
       } else if (TILE[0] === 0) {
         TILE[1] = TILE_STATES.REVEALED;
+        if (!no_animate) {
+          await this.animateTile(
+            x,
+            y,
+            s_x,
+            s_y,
+            InfiniteMinesweeper.ANIMATION_SPEED_BASE * 0.2,
+            TILE_STATES.REVEALED,
+          );
+        }
         recursed = true;
         let promises = [];
         const [G_X, G_Y] = this.convert(false, x, y, s_x, s_y);
@@ -333,6 +455,16 @@ class InfiniteMinesweeper {
         await Promise.all(promises);
       } else if (TILE[0] > 0) {
         TILE[1] = TILE_STATES.REVEALED;
+        if (!no_animate) {
+          await this.animateTile(
+            x,
+            y,
+            s_x,
+            s_y,
+            InfiniteMinesweeper.ANIMATION_SPEED_BASE,
+            TILE_STATES.REVEALED,
+          );
+        }
       }
     }
     if (this.isSectorSolved(s_x, s_y)) {
@@ -346,6 +478,24 @@ class InfiniteMinesweeper {
     return recursed;
   }
   /**
+   * Animates a tile
+   * @param {number} x - X-coordinate of tile
+   * @param {number} y - Y-coordinate of tile
+   * @param {number} [s_x] - X-coordinate of sector if `x` is relative
+   * @param {number} [s_y] - Y-coordinate of sector if `y` is relative
+   * @param {number} speed - Speed of animation
+   * @param {number} state - State of tile
+   * @returns {Promise<void>}
+   */
+  async animateTile(x, y, s_x, s_y, speed, state) {
+    [s_x, s_y, x, y] = this.convert(true, x, y, s_x, s_y);
+    this.animations[`${s_x}:${s_y}:${x}:${y}`] = [state, Date.now(), speed];
+    await new Promise((resolve) => {
+      setTimeout(resolve, speed);
+    });
+    delete this.animations[`${s_x}:${s_y}:${x}:${y}`];
+  }
+  /**
    * Flags/Unflags a tile.
    * @param {number} x - X-coordinate of tile
    * @param {number} y - Y-coordinate of tile
@@ -357,20 +507,24 @@ class InfiniteMinesweeper {
     const BOARD_SECTOR = this.board[`${s_x}:${s_y}`];
     const TILE =
       BOARD_SECTOR === SOLVED
-        ? this.buildSectorCache(s_x, s_y)?.[y][x] || null
-        : BOARD_SECTOR?.[y][x] || null;
+        ? null
+        : BOARD_SECTOR?.[y][x] || this.buildSector(s_x, s_y)?.[y][x] || null;
     if (!TILE) return;
     if (TILE[1] !== TILE_STATES.REVEALED) {
-      TILE[1] =
-        TILE[1] === TILE_STATES.FLAGGED
-          ? TILE_STATES.HIDDEN
-          : TILE_STATES.FLAGGED;
+      if (TILE[1] === TILE_STATES.FLAGGED) {
+        TILE[1] = TILE_STATES.HIDDEN;
+        this.animateTile(x, y, s_x, s_y, TILE_STATES.HIDDEN);
+      } else {
+        TILE[1] = TILE_STATES.FLAGGED;
+        this.animateTile(x, y, s_x, s_y, TILE_STATES.FLAGGED);
+      }
     }
   }
   /** Updates the canvas size */
   updateCanvasSize() {
     this.canvas.width = window.innerWidth;
     this.canvas.height = window.innerHeight;
+    this.ctx.imageSmoothingEnabled = false;
   }
   /**
    * Checks if a tile is clickable
@@ -427,22 +581,24 @@ class InfiniteMinesweeper {
    * Builds a solved sector into the cache
    * @param {number} [s_x] - X-coordinate of sector
    * @param {number} [s_y] - Y-coordinate of sector
-   * @returns {Array<Array<[number, number]>>|false} - A solved sector built into the cache.
+   * @returns {Array<Array<[number, number]>>|false} - A solved sector built into
+   *                                                   the cache.
    */
   buildSectorCache(s_x, s_y) {
-    if (this.board[`${s_x}:${s_y}`] !== 1) return false;
-    if (this.cached_sectors[`${s_x}:${s_y}`])
-      return this.cached_sectors[`${s_x}:${s_y}`];
-    this.cached_sectors[`${s_x}:${s_y}`] = Array.from(
-      { length: InfiniteMinesweeper.TILE_SIZE },
+    const SECTOR_KEY = `${s_x}:${s_y}`;
+    if (this.board[SECTOR_KEY] !== 1) return false;
+    if (this.cached_sectors.hasOwnProperty(SECTOR_KEY))
+      return this.cached_sectors[SECTOR_KEY];
+    this.cached_sectors[SECTOR_KEY] = Array.from(
+      { length: InfiniteMinesweeper.SECTOR_SIZE },
       (_, y) =>
-        Array.from({ length: InfiniteMinesweeper.TILE_SIZE }, (_, x) =>
+        Array.from({ length: InfiniteMinesweeper.SECTOR_SIZE }, (_, x) =>
           this.isMine(x, y, s_x, s_y)
             ? [MINE, TILE_STATES.FLAGGED]
-            : [this.mineCount(x, y, s_x, s_y), TILE_STATES.REVEALED],
+            : [this.mineCount(x, y, s_x, s_y, true), TILE_STATES.REVEALED],
         ),
     );
-    return this.cached_sectors[`${s_x}:${s_y}`];
+    return this.cached_sectors[SECTOR_KEY];
   }
   /** Cleans the sector cache */
   cleanSectorCache() {
@@ -487,10 +643,13 @@ class InfiniteMinesweeper {
    * Builds a sector into the main board.
    * @param {number} [s_x] - X-coordinate of sector
    * @param {number} [s_y] - Y-coordinate of sector
+   * @returns {Array<Array<[number, number]>>|false} - A newly generated unsolved
+   *                                                   sector or if exists, the
+   *                                                   existing one.
    */
   buildSector(s_x, s_y) {
     const SECTOR_KEY = `${s_x}:${s_y}`;
-    if (this.board.hasOwnProperty(SECTOR_KEY)) return;
+    if (this.board.hasOwnProperty(SECTOR_KEY)) return this.board[SECTOR_KEY];
     const SECTOR = Array.from(
       { length: InfiniteMinesweeper.SECTOR_SIZE },
       (_, y) =>
@@ -508,6 +667,7 @@ class InfiniteMinesweeper {
       }
     }
     this.board[SECTOR_KEY] = SECTOR;
+    return SECTOR;
   }
   /**
    * Returns the number of flags around a tile.
@@ -552,6 +712,10 @@ class InfiniteMinesweeper {
       for (let j = -1; j <= 1; j++) {
         const [S_X, S_Y, X, Y] = this.convert(true, G_X + i, G_Y + j);
         const BOARD_SECTOR = this.board[`${S_X}:${S_Y}`];
+        if (force) {
+          if (this.isMine(X, Y, S_X, S_Y)) sum++;
+          continue;
+        }
         const TILE =
           BOARD_SECTOR === SOLVED
             ? this.buildSectorCache(S_X, S_Y)[Y][X]
@@ -576,8 +740,10 @@ class InfiniteMinesweeper {
   isMine(x, y, s_x, s_y) {
     [s_x, s_y, x, y] = this.convert(true, x, y, s_x, s_y);
     if (s_x == 0 && s_y == 0 && x == 4 && y == 4) return false;
+    let hash = this.sip.hash(this.key, `${this.seed}:${s_x}:${s_y}:${x}:${y}`);
+    hash = ((hash.h >>> 0) * 0x100000000 + (hash.l >>> 0)) % 101;
     return (
-      murmur(`${this.seed}:${s_x}:${s_y}:${x}:${y}`) <
+      hash <
       ([s_x, s_y].every((c) => c >= -1 && c <= 1)
         ? this.difficulty * InfiniteMinesweeper.CENTRAL_AREA_DIFFICULTY_MODIFIER
         : this.difficulty)
@@ -620,55 +786,6 @@ class InfiniteMinesweeper {
       }
     }
   }
-}
-
-/**
- * Generate a pseudo random number from a seed using MurmurHash3_x86_32
- * @param {string} seed - a seed
- * @returns {number} - a pseudo random number between 0 and 100 (inclusive)
- */
-function murmur(seed) {
-  const key = String(seed);
-  let h1 = 0;
-  let remainder = key.length & 3;
-  let bytes = key.length - remainder;
-  let c1 = 0xcc9e2d51;
-  let c2 = 0x1b873593;
-  let i = 0;
-  while (i < bytes) {
-    let k1 =
-      (key.charCodeAt(i) & 0xff) |
-      ((key.charCodeAt(i + 1) & 0xff) << 8) |
-      ((key.charCodeAt(i + 2) & 0xff) << 16) |
-      ((key.charCodeAt(i + 3) & 0xff) << 24);
-    i += 4;
-    k1 = Math.imul(k1, c1);
-    k1 = (k1 << 15) | (k1 >>> 17);
-    k1 = Math.imul(k1, c2);
-    h1 ^= k1;
-    h1 = (h1 << 13) | (h1 >>> 19);
-    h1 = Math.imul(h1, 5) + 0xe6546b64;
-  }
-  let k1 = 0;
-  switch (remainder) {
-    case 3:
-      k1 ^= key.charCodeAt(i + 2) << 16;
-    case 2:
-      k1 ^= key.charCodeAt(i + 1) << 8;
-    case 1:
-      k1 ^= key.charCodeAt(i);
-      k1 = Math.imul(k1, c1);
-      k1 = (k1 << 15) | (k1 >>> 17);
-      k1 = Math.imul(k1, c2);
-      h1 ^= k1;
-  }
-  h1 ^= key.length;
-  h1 ^= h1 >>> 16;
-  h1 = Math.imul(h1, 0x85ebca6b);
-  h1 ^= h1 >>> 13;
-  h1 = Math.imul(h1, 0xc2b2ae35);
-  h1 ^= h1 >>> 16;
-  return (h1 >>> 0) % 101;
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
