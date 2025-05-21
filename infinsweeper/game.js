@@ -3,21 +3,26 @@
 import { SipHash } from "./siphash.js";
 
 const TILE_STATES = Object.freeze({
+  LOST: -1,
   HIDDEN: 0,
   FLAGGED: 1,
   REVEALED: 2,
 });
 
 let COLORS = {
-  BACKGROUND_ORIG: "#262521",
-  BACKGROUND: "#262521",
+  BACKGROUND_ORIG: "#1b262c",
+  BACKGROUND: "#1b262c",
   TILE_DEFAULT: "#0e4c75",
   TILE_CLICKABLE: "#115d8f",
   TILE_REVEALED_NUMBERED: "#1b262c",
   TILE_REVEALED_EMPTY: "#1b262c",
   TILE_FLAGGED: "#25353d",
-  TEXT: "#ffffff",
+  SECTOR_OVERLAY: "#90bdd9",
+  SECTOR_LOST_OVERLAY: "#fa908c",
   SECTOR_BORDER: "#90bdd9",
+  FLAG_PARTICLE_COLOR: "#90bdd9",
+  SOLVED_PARTICLE_COLOR: "#90bdd9",
+  LOST_PARTICLE_COLOR: "#fa908c",
 };
 
 const SOLVED = 1;
@@ -65,17 +70,21 @@ class InfiniteMinesweeper {
     this.is_dragging = false;
     this.is_mouse_down = false;
     this.drag_start_pos = [0, 0];
-    this.border_width = Math.floor(this.tile_size * 0.05);
+    this.border_width = Math.floor(this.tile_size * 0.065);
     this.hide_details = false;
     this.cached_sectors = {};
     this.animations = {};
+    this.animated_sectors = {};
+    this.lost_animations = {};
+    this.lost_sectors = new Set();
     this.img = new Image();
-    this.is_img_loaded = false;
+    this.solved_img = new Image();
+    this.lost_img = new Image();
     this.loop = this.loop.bind(this);
     this.sip = SipHash;
     this.key = this.sip.string16_to_key(this.seed);
     this.setupEventListeners();
-    this.loadImage();
+    this.loadImages();
   }
   /** Initializes the event listeners */
   setupEventListeners() {
@@ -162,7 +171,7 @@ class InfiniteMinesweeper {
       this.hide_details = this.tile_size < InfiniteMinesweeper.DETAIL_THRESHOLD;
       this.border_width = this.hide_details
         ? 0
-        : Math.floor(this.tile_size * 0.05);
+        : Math.floor(this.tile_size * 0.065);
       COLORS.BACKGROUND = this.hide_details
         ? COLORS.TILE_DEFAULT
         : COLORS.BACKGROUND_ORIG;
@@ -179,13 +188,11 @@ class InfiniteMinesweeper {
     });
   }
   /** Loads the game art image */
-  loadImage() {
+  loadImages() {
     this.img.onload = () => {
-      this.is_img_loaded = true;
       this.start();
     };
     this.img.onerror = () => {
-      this.is_img_loaded = false;
       this.ctx.fillStyle = "red";
       this.ctx.font = "16px Arial";
       this.ctx.textAlign = "center";
@@ -196,6 +203,8 @@ class InfiniteMinesweeper {
       );
     };
     this.img.src = "img/minesweeper.png";
+    this.solved_img.src = "img/solved_txt.png";
+    this.lost_img.src = "img/lost_txt.png";
   }
   /**
    * Starts the game and builds a game with better opening conditions
@@ -245,8 +254,221 @@ class InfiniteMinesweeper {
     const END_Y = Math.ceil(
       START_Y + this.canvas.height / SECTOR_PIXEL_SIZE + 1,
     );
-    for (let s_y = START_Y; s_y < END_Y; s_y++) {
-      for (let s_x = START_X; s_x < END_X; s_x++) {
+    this._drawStaticTiles(START_X, END_X, START_Y, END_Y);
+    this._drawAnimations(START_X, END_X, START_Y, END_Y);
+    if (!this.hide_details) {
+      this._drawSectorBorders(
+        START_X,
+        END_X,
+        START_Y,
+        END_Y,
+        SECTOR_PIXEL_SIZE,
+      );
+      this._drawSectorOverlays(
+        START_X,
+        END_X,
+        START_Y,
+        END_Y,
+        SECTOR_PIXEL_SIZE,
+      );
+      this._drawSectorAnimations(
+        START_X,
+        END_X,
+        START_Y,
+        END_Y,
+        SECTOR_PIXEL_SIZE,
+      );
+      this._drawLostSectorOverlays(
+        START_X,
+        END_X,
+        START_Y,
+        END_Y,
+        SECTOR_PIXEL_SIZE,
+      );
+      this._drawLostSectorAnimations(
+        START_X,
+        END_X,
+        START_Y,
+        END_Y,
+        SECTOR_PIXEL_SIZE,
+      );
+    }
+  }
+  /**
+   * Draws a rounded rectangle
+   * @param {number} x - The x position of the top left corner
+   * @param {number} y - The y position of the top left corner
+   * @param {number} width - The width of the rectangle
+   * @param {number} height - The height of the rectangle
+   * @param {number} radius - The radius of the rounded corners
+   */
+  _drawRoundedRect(x, y, width, height, radius) {
+    this.ctx.beginPath();
+    this.ctx.moveTo(x + radius, y);
+    this.ctx.lineTo(x + width - radius, y);
+    this.ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+    this.ctx.lineTo(x + width, y + height - radius);
+    this.ctx.quadraticCurveTo(
+      x + width,
+      y + height,
+      x + width - radius,
+      y + height,
+    );
+    this.ctx.lineTo(x + radius, y + height);
+    this.ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+    this.ctx.lineTo(x, y + radius);
+    this.ctx.quadraticCurveTo(x, y, x + radius, y);
+    this.ctx.closePath();
+    this.ctx.fill();
+  }
+  /**
+   * Draws the static tiles
+   * @param {number} start_x - the starting sector x position onscreen
+   * @param {number} end_x - the ending sector x position onscreen
+   * @param {number} start_y - the starting sector y position onscreen
+   * @param {number} end_y - the ending sector y position onscreen
+   */
+  _drawStaticTiles(start_x, end_x, start_y, end_y) {
+    for (let s_y = start_y; s_y < end_y; s_y++) {
+      for (let s_x = start_x; s_x < end_x; s_x++) {
+        const BOARD_SECTOR = this.board[`${s_x}:${s_y}`];
+        const SECTOR =
+          BOARD_SECTOR === SOLVED
+            ? this.buildSectorCache(s_x, s_y) || false
+            : BOARD_SECTOR || false;
+        for (let y = 0; y < InfiniteMinesweeper.SECTOR_SIZE; y++) {
+          for (let x = 0; x < InfiniteMinesweeper.SECTOR_SIZE; x++) {
+            const TILE_X =
+              (s_x * InfiniteMinesweeper.SECTOR_SIZE + x) * this.tile_size +
+              this.offset_x;
+            const TILE_Y =
+              (s_y * InfiniteMinesweeper.SECTOR_SIZE + y) * this.tile_size +
+              this.offset_y;
+            if (!SECTOR) {
+              if (this.isClickable(x, y, s_x, s_y)) {
+                this.ctx.fillStyle = COLORS.TILE_CLICKABLE;
+                this._drawRoundedRect(
+                  TILE_X,
+                  TILE_Y,
+                  this.tile_size - this.border_width,
+                  this.tile_size - this.border_width,
+                  this.tile_size / 15,
+                );
+              } else {
+                this.ctx.fillStyle = COLORS.TILE_DEFAULT;
+                this.ctx.fillRect(
+                  TILE_X,
+                  TILE_Y,
+                  this.tile_size - this.border_width,
+                  this.tile_size - this.border_width,
+                );
+              }
+              continue;
+            }
+            const [TILE_NUM, TILE_STATE] = SECTOR[y][x];
+            if (this.animations.hasOwnProperty(`${s_x}:${s_y}:${x}:${y}`)) {
+              continue;
+            }
+            if (TILE_STATE === TILE_STATES.REVEALED && TILE_NUM !== 0) {
+              this.ctx.fillStyle = COLORS.TILE_REVEALED_NUMBERED;
+              this.ctx.fillRect(TILE_X, TILE_Y, this.tile_size, this.tile_size);
+            } else if (TILE_STATE === TILE_STATES.REVEALED) {
+              this.ctx.fillStyle = COLORS.TILE_REVEALED_EMPTY;
+              this.ctx.fillRect(TILE_X, TILE_Y, this.tile_size, this.tile_size);
+            } else if (TILE_STATE === TILE_STATES.LOST) {
+              this.ctx.fillStyle = COLORS.TILE_CLICKABLE;
+              this._drawRoundedRect(
+                TILE_X,
+                TILE_Y,
+                this.tile_size - this.border_width,
+                this.tile_size - this.border_width,
+                this.tile_size / 6,
+              );
+            } else if (TILE_STATE === TILE_STATES.FLAGGED) {
+              this.ctx.fillStyle = COLORS.TILE_FLAGGED;
+              this._drawRoundedRect(
+                TILE_X,
+                TILE_Y,
+                this.tile_size - this.border_width,
+                this.tile_size - this.border_width,
+                this.tile_size / 6,
+              );
+            } else if (this.isClickable(x, y, s_x, s_y)) {
+              this.ctx.fillStyle = COLORS.TILE_CLICKABLE;
+              this._drawRoundedRect(
+                TILE_X,
+                TILE_Y,
+                this.tile_size - this.border_width,
+                this.tile_size - this.border_width,
+                this.tile_size / 15,
+              );
+            } else {
+              this.ctx.fillStyle = COLORS.TILE_DEFAULT;
+              this.ctx.fillRect(
+                TILE_X,
+                TILE_Y,
+                this.tile_size - this.border_width,
+                this.tile_size - this.border_width,
+              );
+            }
+            if (!this.hide_details) {
+              if (TILE_NUM !== 0 && TILE_STATE === TILE_STATES.REVEALED) {
+                this.ctx.drawImage(
+                  this.img,
+                  (TILE_NUM - 1) * 4,
+                  0,
+                  3,
+                  5,
+                  TILE_X + (3 * this.tile_size) / 10,
+                  TILE_Y + this.tile_size / 6,
+                  (2 * this.tile_size) / 5,
+                  (2 * this.tile_size) / 3,
+                );
+              } else if (TILE_STATE === TILE_STATES.FLAGGED) {
+                this.ctx.drawImage(
+                  this.img,
+                  32,
+                  0,
+                  4,
+                  7,
+                  TILE_X + (3 * this.tile_size) / 10 - this.border_width / 2,
+                  TILE_Y + this.tile_size / 6,
+                  (2 * (this.tile_size - this.border_width)) / 5,
+                  (2 * (this.tile_size - this.border_width)) / 3,
+                );
+              } else if (TILE_STATE === TILE_STATES.LOST) {
+                this.ctx.drawImage(
+                  this.img,
+                  37,
+                  0,
+                  5,
+                  5,
+                  TILE_X +
+                    (this.tile_size - this.border_width) / 2 -
+                    (this.tile_size - this.border_width) / 4,
+                  TILE_Y +
+                    (this.tile_size - this.border_width) / 2 -
+                    (this.tile_size - this.border_width) / 4,
+                  (this.tile_size - this.border_width) / 2,
+                  (this.tile_size - this.border_width) / 2,
+                );
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  /**
+   * Draws the animations on the board
+   * @param {number} start_x - the starting sector x position onscreen
+   * @param {number} end_x - the ending sector x position onscreen
+   * @param {number} start_y - the starting sector y position onscreen
+   * @param {number} end_y - the ending sector y position onscreen
+   */
+  _drawAnimations(start_x, end_x, start_y, end_y) {
+    for (let s_y = start_y; s_y < end_y; s_y++) {
+      for (let s_x = start_x; s_x < end_x; s_x++) {
         const BOARD_SECTOR = this.board[`${s_x}:${s_y}`];
         const SECTOR =
           BOARD_SECTOR === SOLVED
@@ -255,156 +477,423 @@ class InfiniteMinesweeper {
         for (let y = 0; y < InfiniteMinesweeper.SECTOR_SIZE; y++) {
           for (let x = 0; x < InfiniteMinesweeper.SECTOR_SIZE; x++) {
             const ANIMATE_KEY = `${s_x}:${s_y}:${x}:${y}`;
-            const TILE_X =
-              (s_x * InfiniteMinesweeper.SECTOR_SIZE + x) * this.tile_size +
-              this.offset_x;
-            const TILE_Y =
-              (s_y * InfiniteMinesweeper.SECTOR_SIZE + y) * this.tile_size +
-              this.offset_y;
-            const TILE_SIZE = Math.floor(this.tile_size - this.border_width);
-            this.ctx.fillStyle = COLORS.TILE_DEFAULT;
-            this.ctx.fillRect(TILE_X, TILE_Y, TILE_SIZE, TILE_SIZE);
-            if (!SECTOR) continue;
-            const [TILE_NUM, TILE_STATE] = SECTOR[y][x];
             if (this.animations.hasOwnProperty(ANIMATE_KEY)) {
               const [TARGET_STATE, START_TIME, SPEED] =
                 this.animations[ANIMATE_KEY];
               const FRAME_TIME = (Date.now() - START_TIME) / SPEED;
-              if (TARGET_STATE === TILE_STATES.REVEALED) {
-                this.ctx.fillStyle = COLORS.TILE_REVEALED_EMPTY;
-                this.ctx.fillRect(TILE_X, TILE_Y, TILE_SIZE, TILE_SIZE);
-                if (!this.hide_details && TILE_NUM !== 0) {
-                  let animated_progress;
-                  const OVERSHOOT = 1.2;
-                  animated_progress =
-                    FRAME_TIME === 1
-                      ? 1
-                      : FRAME_TIME *
-                        FRAME_TIME *
-                        ((OVERSHOOT + 1) * FRAME_TIME - OVERSHOOT);
-                  let current_scale;
-                  if (FRAME_TIME < 1) {
-                    current_scale =
-                      FRAME_TIME *
-                        FRAME_TIME *
-                        ((OVERSHOOT + 1) * FRAME_TIME - OVERSHOOT) +
-                      1;
-                    let base_progress;
-                    if (FRAME_TIME < 0.5) {
-                      base_progress = 2 * FRAME_TIME * FRAME_TIME;
-                    } else {
-                      base_progress = 1 - Math.pow(-2 * FRAME_TIME + 2, 2) / 2;
-                    }
-                    if (base_progress <= 0.8) {
-                      current_scale = (base_progress / 0.8) * OVERSHOOT;
-                    } else {
-                      const settle_progress = (base_progress - 0.8) / 0.2;
-                      current_scale =
-                        OVERSHOOT -
-                        (OVERSHOOT - 1.0) *
-                          (1 - Math.pow(1 - settle_progress, 3));
-                    }
-                    current_scale = Math.max(current_scale, 0);
-                  } else {
-                    current_scale = 1.0;
-                    delete this.animations[ANIMATE_KEY];
-                  }
-                  const SCALED_WIDTH = ((2 * TILE_SIZE) / 5) * current_scale;
-                  const SCALED_HEIGHT = ((2 * TILE_SIZE) / 3) * current_scale;
+              const TILE_X =
+                (s_x * InfiniteMinesweeper.SECTOR_SIZE + x) * this.tile_size +
+                this.offset_x;
+              const TILE_Y =
+                (s_y * InfiniteMinesweeper.SECTOR_SIZE + y) * this.tile_size +
+                this.offset_y;
+              this.ctx.fillStyle = COLORS.TILE_REVEALED_EMPTY;
+              this.ctx.fillRect(TILE_X, TILE_Y, this.tile_size, this.tile_size);
+              let current_scale = 1.0;
+              if (FRAME_TIME < 1) {
+                let base_progress;
+                if (FRAME_TIME < 0.5) {
+                  base_progress = 2 * FRAME_TIME * FRAME_TIME;
+                } else {
+                  base_progress = 1 - Math.pow(-2 * FRAME_TIME + 2, 2) / 2;
+                }
+                const OVERSHOOT_AMOUNT = 1.2;
+                if (base_progress <= 0.8) {
+                  current_scale = (base_progress / 0.8) * OVERSHOOT_AMOUNT;
+                } else {
+                  const settle_progress = (base_progress - 0.8) / 0.2;
+                  current_scale =
+                    OVERSHOOT_AMOUNT -
+                    (OVERSHOOT_AMOUNT - 1.0) *
+                      (1 - Math.pow(1 - settle_progress, 3));
+                }
+                current_scale = Math.max(current_scale, 0);
+              } else {
+                current_scale = 1.0;
+                delete this.animations[ANIMATE_KEY];
+              }
+              if (!SECTOR) continue;
+              const [TILE_NUM] = SECTOR[y][x];
+              if (
+                TARGET_STATE === TILE_STATES.REVEALED &&
+                !this.hide_details &&
+                TILE_NUM !== 0
+              ) {
+                const SCALED_WIDTH = ((2 * this.tile_size) / 5) * current_scale;
+                const SCALED_HEIGHT =
+                  ((2 * this.tile_size) / 3) * current_scale;
+                this.ctx.drawImage(
+                  this.img,
+                  (TILE_NUM - 1) * 4,
+                  0,
+                  3,
+                  5,
+                  TILE_X +
+                    (3 * this.tile_size) / 10 +
+                    ((2 * this.tile_size) / 5 - SCALED_WIDTH) / 2,
+                  TILE_Y +
+                    this.tile_size / 6 +
+                    ((2 * this.tile_size) / 3 - SCALED_HEIGHT) / 2,
+                  SCALED_WIDTH,
+                  SCALED_HEIGHT,
+                );
+              } else if (TARGET_STATE === TILE_STATES.FLAGGED) {
+                this.ctx.fillStyle = COLORS.TILE_FLAGGED;
+                this._drawRoundedRect(
+                  TILE_X,
+                  TILE_Y,
+                  this.tile_size - this.border_width,
+                  this.tile_size - this.border_width,
+                  this.tile_size / 6,
+                );
+                if (!this.hide_details) {
+                  const SCALED_WIDTH =
+                    ((2 * (this.tile_size - this.border_width)) / 5) *
+                    current_scale;
+                  const SCALED_HEIGHT =
+                    ((2 * (this.tile_size - this.border_width)) / 3) *
+                    current_scale;
                   this.ctx.drawImage(
                     this.img,
-                    (TILE_NUM - 1) * 4,
+                    32,
                     0,
-                    3,
-                    5,
+                    4,
+                    7,
                     TILE_X +
-                      (3 * TILE_SIZE) / 10 +
-                      ((2 * TILE_SIZE) / 5 - SCALED_WIDTH) / 2,
+                      (3 * this.tile_size) / 10 +
+                      ((2 * (this.tile_size - this.border_width)) / 5 -
+                        SCALED_WIDTH) /
+                        2 -
+                      this.border_width / 2,
                     TILE_Y +
-                      TILE_SIZE / 6 +
-                      ((2 * TILE_SIZE) / 3 - SCALED_HEIGHT) / 2,
+                      this.tile_size / 6 +
+                      ((2 * (this.tile_size - this.border_width)) / 3 -
+                        SCALED_HEIGHT) /
+                        2,
                     SCALED_WIDTH,
                     SCALED_HEIGHT,
                   );
+                  if (FRAME_TIME < 1.0) {
+                    this._drawFlagParticles(TILE_X, TILE_Y, FRAME_TIME);
+                  }
+                }
+              } else if (TARGET_STATE == TILE_STATES.LOST) {
+                this.ctx.fillStyle = COLORS.TILE_DEFAULT;
+                this._drawRoundedRect(
+                  TILE_X,
+                  TILE_Y,
+                  this.tile_size - this.border_width,
+                  this.tile_size - this.border_width,
+                  this.tile_size / 6,
+                );
+                if (!this.hide_details) {
+                  const SCALED =
+                    ((this.tile_size - this.border_width) / 2) * current_scale;
+                  this.ctx.drawImage(
+                    this.img,
+                    37,
+                    0,
+                    5,
+                    5,
+                    TILE_X +
+                      (this.tile_size - this.border_width) / 2 -
+                      SCALED / 2,
+                    TILE_Y +
+                      (this.tile_size - this.border_width) / 2 -
+                      SCALED / 2,
+                    SCALED,
+                    SCALED,
+                  );
+                  if (FRAME_TIME < 1.0) {
+                    this._drawMineParticles(TILE_X, TILE_Y, FRAME_TIME);
+                  }
                 }
               }
-              continue;
-            }
-            if (TILE_STATE === TILE_STATES.REVEALED && TILE_NUM !== 0) {
-              this.ctx.fillStyle = COLORS.TILE_REVEALED_NUMBERED;
-              this.ctx.fillRect(TILE_X, TILE_Y, TILE_SIZE, TILE_SIZE);
-            } else if (TILE_STATE === TILE_STATES.REVEALED) {
-              this.ctx.fillStyle = COLORS.TILE_REVEALED_EMPTY;
-              this.ctx.fillRect(TILE_X, TILE_Y, TILE_SIZE, TILE_SIZE);
-            } else if (TILE_STATE === TILE_STATES.FLAGGED) {
-              this.ctx.fillStyle = COLORS.TILE_FLAGGED;
-              this.ctx.fillRect(TILE_X, TILE_Y, TILE_SIZE, TILE_SIZE);
-              if (!this.hide_details) {
-                this.ctx.drawImage(
-                  this.img,
-                  32,
-                  0,
-                  4,
-                  7,
-                  TILE_X + (3 * TILE_SIZE) / 10,
-                  TILE_Y + TILE_SIZE / 6,
-                  (2 * TILE_SIZE) / 5,
-                  (2 * TILE_SIZE) / 3,
-                );
-              }
-            }
-            if (
-              !this.hide_details &&
-              TILE_NUM !== 0 &&
-              TILE_STATE === TILE_STATES.REVEALED
-            ) {
-              this.ctx.drawImage(
-                this.img,
-                (TILE_NUM - 1) * 4,
-                0,
-                3,
-                5,
-                TILE_X + (3 * TILE_SIZE) / 10,
-                TILE_Y + TILE_SIZE / 6,
-                (2 * TILE_SIZE) / 5,
-                (2 * TILE_SIZE) / 3,
-              );
             }
           }
         }
       }
     }
-    if (!this.hide_details) {
-      this.ctx.strokeStyle = COLORS.SECTOR_BORDER;
-      for (let s_x = START_X; s_x < END_X; s_x++) {
-        const SECTOR_X_POS = s_x * SECTOR_PIXEL_SIZE + this.offset_x;
-        this.ctx.lineWidth = this.border_width;
-        this.ctx.beginPath();
-        this.ctx.moveTo(
-          SECTOR_X_POS + SECTOR_PIXEL_SIZE - this.border_width / 2,
-          0,
+  }
+  /**
+   * Draws flag particles for a tile
+   * @param {number} tile_x - X-coordinate of tile
+   * @param {number} tile_y - Y-coordinate of tile
+   * @param {number} frame_time - The current animation frame (0-1)
+   */
+  _drawFlagParticles(tile_x, tile_y, frame_time) {
+    const PARTICLE_SPEED = this.tile_size * 1.5;
+    const PARTICLE_SIZE = this.tile_size * 0.55;
+    for (let i = 0; i < 5; i++) {
+      let hash = this.sip.hash(
+        this.key,
+        `${this.seed}:${tile_x}:${tile_y}:${i}`,
+      );
+      hash = (((hash.h >>> 0) * 0x100000000 + (hash.l >>> 0)) % 101) / 100;
+      const angle_offset = hash * Math.PI * 2;
+      const speed_multiplier = 0.9 + hash * 0.6;
+      const size_multiplier = 0.8 + hash * 0.4;
+      const current_particle_speed = PARTICLE_SPEED * speed_multiplier;
+      const current_particle_size = PARTICLE_SIZE * size_multiplier;
+      const angle = angle_offset + frame_time * Math.PI * 4 * (1 + hash * 0.7);
+      const radius = frame_time * current_particle_speed;
+      const particle_x = tile_x + this.tile_size / 2 + Math.cos(angle) * radius;
+      const particle_y = tile_y + this.tile_size / 2 + Math.sin(angle) * radius;
+      const particle_final_size = current_particle_size * (1 - frame_time);
+      this.ctx.globalAlpha = Math.max(0, 1 - Math.pow(frame_time, 1.5));
+      this.ctx.fillStyle = COLORS.FLAG_PARTICLE_COLOR;
+      this.ctx.beginPath();
+      this.ctx.arc(
+        particle_x,
+        particle_y,
+        particle_final_size / 2,
+        0,
+        Math.PI * 2,
+      );
+      this.ctx.fill();
+      this.ctx.globalAlpha = 1.0;
+    }
+  }
+  _drawMineParticles(tile_x, tile_y, frame_time) {
+    const PARTICLE_SPEED = this.tile_size;
+    const PARTICLE_SIZE = this.tile_size * 0.2;
+    for (let i = 0; i < 5; i++) {
+      let hash = this.sip.hash(
+        this.key,
+        `${this.seed}:${tile_x}:${tile_y}:${i}`,
+      );
+      hash = (((hash.h >>> 0) * 0x100000000 + (hash.l >>> 0)) % 101) / 100;
+      const angle_offset = hash * Math.PI * 2;
+      const speed_multiplier = 0.9 + hash * 0.6;
+      const size_multiplier = 0.8 + hash * 0.4;
+      const current_particle_speed = PARTICLE_SPEED * speed_multiplier;
+      const current_particle_size = PARTICLE_SIZE * size_multiplier;
+      const angle = angle_offset + frame_time * Math.PI * 4 * (1 + hash * 0.7);
+      const radius = frame_time * current_particle_speed;
+      const particle_x = tile_x + this.tile_size / 2 + Math.cos(angle) * radius;
+      const particle_y = tile_y + this.tile_size / 2 + Math.sin(angle) * radius;
+      const particle_final_size = current_particle_size * (1 - frame_time);
+      this.ctx.globalAlpha = Math.max(0, 1 - Math.pow(frame_time, 1.5));
+      this.ctx.fillStyle = COLORS.LOST_PARTICLE_COLOR;
+      this.ctx.beginPath();
+      this.ctx.arc(
+        particle_x,
+        particle_y,
+        particle_final_size / 2,
+        0,
+        Math.PI * 2,
+      );
+      this.ctx.fill();
+      this.ctx.globalAlpha = 1.0;
+    }
+  }
+  /**
+   * Draws the sector borders
+   * @param {number} start_x - the starting sector x position onscreen
+   * @param {number} end_x - the ending sector x position onscreen
+   * @param {number} start_y - the starting sector y position onscreen
+   * @param {number} end_y - the ending sector y position onscreen
+   * @param {number} sector_pixel_size - the size of a sector in pixels
+   */
+  _drawSectorBorders(start_x, end_x, start_y, end_y, sector_pixel_size) {
+    this.ctx.strokeStyle = COLORS.SECTOR_BORDER;
+    this.ctx.lineWidth = this.border_width;
+    for (let s_x = start_x; s_x < end_x; s_x++) {
+      const SECTOR_X_POS = s_x * sector_pixel_size + this.offset_x;
+      this.ctx.beginPath();
+      this.ctx.moveTo(
+        SECTOR_X_POS + sector_pixel_size - this.border_width / 2,
+        0,
+      );
+      this.ctx.lineTo(
+        SECTOR_X_POS + sector_pixel_size - this.border_width / 2,
+        this.canvas.height,
+      );
+      this.ctx.stroke();
+    }
+    for (let s_y = start_y; s_y < end_y; s_y++) {
+      const SECTOR_Y_POS = s_y * sector_pixel_size + this.offset_y;
+      this.ctx.beginPath();
+      this.ctx.moveTo(
+        0,
+        SECTOR_Y_POS + sector_pixel_size - this.border_width / 2,
+      );
+      this.ctx.lineTo(
+        this.canvas.width,
+        SECTOR_Y_POS + sector_pixel_size - this.border_width / 2,
+      );
+      this.ctx.stroke();
+    }
+  }
+  _drawSectorOverlays(start_x, end_x, start_y, end_y, sector_pixel_size) {
+    this.ctx.fillStyle = COLORS.SECTOR_OVERLAY;
+    this.ctx.globalAlpha = 0.2;
+    for (let s_x = start_x; s_x < end_x; s_x++) {
+      for (let s_y = start_y; s_y < end_y; s_y++) {
+        if (!this.board.hasOwnProperty(`${s_x}:${s_y}`)) continue;
+        if (this.board[`${s_x}:${s_y}`] !== SOLVED) continue;
+        if (this.animated_sectors.hasOwnProperty(`${s_x}:${s_y}`)) continue;
+        const SECTOR_X_POS = s_x * sector_pixel_size + this.offset_x;
+        const SECTOR_Y_POS = s_y * sector_pixel_size + this.offset_y;
+        this.ctx.fillRect(
+          SECTOR_X_POS,
+          SECTOR_Y_POS,
+          sector_pixel_size - this.border_width,
+          sector_pixel_size - this.border_width,
         );
-        this.ctx.lineTo(
-          SECTOR_X_POS + SECTOR_PIXEL_SIZE - this.border_width / 2,
-          this.canvas.height,
-        );
-        this.ctx.stroke();
-      }
-      for (let s_y = START_Y; s_y < END_Y; s_y++) {
-        const SECTOR_Y_POS = s_y * SECTOR_PIXEL_SIZE + this.offset_y;
-        this.ctx.lineWidth = this.border_width;
-        this.ctx.beginPath();
-        this.ctx.moveTo(
-          0,
-          SECTOR_Y_POS + SECTOR_PIXEL_SIZE - this.border_width / 2,
-        );
-        this.ctx.lineTo(
-          this.canvas.width,
-          SECTOR_Y_POS + SECTOR_PIXEL_SIZE - this.border_width / 2,
-        );
-        this.ctx.stroke();
       }
     }
+    this.ctx.globalAlpha = 1.0;
+  }
+  _drawSectorAnimations(start_x, end_x, start_y, end_y, sector_pixel_size) {
+    this.ctx.fillStyle = COLORS.SECTOR_OVERLAY;
+    for (let s_x = start_x; s_x < end_x; s_x++) {
+      for (let s_y = start_y; s_y < end_y; s_y++) {
+        if (!this.animated_sectors.hasOwnProperty(`${s_x}:${s_y}`)) continue;
+        const FRAME_TIME =
+          (Date.now() - this.animated_sectors[`${s_x}:${s_y}`]) /
+          (InfiniteMinesweeper.ANIMATION_SPEED_BASE * 12);
+        this.ctx.globalAlpha = Math.min(FRAME_TIME, 1) * 0.2;
+        const SECTOR_X_POS = s_x * sector_pixel_size + this.offset_x;
+        const SECTOR_Y_POS = s_y * sector_pixel_size + this.offset_y;
+        this.ctx.fillRect(
+          SECTOR_X_POS,
+          SECTOR_Y_POS,
+          sector_pixel_size - this.border_width,
+          sector_pixel_size - this.border_width,
+        );
+        if (!(FRAME_TIME > 0.25)) {
+          this._drawSectorParticles(
+            SECTOR_X_POS,
+            SECTOR_Y_POS,
+            sector_pixel_size,
+            Math.min(FRAME_TIME * 4, 1),
+          );
+        }
+        if (this.solved_img && this.solved_img.complete) {
+          const CURRENT_ANIMATION_SCALE = 0.5 + 0.7 * FRAME_TIME;
+          const ANIMATED_WIDTH = sector_pixel_size * CURRENT_ANIMATION_SCALE;
+          const ANIMATED_HEIGHT =
+            ((sector_pixel_size * 16) / 80) * CURRENT_ANIMATION_SCALE;
+          this.ctx.globalAlpha = Math.max(0, 1 - Math.pow(FRAME_TIME, 1.5));
+          this.ctx.drawImage(
+            this.solved_img,
+            SECTOR_X_POS + sector_pixel_size / 2 - ANIMATED_WIDTH / 2,
+            SECTOR_Y_POS +
+              sector_pixel_size / 2 -
+              ANIMATED_HEIGHT / 2 -
+              sector_pixel_size * 0.3 * FRAME_TIME,
+            ANIMATED_WIDTH,
+            ANIMATED_HEIGHT,
+          );
+        }
+        if (FRAME_TIME >= 1) {
+          delete this.animated_sectors[`${s_x}:${s_y}`];
+        }
+      }
+    }
+    this.ctx.globalAlpha = 1.0;
+  }
+  _drawSectorParticles(
+    sector_x_pos,
+    sector_y_pos,
+    sector_pixel_size,
+    frame_time,
+  ) {
+    const NUM_PARTICLES = 20;
+    const PARTICLE_SPEED = sector_pixel_size * 0.7;
+    const PARTICLE_SIZE = sector_pixel_size * 0.2;
+    const center_x = sector_x_pos + sector_pixel_size / 2;
+    const center_y = sector_y_pos + sector_pixel_size / 2;
+    for (let i = 0; i < NUM_PARTICLES; i++) {
+      let hash = this.sip.hash(
+        this.key,
+        `${this.seed}:${sector_x_pos}:${sector_y_pos}:${i}`,
+      );
+      hash = (((hash.h >>> 0) * 0x100000000 + (hash.l >>> 0)) % 101) / 100;
+      const size_multiplier = 0.6 + hash * 0.8;
+      const current_particle_speed = PARTICLE_SPEED * hash;
+      const current_particle_size = PARTICLE_SIZE * size_multiplier;
+      const angle =
+        hash * Math.PI * 2 + frame_time * Math.PI * 2 * (0.5 + hash * 0.5);
+      const radius = frame_time * current_particle_speed;
+      const particle_x = center_x + Math.cos(angle) * radius;
+      const particle_y = center_y + Math.sin(angle) * radius;
+      const particle_final_size = current_particle_size * (1 - frame_time);
+      this.ctx.globalAlpha = Math.max(0, 1 - Math.pow(frame_time, 2));
+      this.ctx.fillStyle = COLORS.SOLVED_PARTICLE_COLOR;
+      this.ctx.beginPath();
+      this.ctx.arc(
+        particle_x,
+        particle_y,
+        particle_final_size / 2,
+        0,
+        Math.PI * 2,
+      );
+      this.ctx.fill();
+      this.ctx.globalAlpha = 1.0;
+    }
+  }
+  _drawLostSectorOverlays(start_x, end_x, start_y, end_y, sector_pixel_size) {
+    this.ctx.fillStyle = COLORS.SECTOR_LOST_OVERLAY;
+    this.ctx.globalAlpha = 0.4;
+    for (let s_x = start_x; s_x < end_x; s_x++) {
+      for (let s_y = start_y; s_y < end_y; s_y++) {
+        if (!this.board.hasOwnProperty(`${s_x}:${s_y}`)) continue;
+        if (this.lost_animations.hasOwnProperty(`${s_x}:${s_y}`)) continue;
+        if (!this.lost_sectors.has(`${s_x}:${s_y}`)) continue;
+        const SECTOR_X_POS = s_x * sector_pixel_size + this.offset_x;
+        const SECTOR_Y_POS = s_y * sector_pixel_size + this.offset_y;
+        this.ctx.fillRect(
+          SECTOR_X_POS,
+          SECTOR_Y_POS,
+          sector_pixel_size - this.border_width,
+          sector_pixel_size - this.border_width,
+        );
+      }
+    }
+    this.ctx.globalAlpha = 1.0;
+  }
+  _drawLostSectorAnimations(start_x, end_x, start_y, end_y, sector_pixel_size) {
+    this.ctx.fillStyle = COLORS.SECTOR_LOST_OVERLAY;
+    for (let s_x = start_x; s_x < end_x; s_x++) {
+      for (let s_y = start_y; s_y < end_y; s_y++) {
+        if (!this.lost_animations.hasOwnProperty(`${s_x}:${s_y}`)) continue;
+        const FRAME_TIME =
+          (Date.now() - this.lost_animations[`${s_x}:${s_y}`]) /
+          (InfiniteMinesweeper.ANIMATION_SPEED_BASE * 12);
+        this.ctx.globalAlpha = Math.min(FRAME_TIME, 1) * 0.4;
+        const SECTOR_X_POS = s_x * sector_pixel_size + this.offset_x;
+        const SECTOR_Y_POS = s_y * sector_pixel_size + this.offset_y;
+        this.ctx.fillRect(
+          SECTOR_X_POS,
+          SECTOR_Y_POS,
+          sector_pixel_size - this.border_width,
+          sector_pixel_size - this.border_width,
+        );
+        if (this.lost_img && this.lost_img.complete) {
+          const CURRENT_ANIMATION_SCALE = 0.5 + 0.7 * FRAME_TIME;
+          const ANIMATED_WIDTH = sector_pixel_size * CURRENT_ANIMATION_SCALE;
+          const ANIMATED_HEIGHT =
+            ((sector_pixel_size * 16) / 55) * CURRENT_ANIMATION_SCALE;
+          this.ctx.globalAlpha = Math.max(0, 1 - Math.pow(FRAME_TIME, 1.5));
+          this.ctx.drawImage(
+            this.lost_img,
+            SECTOR_X_POS + sector_pixel_size / 2 - ANIMATED_WIDTH / 2,
+            SECTOR_Y_POS +
+              sector_pixel_size / 2 -
+              ANIMATED_HEIGHT / 2 -
+              sector_pixel_size * 0.3 * FRAME_TIME,
+            ANIMATED_WIDTH,
+            ANIMATED_HEIGHT,
+          );
+        }
+        if (FRAME_TIME >= 1) {
+          delete this.lost_animations[`${s_x}:${s_y}`];
+        }
+      }
+    }
+    this.ctx.globalAlpha = 1.0;
   }
   /**
    * Reveals a tile
@@ -426,10 +915,17 @@ class InfiniteMinesweeper {
     const TILE = this.board[SECTOR_KEY][y][x];
     if (TILE[1] != TILE_STATES.REVEALED) {
       if (TILE[0] == MINE) {
-        /**
-         * @todo - lost sector logic
-         */
-        console.log("lost sector: " + `${s_x}:${s_x}`);
+        TILE[1] = TILE_STATES.LOST;
+        this.lost_sectors.add(SECTOR_KEY);
+        this.lost_animations[SECTOR_KEY] = Date.now();
+        this.animateTile(
+          x,
+          y,
+          s_x,
+          s_y,
+          InfiniteMinesweeper.ANIMATION_SPEED_BASE * 6,
+          TILE_STATES.LOST,
+        );
       } else if (TILE[0] === 0) {
         TILE[1] = TILE_STATES.REVEALED;
         if (!no_animate) {
@@ -467,13 +963,11 @@ class InfiniteMinesweeper {
         }
       }
     }
-    if (this.isSectorSolved(s_x, s_y)) {
+    if (this.isSectorSolved(s_x, s_y) && this.board[SECTOR_KEY] !== SOLVED) {
+      if (this.lost_sectors.has(SECTOR_KEY))
+        this.lost_sectors.delete(SECTOR_KEY);
       this.board[SECTOR_KEY] = SOLVED;
-      /**
-       * @todo - win sector logic
-       * @todo - Add currency
-       * @todo - Add to total flags and other stats
-       */
+      this.animated_sectors[SECTOR_KEY] = Date.now();
     }
     return recursed;
   }
@@ -513,10 +1007,24 @@ class InfiniteMinesweeper {
     if (TILE[1] !== TILE_STATES.REVEALED) {
       if (TILE[1] === TILE_STATES.FLAGGED) {
         TILE[1] = TILE_STATES.HIDDEN;
-        this.animateTile(x, y, s_x, s_y, TILE_STATES.HIDDEN);
+        this.animateTile(
+          x,
+          y,
+          s_x,
+          s_y,
+          InfiniteMinesweeper.ANIMATION_SPEED_BASE * 0.2,
+          TILE_STATES.HIDDEN,
+        );
       } else {
         TILE[1] = TILE_STATES.FLAGGED;
-        this.animateTile(x, y, s_x, s_y, TILE_STATES.FLAGGED);
+        this.animateTile(
+          x,
+          y,
+          s_x,
+          s_y,
+          InfiniteMinesweeper.ANIMATION_SPEED_BASE * 1.75,
+          TILE_STATES.FLAGGED,
+        );
       }
     }
   }
@@ -536,11 +1044,17 @@ class InfiniteMinesweeper {
    */
   isClickable(x, y, s_x, s_y) {
     [x, y] = this.convert(false, x, y, s_x, s_y);
+    [s_x, s_y] = this.convert(true, x, y);
+    if (this.lost_sectors.has(`${s_x}:${s_y}`)) return false;
     if (this.tile_size < 25) return false;
     if (this.isRevealed(x, y)) return true;
     for (let i = -1; i < 2; i++)
       for (let j = -1; j < 2; j++)
-        if ((i != 0 || j != 0) && this.isRevealed(x + i, y + j)) return true;
+        if (
+          (i != 0 || j != 0) &&
+          (this.isRevealed(x + i, y + j) || this.isFlagged(x + i, y + j))
+        )
+          return true;
     return false;
   }
   /**
