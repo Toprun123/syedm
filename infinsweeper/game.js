@@ -76,15 +76,28 @@ class InfiniteMinesweeper {
     this.animations = {};
     this.animated_sectors = {};
     this.lost_animations = {};
+    this.stats = {
+      mines: 0,
+      flags: 0,
+      solved: 0,
+      1: 0,
+      2: 0,
+      3: 0,
+      4: 0,
+      5: 0,
+      6: 0,
+      7: 0,
+      8: 0,
+      time: 0,
+    };
+    this.goldmines = 0;
     this.lost_sectors = new Set();
     this.img = new Image();
-    this.solved_img = new Image();
-    this.lost_img = new Image();
     this.loop = this.loop.bind(this);
     this.sip = SipHash;
     this.key = this.sip.string16_to_key(this.seed);
     this.setupEventListeners();
-    this.loadImages();
+    this.loadImage();
   }
   /** Initializes the event listeners */
   setupEventListeners() {
@@ -121,6 +134,10 @@ class InfiniteMinesweeper {
       }
       const X = Math.floor((e.offsetX - this.offset_x) / this.tile_size);
       const Y = Math.floor((e.offsetY - this.offset_y) / this.tile_size);
+      if (this.isButton(X, Y)) {
+        this.buy(X, Y);
+        return;
+      }
       if (!this.isClickable(X, Y)) return;
       if (e.button === 0) {
         if (this.isFlagged(X, Y)) return;
@@ -188,7 +205,7 @@ class InfiniteMinesweeper {
     });
   }
   /** Loads the game art image */
-  loadImages() {
+  loadImage() {
     this.img.onload = () => {
       this.start();
     };
@@ -203,8 +220,6 @@ class InfiniteMinesweeper {
       );
     };
     this.img.src = "img/minesweeper.png";
-    this.solved_img.src = "img/solved_txt.png";
-    this.lost_img.src = "img/lost_txt.png";
   }
   /**
    * Starts the game and builds a game with better opening conditions
@@ -256,6 +271,28 @@ class InfiniteMinesweeper {
     );
     this._drawStaticTiles(START_X, END_X, START_Y, END_Y);
     this._drawAnimations(START_X, END_X, START_Y, END_Y);
+    this._drawLostSectorOverlays(
+      START_X,
+      END_X,
+      START_Y,
+      END_Y,
+      SECTOR_PIXEL_SIZE,
+    );
+    this._drawSectorOverlays(START_X, END_X, START_Y, END_Y, SECTOR_PIXEL_SIZE);
+    this._drawSectorAnimations(
+      START_X,
+      END_X,
+      START_Y,
+      END_Y,
+      SECTOR_PIXEL_SIZE,
+    );
+    this._drawLostSectorAnimations(
+      START_X,
+      END_X,
+      START_Y,
+      END_Y,
+      SECTOR_PIXEL_SIZE,
+    );
     if (!this.hide_details) {
       this._drawSectorBorders(
         START_X,
@@ -264,34 +301,147 @@ class InfiniteMinesweeper {
         END_Y,
         SECTOR_PIXEL_SIZE,
       );
-      this._drawSectorOverlays(
-        START_X,
-        END_X,
-        START_Y,
-        END_Y,
-        SECTOR_PIXEL_SIZE,
-      );
-      this._drawSectorAnimations(
-        START_X,
-        END_X,
-        START_Y,
-        END_Y,
-        SECTOR_PIXEL_SIZE,
-      );
-      this._drawLostSectorOverlays(
-        START_X,
-        END_X,
-        START_Y,
-        END_Y,
-        SECTOR_PIXEL_SIZE,
-      );
-      this._drawLostSectorAnimations(
-        START_X,
-        END_X,
-        START_Y,
-        END_Y,
-        SECTOR_PIXEL_SIZE,
-      );
+      this._drawBuyButtons(START_X, END_X, START_Y, END_Y, SECTOR_PIXEL_SIZE);
+    }
+  }
+  _drawBuyButtons(start_x, end_x, start_y, end_y, sector_pixel_size) {
+    for (let s_x = start_x; s_x < end_x; s_x++) {
+      for (let s_y = start_y; s_y < end_y; s_y++) {
+        if (!this.board.hasOwnProperty(`${s_x}:${s_y}`)) continue;
+        if (this.lost_animations.hasOwnProperty(`${s_x}:${s_y}`)) continue;
+        if (!this.lost_sectors.has(`${s_x}:${s_y}`)) continue;
+        const WIDTH_B =
+          (((sector_pixel_size - this.border_width) / 5) * 25) / 13;
+        const HEIGHT_B = (sector_pixel_size - this.border_width) / 5;
+        let width = (sector_pixel_size - this.border_width) / 4;
+        let height = (sector_pixel_size - this.border_width) / 4;
+        this.ctx.drawImage(
+          this.img,
+          50,
+          12,
+          14,
+          14,
+          s_x * sector_pixel_size +
+            this.offset_x +
+            sector_pixel_size / 2 -
+            width / 2,
+          s_y * sector_pixel_size +
+            this.offset_y +
+            (1 * sector_pixel_size) / 5 -
+            height / 2,
+          width,
+          height,
+        );
+        width = (((sector_pixel_size - this.border_width) / 15) * 47) / 7;
+        height = (sector_pixel_size - this.border_width) / 15;
+        this.ctx.drawImage(
+          this.img,
+          26,
+          46,
+          47,
+          7,
+          s_x * sector_pixel_size + this.offset_x + sector_pixel_size / 8,
+          s_y * sector_pixel_size +
+            this.offset_y +
+            (7 * sector_pixel_size) / 10,
+          width,
+          height,
+        );
+        width = (((sector_pixel_size - this.border_width) / 13) * 31) / 8;
+        height = (sector_pixel_size - this.border_width) / 13;
+        this.ctx.drawImage(
+          this.img,
+          0,
+          60,
+          31,
+          8,
+          s_x * sector_pixel_size + this.offset_x + sector_pixel_size / 5,
+          s_y * sector_pixel_size +
+            this.offset_y +
+            (8 * sector_pixel_size) / 10,
+          width,
+          height,
+        );
+        width = (((sector_pixel_size - this.border_width) / 4) * 11) / 14;
+        height = (sector_pixel_size - this.border_width) / 4;
+        this.ctx.drawImage(
+          this.img,
+          49,
+          54,
+          11,
+          14,
+          s_x * sector_pixel_size +
+            this.offset_x +
+            (13 * sector_pixel_size) / 20,
+          s_y * sector_pixel_size +
+            this.offset_y +
+            (13 * sector_pixel_size) / 20,
+          width,
+          height,
+        );
+        this.ctx.drawImage(
+          this.img,
+          0,
+          46,
+          25,
+          13,
+          s_x * sector_pixel_size +
+            this.offset_x +
+            sector_pixel_size / 2 -
+            WIDTH_B / 2,
+          s_y * sector_pixel_size +
+            this.offset_y +
+            sector_pixel_size / 2 -
+            HEIGHT_B / 2,
+          WIDTH_B,
+          HEIGHT_B,
+        );
+        let hash = this.sip.hash(this.key, `${this.seed}:${s_x}:${s_y}`);
+        hash = ((hash.h >>> 0) * 0x100000000 + (hash.l >>> 0)) % 101;
+        const [DIGIT_1, DIGIT_2] = (
+          Math.max(10, Math.floor(this.difficulty ** 2 / 40 + hash / 4)) + ""
+        )
+          .split("")
+          .map(Number);
+        this.ctx.drawImage(
+          this.img,
+          DIGIT_1 * 4,
+          6,
+          3,
+          5,
+          s_x * sector_pixel_size +
+            this.offset_x +
+            sector_pixel_size / 2 -
+            WIDTH_B / 2 +
+            (WIDTH_B / 25) * 6,
+          s_y * sector_pixel_size +
+            this.offset_y +
+            sector_pixel_size / 2 -
+            HEIGHT_B / 2 +
+            (HEIGHT_B / 13) * 4,
+          (((sector_pixel_size - this.border_width) / 13) * 3) / 5,
+          (sector_pixel_size - this.border_width) / 13,
+        );
+        this.ctx.drawImage(
+          this.img,
+          DIGIT_2 * 4,
+          6,
+          3,
+          5,
+          s_x * sector_pixel_size +
+            this.offset_x +
+            sector_pixel_size / 2 -
+            WIDTH_B / 2 +
+            (WIDTH_B / 25) * 10,
+          s_y * sector_pixel_size +
+            this.offset_y +
+            sector_pixel_size / 2 -
+            HEIGHT_B / 2 +
+            (HEIGHT_B / 13) * 4,
+          (((sector_pixel_size - this.border_width) / 13) * 3) / 5,
+          (sector_pixel_size - this.border_width) / 13,
+        );
+      }
     }
   }
   /**
@@ -427,7 +577,7 @@ class InfiniteMinesweeper {
               } else if (TILE_STATE === TILE_STATES.FLAGGED) {
                 this.ctx.drawImage(
                   this.img,
-                  32,
+                  44,
                   0,
                   4,
                   7,
@@ -439,7 +589,7 @@ class InfiniteMinesweeper {
               } else if (TILE_STATE === TILE_STATES.LOST) {
                 this.ctx.drawImage(
                   this.img,
-                  37,
+                  32,
                   0,
                   5,
                   5,
@@ -555,7 +705,7 @@ class InfiniteMinesweeper {
                     current_scale;
                   this.ctx.drawImage(
                     this.img,
-                    32,
+                    44,
                     0,
                     4,
                     7,
@@ -591,7 +741,7 @@ class InfiniteMinesweeper {
                     ((this.tile_size - this.border_width) / 2) * current_scale;
                   this.ctx.drawImage(
                     this.img,
-                    37,
+                    32,
                     0,
                     5,
                     5,
@@ -727,7 +877,7 @@ class InfiniteMinesweeper {
   }
   _drawSectorOverlays(start_x, end_x, start_y, end_y, sector_pixel_size) {
     this.ctx.fillStyle = COLORS.SECTOR_OVERLAY;
-    this.ctx.globalAlpha = 0.2;
+    this.ctx.globalAlpha = 0.1;
     for (let s_x = start_x; s_x < end_x; s_x++) {
       for (let s_y = start_y; s_y < end_y; s_y++) {
         if (!this.board.hasOwnProperty(`${s_x}:${s_y}`)) continue;
@@ -753,7 +903,7 @@ class InfiniteMinesweeper {
         const FRAME_TIME =
           (Date.now() - this.animated_sectors[`${s_x}:${s_y}`]) /
           (InfiniteMinesweeper.ANIMATION_SPEED_BASE * 12);
-        this.ctx.globalAlpha = Math.min(FRAME_TIME, 1) * 0.2;
+        this.ctx.globalAlpha = Math.min(FRAME_TIME, 1) * 0.1;
         const SECTOR_X_POS = s_x * sector_pixel_size + this.offset_x;
         const SECTOR_Y_POS = s_y * sector_pixel_size + this.offset_y;
         this.ctx.fillRect(
@@ -770,23 +920,25 @@ class InfiniteMinesweeper {
             Math.min(FRAME_TIME * 4, 1),
           );
         }
-        if (this.solved_img && this.solved_img.complete) {
-          const CURRENT_ANIMATION_SCALE = 0.5 + 0.7 * FRAME_TIME;
-          const ANIMATED_WIDTH = sector_pixel_size * CURRENT_ANIMATION_SCALE;
-          const ANIMATED_HEIGHT =
-            ((sector_pixel_size * 16) / 80) * CURRENT_ANIMATION_SCALE;
-          this.ctx.globalAlpha = Math.max(0, 1 - Math.pow(FRAME_TIME, 1.5));
-          this.ctx.drawImage(
-            this.solved_img,
-            SECTOR_X_POS + sector_pixel_size / 2 - ANIMATED_WIDTH / 2,
-            SECTOR_Y_POS +
-              sector_pixel_size / 2 -
-              ANIMATED_HEIGHT / 2 -
-              sector_pixel_size * 0.3 * FRAME_TIME,
-            ANIMATED_WIDTH,
-            ANIMATED_HEIGHT,
-          );
-        }
+        const CURRENT_ANIMATION_SCALE = 0.5 + 0.7 * FRAME_TIME;
+        const ANIMATED_WIDTH = sector_pixel_size * CURRENT_ANIMATION_SCALE;
+        const ANIMATED_HEIGHT =
+          ((sector_pixel_size * 16) / 80) * CURRENT_ANIMATION_SCALE;
+        this.ctx.globalAlpha = Math.max(0, 1 - Math.pow(FRAME_TIME, 1.5));
+        this.ctx.drawImage(
+          this.img,
+          0,
+          29,
+          80,
+          16,
+          SECTOR_X_POS + sector_pixel_size / 2 - ANIMATED_WIDTH / 2,
+          SECTOR_Y_POS +
+            sector_pixel_size / 2 -
+            ANIMATED_HEIGHT / 2 -
+            sector_pixel_size * 0.3 * FRAME_TIME,
+          ANIMATED_WIDTH,
+          ANIMATED_HEIGHT,
+        );
         if (FRAME_TIME >= 1) {
           delete this.animated_sectors[`${s_x}:${s_y}`];
         }
@@ -871,21 +1023,52 @@ class InfiniteMinesweeper {
           sector_pixel_size - this.border_width,
           sector_pixel_size - this.border_width,
         );
-        if (this.lost_img && this.lost_img.complete) {
-          const CURRENT_ANIMATION_SCALE = 0.5 + 0.7 * FRAME_TIME;
-          const ANIMATED_WIDTH = sector_pixel_size * CURRENT_ANIMATION_SCALE;
-          const ANIMATED_HEIGHT =
-            ((sector_pixel_size * 16) / 55) * CURRENT_ANIMATION_SCALE;
-          this.ctx.globalAlpha = Math.max(0, 1 - Math.pow(FRAME_TIME, 1.5));
-          this.ctx.drawImage(
-            this.lost_img,
-            SECTOR_X_POS + sector_pixel_size / 2 - ANIMATED_WIDTH / 2,
+        const MAX_JITTER = 20;
+        const DAMPEN = Math.max(1 - FRAME_TIME, 0);
+        const jitterX = (Math.random() - 0.5) * MAX_JITTER * DAMPEN;
+        const jitterY = (Math.random() - 0.5) * MAX_JITTER * DAMPEN;
+        const CURRENT_ANIMATION_SCALE = 0.5 + 0.7 * FRAME_TIME;
+        const ANIMATED_WIDTH = sector_pixel_size * CURRENT_ANIMATION_SCALE;
+        const ANIMATED_HEIGHT =
+          ((sector_pixel_size * 16) / 55) * CURRENT_ANIMATION_SCALE;
+        this.ctx.globalAlpha = Math.max(0, 1 - Math.pow(FRAME_TIME, 0.8)) * 0.9;
+        this.ctx.drawImage(
+          this.img,
+          0,
+          12,
+          49,
+          16,
+          SECTOR_X_POS + sector_pixel_size / 2 - ANIMATED_WIDTH / 2 + jitterX,
+          SECTOR_Y_POS +
+            sector_pixel_size / 2 -
+            ANIMATED_HEIGHT / 2 -
+            sector_pixel_size * 0.3 * FRAME_TIME +
+            jitterY,
+          ANIMATED_WIDTH,
+          ANIMATED_HEIGHT,
+        );
+        for (let i = 0; i < 3; i++) {
+          const angle = (Math.PI * 2 * i) / 3;
+          const radius = 20 + 10 * Math.random();
+          const baseX =
+            SECTOR_X_POS + sector_pixel_size / 2 + Math.cos(angle) * radius;
+          const baseY =
             SECTOR_Y_POS +
-              sector_pixel_size / 2 -
-              ANIMATED_HEIGHT / 2 -
-              sector_pixel_size * 0.3 * FRAME_TIME,
-            ANIMATED_WIDTH,
-            ANIMATED_HEIGHT,
+            (3 * sector_pixel_size) / 4 +
+            Math.sin(angle) * radius;
+          const jitterX = (Math.random() - 0.5) * 10;
+          const jitterY = (Math.random() - 0.5) * 10;
+          const emojiSize = 14 * (2 + 1 * FRAME_TIME);
+          this.ctx.drawImage(
+            this.img,
+            50,
+            12,
+            14,
+            14,
+            baseX + jitterX - emojiSize / 2,
+            baseY + jitterY - emojiSize / 2,
+            emojiSize,
+            emojiSize,
           );
         }
         if (FRAME_TIME >= 1) {
@@ -894,6 +1077,43 @@ class InfiniteMinesweeper {
       }
     }
     this.ctx.globalAlpha = 1.0;
+  }
+  isButton(x, y) {
+    const [S_X, S_Y, X, Y] = this.convert(true, x, y);
+    const SECTOR_PIXEL_SIZE = InfiniteMinesweeper.SECTOR_SIZE * this.tile_size;
+    const START_X = -Math.floor(this.offset_x / SECTOR_PIXEL_SIZE) - 1;
+    const START_Y = -Math.ceil(this.offset_y / SECTOR_PIXEL_SIZE);
+    const END_X = Math.ceil(
+      START_X + this.canvas.width / SECTOR_PIXEL_SIZE + 1,
+    );
+    const END_Y = Math.ceil(
+      START_Y + this.canvas.height / SECTOR_PIXEL_SIZE + 1,
+    );
+    for (let s_y = START_Y; s_y < END_Y; s_y++) {
+      for (let s_x = START_X; s_x < END_X; s_x++) {
+        const SECTOR_KEY = `${s_x}:${s_y}`;
+        if (!this.lost_sectors.has(SECTOR_KEY)) continue;
+        if (s_x === S_X && s_y === S_Y && X > 2 && X < 7 && Y > 3 && Y < 6)
+          return true;
+      }
+    }
+  }
+  buy(x, y) {
+    const [S_X, S_Y] = this.convert(true, x, y);
+    const SECTOR_KEY = `${S_X}:${S_Y}`;
+    let hash = this.sip.hash(this.key, `${this.seed}:${SECTOR_KEY}`);
+    hash = ((hash.h >>> 0) * 0x100000000 + (hash.l >>> 0)) % 101;
+    const PRICE = Math.max(
+      10,
+      Math.floor(this.difficulty ** 2 / 40 + hash / 4),
+    );
+    if (this.goldmines >= PRICE) {
+      this.goldmines -= PRICE;
+      if (this.lost_sectors.has(SECTOR_KEY)) {
+        this.lost_sectors.delete(SECTOR_KEY);
+        this.lost_animations[SECTOR_KEY] = 0;
+      }
+    }
   }
   /**
    * Reveals a tile
@@ -968,6 +1188,7 @@ class InfiniteMinesweeper {
         this.lost_sectors.delete(SECTOR_KEY);
       this.board[SECTOR_KEY] = SOLVED;
       this.animated_sectors[SECTOR_KEY] = Date.now();
+      this.goldmines++;
     }
     return recursed;
   }
