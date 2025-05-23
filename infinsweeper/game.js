@@ -53,6 +53,7 @@ class InfiniteMinesweeper {
     this.is_seeded = seed !== undefined;
     this.is_saved = localStorage.getItem("save") !== null;
     this.save_interval_id = undefined;
+    this.delete_save = false;
     this.seed = seed || (Math.floor(Math.random() * 9e15) + 1e15).toString();
     this.difficulty = difficulty || InfiniteMinesweeper.DEFAULT_DIFFICULTY;
     this.canvas = document.getElementById("gameCanvas");
@@ -207,10 +208,12 @@ class InfiniteMinesweeper {
       this.updateCanvasSize();
     });
     window.addEventListener("beforeunload", () => {
-      this.saveToLocal();
+      if (!this.delete_save) {
+        this.saveToLocal();
+      }
     });
     document.addEventListener("visibilitychange", () => {
-      if (document.visibilityState === "hidden") {
+      if (document.visibilityState === "hidden" && !this.delete_save) {
         this.saveToLocal();
       }
     });
@@ -320,6 +323,10 @@ class InfiniteMinesweeper {
   }
   deleteSave() {
     localStorage.removeItem("save");
+    clearInterval(this.save_interval_id);
+    this.save_interval_id = undefined;
+    this.delete_save = true;
+    window.location.reload();
   }
   /**
    * Resets the game
