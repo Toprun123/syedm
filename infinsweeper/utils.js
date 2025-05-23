@@ -1,7 +1,6 @@
 /**
- *  @IMPORTANT - taken from https://github.com/jedisct1/siphash-js (minified browser version)
+ *  @IMPORTANT - Siphash implementation taken from https://github.com/jedisct1/siphash-js (minified browser version)
  */
-
 export const SipHash = (function () {
   "use strict";
   function r(r, n) {
@@ -115,3 +114,65 @@ export const SipHash = (function () {
     string_to_u8: u,
   };
 })();
+
+export const LZW = {
+  zip: (uncompressed) => {
+    const dict = {};
+    const data = (uncompressed + "").split("");
+    const out = [];
+    let dictSize = 256;
+    for (let i = 0; i < 256; i++) {
+      dict[String.fromCharCode(i)] = i;
+    }
+    let w = "";
+    for (let i = 0; i < data.length; i++) {
+      const c = data[i];
+      const wc = w + c;
+      if (dict.hasOwnProperty(wc)) {
+        w = wc;
+      } else {
+        out.push(dict[w]);
+        dict[wc] = dictSize++;
+        w = c;
+      }
+    }
+    if (w !== "") out.push(dict[w]);
+    const uint16 = new Uint16Array(out);
+    const uint8 = new Uint8Array(uint16.buffer);
+    let binary = "";
+    for (let i = 0; i < uint8.length; i++) {
+      binary += String.fromCharCode(uint8[i]);
+    }
+    return btoa(binary);
+  },
+  unzip: (compressed_bin) => {
+    const binary = atob(compressed_bin);
+    const uint8 = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) {
+      uint8[i] = binary.charCodeAt(i);
+    }
+    const compressed = new Uint16Array(uint8.buffer);
+    const dict = [];
+    let dictSize = 256;
+    for (let i = 0; i < 256; i++) {
+      dict[i] = String.fromCharCode(i);
+    }
+    let w = String.fromCharCode(compressed[0]);
+    let result = w;
+    for (let i = 1; i < compressed.length; i++) {
+      const k = compressed[i];
+      let entry;
+      if (dict[k]) {
+        entry = dict[k];
+      } else if (k === dictSize) {
+        entry = w + w[0];
+      } else {
+        throw new Error("Bad compressed k: " + k);
+      }
+      result += entry;
+      dict[dictSize++] = w + entry[0];
+      w = entry;
+    }
+    return result;
+  },
+};

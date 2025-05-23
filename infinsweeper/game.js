@@ -1,6 +1,6 @@
 "use strict";
 
-import { SipHash } from "./siphash.js";
+import { SipHash, LZW } from "./utils.js";
 
 const TILE_STATES = Object.freeze({
   LOST: -1,
@@ -51,6 +51,8 @@ class InfiniteMinesweeper {
     this.board = {};
     this.frame_id = undefined;
     this.is_seeded = seed !== undefined;
+    this.is_saved = localStorage.getItem("save") !== null;
+    this.save_interval_id = undefined;
     this.seed = seed || (Math.floor(Math.random() * 9e15) + 1e15).toString();
     this.difficulty = difficulty || InfiniteMinesweeper.DEFAULT_DIFFICULTY;
     this.canvas = document.getElementById("gameCanvas");
@@ -94,8 +96,9 @@ class InfiniteMinesweeper {
     this.lost_sectors = new Set();
     this.img = new Image();
     this.loop = this.loop.bind(this);
-    this.sip = SipHash;
-    this.key = this.sip.string16_to_key(this.seed);
+    this.hash_func = SipHash;
+    this.compress_func = LZW;
+    this.key = this.hash_func.string16_to_key(this.seed);
     this.setupEventListeners();
     this.loadImage();
   }
@@ -203,6 +206,14 @@ class InfiniteMinesweeper {
     window.addEventListener("resize", () => {
       this.updateCanvasSize();
     });
+    window.addEventListener("beforeunload", () => {
+      this.saveToLocal();
+    });
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "hidden") {
+        this.saveToLocal();
+      }
+    });
   }
   /** Loads the game art image */
   loadImage() {
@@ -226,18 +237,89 @@ class InfiniteMinesweeper {
    * @param {number} [tries=0] - The number of tries in an unseeded game
    */
   async start(tries = 0) {
-    const CENTRE = (InfiniteMinesweeper.SECTOR_SIZE - 1) / 2;
-    if (!this.is_seeded && tries < InfiniteMinesweeper.MAX_TRIES) {
-      let revealed = false;
-      revealed = await this.reveal(CENTRE, CENTRE, undefined, undefined, true);
-      if (!revealed) {
-        await this.reset(tries + 1);
-        return;
-      }
+    if (this.is_saved) {
+      this.loadSave(localStorage.getItem("save"));
+      this.save_interval_id = setInterval(
+        () => {
+          this.saveToLocal();
+        },
+        2 * 60 * 1000,
+      );
+      this.loop();
     } else {
-      this.reveal(CENTRE, CENTRE);
+      const CENTRE = (InfiniteMinesweeper.SECTOR_SIZE - 1) / 2;
+      if (!this.is_seeded && tries < InfiniteMinesweeper.MAX_TRIES) {
+        let revealed = false;
+        revealed = await this.reveal(
+          CENTRE,
+          CENTRE,
+          undefined,
+          undefined,
+          true,
+        );
+        if (!revealed) {
+          await this.reset(tries + 1);
+          return;
+        } else {
+          this.save_interval_id = setInterval(
+            () => {
+              this.saveToLocal();
+            },
+            2 * 60 * 1000,
+          );
+        }
+      } else {
+        this.reveal(CENTRE, CENTRE);
+        this.save_interval_id = setInterval(
+          () => {
+            this.saveToLocal();
+          },
+          2 * 60 * 1000,
+        );
+      }
+      this.loop();
     }
-    this.loop();
+  }
+  loadSave(save) {
+    if (!save) return;
+    let saveData = JSON.parse(this.compress_func.unzip(save));
+    this.board = saveData.board;
+    this.seed = saveData.seed;
+    this.key = this.hash_func.string16_to_key(this.seed);
+    this.difficulty = saveData.difficulty;
+    this.offset_x = saveData.offset_x;
+    this.offset_y = saveData.offset_y;
+    this.tile_size = saveData.tile_size;
+    this.hide_details = this.tile_size < InfiniteMinesweeper.DETAIL_THRESHOLD;
+    this.border_width = this.hide_details
+      ? 0
+      : Math.floor(this.tile_size * 0.065);
+    COLORS.BACKGROUND = this.hide_details
+      ? COLORS.TILE_DEFAULT
+      : COLORS.BACKGROUND_ORIG;
+    this.stats = saveData.stats;
+    this.goldmines = saveData.goldmines;
+    this.lost_sectors = new Set(saveData.lost_sectors);
+  }
+  saveToLocal() {
+    let saveData = {
+      board: this.board,
+      seed: this.seed,
+      difficulty: this.difficulty,
+      offset_x: this.offset_x,
+      offset_y: this.offset_y,
+      tile_size: this.tile_size,
+      stats: this.stats,
+      goldmines: this.goldmines,
+      lost_sectors: Array.from(this.lost_sectors),
+    };
+    localStorage.setItem(
+      "save",
+      this.compress_func.zip(JSON.stringify(saveData)),
+    );
+  }
+  deleteSave() {
+    localStorage.removeItem("save");
   }
   /**
    * Resets the game
@@ -246,6 +328,7 @@ class InfiniteMinesweeper {
   async reset(tries = 0) {
     this.board = {};
     this.seed = (Math.floor(Math.random() * 9e15) + 1e15).toString();
+    this.key = this.hash_func.string16_to_key(this.seed);
     this.is_dragging = false;
     this.drag_start_pos = [0, 0];
     cancelAnimationFrame(this.frame_id);
@@ -396,7 +479,7 @@ class InfiniteMinesweeper {
           WIDTH_B,
           HEIGHT_B,
         );
-        let hash = this.sip.hash(this.key, `${this.seed}:${s_x}:${s_y}`);
+        let hash = this.hash_func.hash(this.key, `${s_x}:${s_y}`);
         hash = ((hash.h >>> 0) * 0x100000000 + (hash.l >>> 0)) % 101;
         const [DIGIT_1, DIGIT_2] = (
           Math.max(10, Math.floor(this.difficulty ** 2 / 40 + hash / 4)) + ""
@@ -775,10 +858,7 @@ class InfiniteMinesweeper {
     const PARTICLE_SPEED = this.tile_size * 1.5;
     const PARTICLE_SIZE = this.tile_size * 0.55;
     for (let i = 0; i < 5; i++) {
-      let hash = this.sip.hash(
-        this.key,
-        `${this.seed}:${tile_x}:${tile_y}:${i}`,
-      );
+      let hash = this.hash_func.hash(this.key, `${tile_x}:${tile_y}:${i}`);
       hash = (((hash.h >>> 0) * 0x100000000 + (hash.l >>> 0)) % 101) / 100;
       const angle_offset = hash * Math.PI * 2;
       const speed_multiplier = 0.9 + hash * 0.6;
@@ -808,10 +888,7 @@ class InfiniteMinesweeper {
     const PARTICLE_SPEED = this.tile_size;
     const PARTICLE_SIZE = this.tile_size * 0.2;
     for (let i = 0; i < 5; i++) {
-      let hash = this.sip.hash(
-        this.key,
-        `${this.seed}:${tile_x}:${tile_y}:${i}`,
-      );
+      let hash = this.hash_func.hash(this.key, `${tile_x}:${tile_y}:${i}`);
       hash = (((hash.h >>> 0) * 0x100000000 + (hash.l >>> 0)) % 101) / 100;
       const angle_offset = hash * Math.PI * 2;
       const speed_multiplier = 0.9 + hash * 0.6;
@@ -958,9 +1035,9 @@ class InfiniteMinesweeper {
     const center_x = sector_x_pos + sector_pixel_size / 2;
     const center_y = sector_y_pos + sector_pixel_size / 2;
     for (let i = 0; i < NUM_PARTICLES; i++) {
-      let hash = this.sip.hash(
+      let hash = this.hash_func.hash(
         this.key,
-        `${this.seed}:${sector_x_pos}:${sector_y_pos}:${i}`,
+        `${sector_x_pos}:${sector_y_pos}:${i}`,
       );
       hash = (((hash.h >>> 0) * 0x100000000 + (hash.l >>> 0)) % 101) / 100;
       const size_multiplier = 0.6 + hash * 0.8;
@@ -1101,7 +1178,7 @@ class InfiniteMinesweeper {
   buy(x, y) {
     const [S_X, S_Y] = this.convert(true, x, y);
     const SECTOR_KEY = `${S_X}:${S_Y}`;
-    let hash = this.sip.hash(this.key, `${this.seed}:${SECTOR_KEY}`);
+    let hash = this.hash_func.hash(this.key, `${SECTOR_KEY}`);
     hash = ((hash.h >>> 0) * 0x100000000 + (hash.l >>> 0)) % 101;
     const PRICE = Math.max(
       10,
@@ -1475,7 +1552,7 @@ class InfiniteMinesweeper {
   isMine(x, y, s_x, s_y) {
     [s_x, s_y, x, y] = this.convert(true, x, y, s_x, s_y);
     if (s_x == 0 && s_y == 0 && x == 4 && y == 4) return false;
-    let hash = this.sip.hash(this.key, `${this.seed}:${s_x}:${s_y}:${x}:${y}`);
+    let hash = this.hash_func.hash(this.key, `${s_x}:${s_y}:${x}:${y}`);
     hash = ((hash.h >>> 0) * 0x100000000 + (hash.l >>> 0)) % 101;
     return (
       hash <
