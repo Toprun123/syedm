@@ -28,7 +28,7 @@ export default class GameLogic {
   /**
    * @constructs GameLogic
    * @function constructor
-   * @desc Initializes the game logic
+   * @description Initializes the game logic
    * @param {Object} game_pos
    * @param {Uint32Array} key
    * @param {EventBus} bus
@@ -68,7 +68,7 @@ export default class GameLogic {
   }
   /**
    * @function click
-   * @desc Handles a click
+   * @description Handles a click
    * @param {number} x - X-coordinate in terms of screen
    * @param {number} y - Y-coordinate in terms of screen
    * @param {number} button - 0 for left, 1 for middle, 2 for right (from Event#button)
@@ -111,7 +111,7 @@ export default class GameLogic {
   }
   /**
    * @function updateKey
-   * @desc Updates the game key
+   * @description Updates the game key
    * @param {Uint32Array} key
    */
   updateKey(key) {
@@ -119,7 +119,7 @@ export default class GameLogic {
   }
   /**
    * @function buy
-   * @desc Buys a sector
+   * @description Buys a sector
    * @param {number} x - X-coordinate of tile
    * @param {number} y - Y-coordinate of tile
    * @param {number} [s_x] - X-coordinate of sector if `x` is relative
@@ -139,7 +139,7 @@ export default class GameLogic {
   }
   /**
    * @function reveal
-   * @desc Reveals a tile
+   * @description Reveals a tile
    * @async
    * @param {number} x - X-coordinate of tile
    * @param {number} y - Y-coordinate of tile
@@ -227,7 +227,7 @@ export default class GameLogic {
   }
   /**
    * @function flag
-   * @desc Flags a tile
+   * @description Flags a tile
    * @param {number} x - X-coordinate of tile
    * @param {number} y - Y-coordinate of tile
    * @param {number} [s_x] - X-coordinate of sector if `x` is relative
@@ -255,7 +255,7 @@ export default class GameLogic {
   }
   /**
    * @function isClickable
-   * @desc Checks if a tile is clickable
+   * @description Checks if a tile is clickable
    * @param {number} x - X-coordinate of tile
    * @param {number} y - Y-coordinate of tile
    * @param {number} [s_x] - X-coordinate of sector if `x` is relative
@@ -276,7 +276,7 @@ export default class GameLogic {
   }
   /**
    * @function isFlagged
-   * @desc Checks if a tile is flagged
+   * @description Checks if a tile is flagged
    * @param {number} x - X-coordinate of tile
    * @param {number} y - Y-coordinate of tile
    * @param {number} [s_x] - X-coordinate of sector if `x` is relative
@@ -294,7 +294,7 @@ export default class GameLogic {
   }
   /**
    * @function isRevealed
-   * @desc Checks if a tile is revealed
+   * @description Checks if a tile is revealed
    * @param {number} x - X-coordinate of tile
    * @param {number} y - Y-coordinate of tile
    * @param {number} [s_x] - X-coordinate of sector if `x` is relative
@@ -312,7 +312,7 @@ export default class GameLogic {
   }
   /**
    * @function isSectorSolved
-   * @desc Checks if a sector is solved
+   * @description Checks if a sector is solved
    * @param {number} s_x - X-coordinate of sector
    * @param {number} s_y - Y-coordinate of sector
    * @returns {boolean} - True if sector is solved, false otherwise
@@ -335,7 +335,7 @@ export default class GameLogic {
   }
   /**
    * @function flagCount
-   * @desc Counts the number of flags adjacent to a tile
+   * @description Counts the number of flags adjacent to a tile
    * @param {number} x - X-coordinate of tile
    * @param {number} y - Y-coordinate of tile
    * @param {number} [s_x] - X-coordinate of sector if `x` is relative
@@ -348,7 +348,7 @@ export default class GameLogic {
   }
   /**
    * @function mineCount
-   * @desc Counts the number of mines adjacent to a tile
+   * @description Counts the number of mines adjacent to a tile
    * @param {number} x - X-coordinate of tile
    * @param {number} y - Y-coordinate of tile
    * @param {number} [s_x] - X-coordinate of sector if `x` is relative
@@ -392,7 +392,7 @@ export default class GameLogic {
   }
   /**
    * @function buildSector
-   * @desc Builds a new sector
+   * @description Builds a new sector
    * @param {number} s_x - X-coordinate of sector
    * @param {number} s_y - Y-coordinate of sector
    * @returns {Array<Array<Array<number>>>} - The sector
@@ -425,7 +425,7 @@ export default class GameLogic {
   }
   /**
    * @function buildSectorCache
-   * @desc Builds a sector cache
+   * @description Builds a sector cache
    * @param {number} s_x - X-coordinate of sector
    * @param {number} s_y - Y-coordinate of sector
    * @returns {Array<Array<Array<number>>>|false} - The cached sector
@@ -449,7 +449,7 @@ export default class GameLogic {
   }
   /**
    * @function cleanSectorCache
-   * @desc Cleans the sector cache
+   * @description Cleans the sector cache
    * @fires EventBus#sector_bounds
    */
   cleanSectorCache() {
@@ -465,7 +465,7 @@ export default class GameLogic {
   }
   /**
    * @function animate
-   * @desc Animate a tile or sector
+   * @description Animate a tile or sector
    * @param {string} key - Key to use for hashing
    * @param {string} type - Type of animation
    * @param {boolean} is_tile - Whether the animation is for a tile

@@ -19,7 +19,7 @@ export default class EventHandler {
   /**
    * @constructs EventHandler
    * @function constructor
-   * @desc Initializes the event handler
+   * @description Initializes the event handler
    * @param {HTMLCanvasElement} canvas
    * @param {EventBus} bus
    */

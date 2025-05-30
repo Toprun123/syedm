@@ -15,7 +15,7 @@ export default class EventBus {
   /**
    * @constructs EventBus
    * @function constructor
-   * @desc Initializes the event bus
+   * @description Initializes the event bus
    */
   constructor() {
     this.retreivable_events = {};
@@ -23,7 +23,7 @@ export default class EventBus {
   }
   /**
    * @function on
-   * @desc Sets up an event listener
+   * @description Sets up an event listener
    * @param {string} event - Event name
    * @param {Function} callback - Callback function to call
    *                              (multiple functions can be added)
@@ -36,7 +36,7 @@ export default class EventBus {
   }
   /**
    * @function emit
-   * @desc Emits an event
+   * @description Emits an event
    * @param {string} event - Event name
    * @param {...*} args - Arguments to pass to the callback
    *                      functions (0 or more)
@@ -50,7 +50,7 @@ export default class EventBus {
   }
   /**
    * @function onRetrievable
-   * @desc Sets up a retrievable event listener
+   * @description Sets up a retrievable event listener
    * @param {string} event - Event name
    * @param {Function} callback - Callback function to call
    *                              (can only be used once)
@@ -60,7 +60,7 @@ export default class EventBus {
   }
   /**
    * @function get
-   * @desc Retrieves data from an event
+   * @description Retrieves data from an event
    * @param {string} event - Event name
    * @param {...*} args - Arguments to pass to the callback
    *                      function (only one)

@@ -29,7 +29,7 @@ export default class GameRenderer {
   /**
    * @constructs GameRenderer
    * @function constructor
-   * @desc Initializes the game renderer
+   * @description Initializes the game renderer
    * @param {Image} img
    * @param {Object} game_pos
    * @param {Uint32Array} key
@@ -66,7 +66,7 @@ export default class GameRenderer {
   }
   /**
    * @function getViewPos
-   * @desc Returns the current view position (for saving)
+   * @description Returns the current view position (for saving)
    * @return {Object} - The view position (offset, tile_size)
    */
   getViewPos() {
@@ -77,7 +77,7 @@ export default class GameRenderer {
   }
   /**
    * @function setViewPos
-   * @desc Sets the view position (from saved data)
+   * @description Sets the view position (from saved data)
    * @param {Object} view_pos - The view position (offset, tile_size)
    * @fires EventBus#disable_click - optionally
    */
@@ -92,7 +92,7 @@ export default class GameRenderer {
   }
   /**
    * @function draw
-   * @desc Draws the main game frame
+   * @description Draws the main game frame
    */
   draw() {
     this.ctx.fillStyle = !this.hide_details
@@ -146,7 +146,7 @@ export default class GameRenderer {
   }
   /**
    * @function drawBuyButtons
-   * @desc Draws the buy buttons for a sector
+   * @description Draws the buy buttons for a sector
    * @param {number} s_x - X-coordinate of sector
    * @param {number} s_y - Y-coordinate of sector
    */
@@ -260,7 +260,7 @@ export default class GameRenderer {
   }
   /**
    * @function drawRoundedRect
-   * @desc Draws a rounded rectangle
+   * @description Draws a rounded rectangle
    * @param {number} x - X-coordinate of top-left corner
    * @param {number} y - Y-coordinate of top-left corner
    * @param {number} width - Width of rectangle
@@ -292,7 +292,7 @@ export default class GameRenderer {
   }
   /**
    * @function drawStaticTiles
-   * @desc Draws a static tile
+   * @description Draws a static tile
    * @param {Array<Array<Array<number>>>|false} sector
    * @param {number} s_x - X-coordinate of sector
    * @param {number} s_y - Y-coordinate of sector
@@ -351,7 +351,7 @@ export default class GameRenderer {
   }
   /**
    * @function _drawEmptyOrClickable
-   * @desc Draws an empty or clickable tile
+   * @description Draws an empty or clickable tile
    * @access private
    * @param {number} tile_x - X-coordinate of top-left corner of tile
    * @param {number} tile_y - Y-coordinate of top-left corner of tile
@@ -372,7 +372,7 @@ export default class GameRenderer {
   }
   /**
    * @function _drawRevealedStaticTile
-   * @desc Draws a revealed tile
+   * @description Draws a revealed tile
    * @access private
    * @param {number} tile_x - X-coordinate of top-left corner of tile
    * @param {number} tile_y - Y-coordinate of top-left corner of tile
@@ -387,7 +387,7 @@ export default class GameRenderer {
   }
   /**
    * @function _drawFlaggedOrLostTile
-   * @desc Draws a flagged or lost tile
+   * @description Draws a flagged or lost tile
    * @access private
    * @param {number} tile_x - X-coordinate of top-left corner of tile
    * @param {number} tile_y - Y-coordinate of top-left corner of tile
@@ -408,7 +408,7 @@ export default class GameRenderer {
   }
   /**
    * @function _drawStaticTileDetails
-   * @desc Draws the details of a static tile
+   * @description Draws the details of a static tile
    * @access private
    * @param {number} tile_x - X-coordinate of top-left corner of tile
    * @param {number} tile_y - Y-coordinate of top-left corner of tile
@@ -448,7 +448,7 @@ export default class GameRenderer {
   }
   /**
    * @function drawAnimatedTiles
-   * @desc Draws an animated tile
+   * @description Draws an animated tile
    * @param {Array<Array<Array<number>>>|false} sector
    * @param {number} s_x - X-coordinate of sector
    * @param {number} s_y - Y-coordinate of sector
@@ -498,7 +498,7 @@ export default class GameRenderer {
   }
   /**
    * @function _calculateCurrentScale
-   * @desc Calculates the current scale of an animated tile
+   * @description Calculates the current scale of an animated tile
    * @access private
    * @param {number} frame_time - Time since animation start
    * @return {number} - Current scale of tile
@@ -520,7 +520,7 @@ export default class GameRenderer {
   }
   /**
    * @function _drawRevealedTileAnimated
-   * @desc Draws a revealed tiles animation
+   * @description Draws a revealed tiles animation
    * @access private
    * @param {number} tile_x - X-coordinate of top-left corner of tile
    * @param {number} tile_y - Y-coordinate of top-left corner of tile
@@ -545,7 +545,7 @@ export default class GameRenderer {
   }
   /**
    * @function _drawFlaggedTileAnimated
-   * @desc Draws a flagged tiles animation
+   * @description Draws a flagged tiles animation
    * @access private
    * @param {number} tile_x - X-coordinate of top-left corner of tile
    * @param {number} tile_y - Y-coordinate of top-left corner of tile
@@ -584,7 +584,7 @@ export default class GameRenderer {
   }
   /**
    * @function _drawBombedTileAnimated
-   * @desc Draws a bombed tiles animation
+   * @description Draws a bombed tiles animation
    * @access private
    * @param {number} tile_x - X-coordinate of top-left corner of tile
    * @param {number} tile_y - Y-coordinate of top-left corner of tile
@@ -617,7 +617,7 @@ export default class GameRenderer {
   }
   /**
    * @function drawParticles
-   * @desc Draws particles
+   * @description Draws particles
    * @param {number} tile_x - X-coordinate of top-left corner of tile
    * @param {number} tile_y - Y-coordinate of top-left corner of tile
    * @param {number} frame_time - Time since animation start (0-1)
@@ -653,7 +653,7 @@ export default class GameRenderer {
   }
   /**
    * @function drawSectorBorders
-   * @desc Draws sector borders
+   * @description Draws sector borders
    * @param {number} start_x - X-coordinate of top-left corner of sector
    * @param {number} start_y - Y-coordinate of top-left corner of sector
    */
@@ -698,7 +698,7 @@ export default class GameRenderer {
   }
   /**
    * @function drawSectorOverlays
-   * @desc Draws sector overlays
+   * @description Draws sector overlays
    * @param {number} s_x - X-coordinate of sector
    * @param {number} s_y - Y-coordinate of sector
    */
@@ -730,7 +730,7 @@ export default class GameRenderer {
   }
   /**
    * @function drawSolvedAnimations
-   * @desc Draws solved sector animations
+   * @description Draws solved sector animations
    * @param {number} s_x - X-coordinate of sector
    * @param {number} s_y - Y-coordinate of sector
    */
@@ -783,7 +783,7 @@ export default class GameRenderer {
   }
   /**
    * @function drawSolvedParticles
-   * @desc Draws solved sector particles
+   * @description Draws solved sector particles
    * @param {number} sector_x_pos - X-coordinate of sector
    * @param {number} sector_y_pos - Y-coordinate of sector
    * @param {number} frame_time - Current frame time (0-1)
@@ -815,7 +815,7 @@ export default class GameRenderer {
   }
   /**
    * @function drawLostAnimations
-   * @desc Draws lost sector animations
+   * @description Draws lost sector animations
    * @param {number} s_x - X-coordinate of sector
    * @param {number} s_y - Y-coordinate of sector
    */

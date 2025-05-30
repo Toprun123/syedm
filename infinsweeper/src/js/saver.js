@@ -21,7 +21,7 @@ export default class Saver {
   /**
    * @constructs Saver
    * @function constructor
-   * @desc Initializes the game saver
+   * @description Initializes the game saver
    * @param {GameController} game
    * @param {EventBus} bus
    */
@@ -46,7 +46,7 @@ export default class Saver {
   }
   /**
    * @function startAutosaver
-   * @desc Starts the autosave feature
+   * @description Starts the autosave feature
    */
   startAutosaver() {
     this.save_interval_id = setInterval(
@@ -58,7 +58,7 @@ export default class Saver {
   }
   /**
    * @function stopAutosaver
-   * @desc Stops the autosave feature
+   * @description Stops the autosave feature
    */
   stopAutosaver() {
     clearInterval(this.save_interval_id);
@@ -66,14 +66,14 @@ export default class Saver {
   }
   /**
    * @function isSaved
-   * @desc Checks if a save exists
+   * @description Checks if a save exists
    */
   isSaved() {
     return localStorage.getItem("save") !== null;
   }
   /**
    * @function save
-   * @desc Saves the game data
+   * @description Saves the game data
    * @fires EventBus#view_pos
    */
   save() {
@@ -90,7 +90,7 @@ export default class Saver {
   }
   /**
    * @function load
-   * @desc Loads the game data
+   * @description Loads the game data
    * @param {string} [compressed] - Compressed game data
    * @fires EventBus#set_view_pos
    * @fires EventBus#update_key
@@ -125,7 +125,7 @@ export default class Saver {
   }
   /**
    * @function saveToFile
-   * @desc Saves the game data to a file
+   * @description Saves the game data to a file
    */
   saveToFile() {
     const data = {
@@ -147,7 +147,7 @@ export default class Saver {
   }
   /**
    * @function deleteSave
-   * @desc Deletes the save
+   * @description Deletes the save
    */
   deleteSave() {
     localStorage.removeItem("save");
@@ -156,7 +156,7 @@ export default class Saver {
   }
   /**
    * @function loadFromFile
-   * @desc Loads the game data from a file
+   * @description Loads the game data from a file
    */
   loadFromFile() {
     let input = document.createElement("input");

@@ -24,7 +24,7 @@ export default class UIRenderer extends GameRenderer {
   /**
    * @constructs UIRenderer
    * @function constructor
-   * @desc Initializes the renderer
+   * @description Initializes the renderer
    * @param {Image} img
    * @param {Object} game_pos
    * @param {Uint32Array} key
@@ -55,7 +55,7 @@ export default class UIRenderer extends GameRenderer {
   }
   /**
    * @function loop
-   * @desc Loops the animation frame and calls `draw`
+   * @description Loops the animation frame and calls `draw`
    */
   loop() {
     this.draw();
@@ -63,7 +63,7 @@ export default class UIRenderer extends GameRenderer {
   }
   /**
    * @function drag
-   * @desc Updates the offset
+   * @description Updates the offset
    * @param {number} x - X-offset
    * @param {number} y - Y-offset
    */
@@ -73,7 +73,7 @@ export default class UIRenderer extends GameRenderer {
   }
   /**
    * @function resize
-   * @desc Resizes the canvas
+   * @description Resizes the canvas
    */
   resize() {
     this.canvas.width = window.innerWidth;
@@ -82,7 +82,7 @@ export default class UIRenderer extends GameRenderer {
   }
   /**
    * @function updateKey
-   * @desc Updates the key
+   * @description Updates the key
    * @param {Uint32Array} key
    */
   updateKey(key) {
@@ -90,7 +90,7 @@ export default class UIRenderer extends GameRenderer {
   }
   /**
    * @function zoom
-   * @desc Zooms in or out
+   * @description Zooms in or out
    * @param {number} x - X-coordinate of center of zoom
    * @param {number} y - Y-coordinate of center of zoom
    * @param {boolean} is_zoom_in - True if zooming in, false if zooming out
@@ -112,7 +112,7 @@ export default class UIRenderer extends GameRenderer {
   }
   /**
    * @function isBuyButton
-   * @desc Checks if the tile is a buy button
+   * @description Checks if the tile is a buy button
    * @param {number} x - X-coordinate of the tile
    * @param {number} y - Y-coordinate of the tile
    * @returns {boolean} True if the tile is a buy button, false otherwise
@@ -145,7 +145,7 @@ export default class UIRenderer extends GameRenderer {
   }
   /**
    * @function sectorBounds
-   * @desc Returns the sector bounds
+   * @description Returns the sector bounds
    * @returns {Array} - Array of [start_x, start_y, end_x, end_y]
    */
   sectorBounds() {
@@ -160,7 +160,7 @@ export default class UIRenderer extends GameRenderer {
   }
   /**
    * @function clickConvert
-   * @desc Converts raw click coords to sector adjusted coords
+   * @description Converts raw click coords to sector adjusted coords
    * @param {number} x - X-coordinate of the click
    * @param {number} y - Y-coordinate of the click
    * @returns {Array} - Array of [x, y]

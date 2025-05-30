@@ -26,7 +26,7 @@ import {
 export const DataHasher = {
   /**
    * @function generate_key
-   * @desc Generates a key
+   * @description Generates a key
    * @param {string} seed - Seed for the hash function
    * @returns {Uint32Array} - Generated key
    *                     It can be the input itself for hashing
@@ -35,7 +35,7 @@ export const DataHasher = {
   generate_key: SipHash.string16_to_key,
   /**
    * @function hash
-   * @desc Hashes data
+   * @description Hashes data
    * @param {Uint32Array} key - Key for the hash function
    *                       For hashing functions that dont require keys
    *                       it can be concatenated to the data
@@ -61,14 +61,14 @@ export const DataHasher = {
 export const DataCompressor = {
   /**
    * @function zip
-   * @desc Compresses data
+   * @description Compresses data
    * @param {string} data - Uncompressed data
    * @returns {string} - Compressed data
    */
   zip: (data) => String.fromCharCode(...LZW.compress(data)),
   /**
    * @function unzip
-   * @desc Uncompresses data
+   * @description Uncompresses data
    * @param {string} data - Compressed data
    * @returns {string} - Uncompressed data
    * @throws {Error} - If the compressed data is invalid
@@ -94,7 +94,7 @@ export const DataCompressor = {
 export const LOOPS = {
   /**
    * @function overAdjacent
-   * @desc Loops over adjacent tiles and calls a function
+   * @description Loops over adjacent tiles and calls a function
    * @param {function} f - Function to call on each tile
    * @param {number} x - X-coordinate of tile
    * @param {number} y - Y-coordinate of tile
@@ -112,7 +112,7 @@ export const LOOPS = {
   },
   /**
    * @function overAdjacentSum
-   * @desc Loops over adjacent tiles and checks if they satisfy a condition
+   * @description Loops over adjacent tiles and checks if they satisfy a condition
    * @param {function} condition - The condition to check
    * @param {number} x - X-coordinate of tile
    * @param {number} y - Y-coordinate of tile
@@ -133,7 +133,7 @@ export const LOOPS = {
   },
   /**
    * @function anyAdjacent
-   * @desc Loops over adjacent tiles and checks if they satisfy a condition
+   * @description Loops over adjacent tiles and checks if they satisfy a condition
    * @param {function} condition - The condition to check
    * @param {number} x - X-coordinate of tile
    * @param {number} y - Y-coordinate of tile
@@ -153,7 +153,7 @@ export const LOOPS = {
   },
   /**
    * @function overOnScreenSectors
-   * @desc Loops over all sectors in view
+   * @description Loops over all sectors in view
    * @param {function} f - Function to call on each sector
    * @param {number} start_x - X-coordinate of starting sector
    * @param {number} start_y - Y-coordinate of starting sector
@@ -171,7 +171,7 @@ export const LOOPS = {
   },
   /**
    * @function overTilesInSector
-   * @desc Loops over all tiles in a sector
+   * @description Loops over all tiles in a sector
    * @param {function} f - Function to call on each tile
    */
   overTilesInSector: (f) => {
@@ -183,7 +183,7 @@ export const LOOPS = {
   },
   /**
    * @function anyTilesInSector
-   * @desc Checks if any tile in a sector satisfies a condition
+   * @description Checks if any tile in a sector satisfies a condition
    * @param {function} condition - The condition to check
    * @returns {boolean} - Whether any tile satisfies the condition or not
    */
@@ -197,7 +197,7 @@ export const LOOPS = {
   },
   /**
    * @function overTilesInSectorSum
-   * @desc Checks if all tiles in a sector satisfy a condition
+   * @description Checks if all tiles in a sector satisfy a condition
    * @param {function} condition - The condition to check
    * @returns {number} - Number of tiles that satisfy the condition
    */
@@ -214,7 +214,7 @@ export const LOOPS = {
 
 /**
  * @function convert
- * @desc Converts between tile and sector coordinates.
+ * @description Converts between tile and sector coordinates.
  * @param {boolean} to_local_coords - Whether to convert to local coordinates or not
  * @param {number} x - X-coordinate of tile
  * @param {number} y - Y-coordinate of tile
@@ -245,7 +245,7 @@ export function convert(to_local_coords, x, y, s_x, s_y) {
 
 /**
  * @function isMine
- * @desc Get the type of a tile (mine or not) deterministically.
+ * @description Get the type of a tile (mine or not) deterministically.
  * @param {string} key - Key to use for hashing
  * @param {number} x - X-coordinate of the tile
  * @param {number} y - Y-coordinate of the tile

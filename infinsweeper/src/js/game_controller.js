@@ -29,7 +29,7 @@ export default class GameController {
   /**
    * @constructs GameController
    * @function constructor
-   * @desc Initializes the game controller
+   * @description Initializes the game controller
    * @param {string} seed - Seed for the game
    */
   constructor(seed) {
@@ -56,7 +56,7 @@ export default class GameController {
   }
   /**
    * @function init
-   * @desc Initializes the game
+   * @description Initializes the game
    * @async
    */
   async init() {
@@ -69,7 +69,7 @@ export default class GameController {
   }
   /**
    * @function loadImage
-   * @desc Loads the game image
+   * @description Loads the game image
    * @returns {Promise<void>} - Promise that resolves when the image is loaded
    * @throws {Error} - If the image fails to load
    */
@@ -82,7 +82,7 @@ export default class GameController {
   }
   /**
    * @function start
-   * @desc Starts the game
+   * @description Starts the game
    * @async
    * @param {number} tries - Number of times the game has been reset
    * @fires EventBus#start
@@ -97,7 +97,7 @@ export default class GameController {
   }
   /**
    * @function _loadSavedGame
-   * @desc Loads a saved game
+   * @description Loads a saved game
    * @access private
    * @fires EventBus#load_save
    * @fires EventBus#start_autosaver
@@ -110,7 +110,7 @@ export default class GameController {
   }
   /**
    * @function _tryOpening
-   * @desc Tries to open the game
+   * @description Tries to open the game
    * @async
    * @access private
    * @param {number} tries - Number of times the game has been reset
@@ -142,7 +142,7 @@ export default class GameController {
   }
   /**
    * @function reset
-   * @desc Resets the game
+   * @description Resets the game
    * @async
    * @param {number} tries - Number of times the game has been reset
    */
@@ -153,7 +153,7 @@ export default class GameController {
   }
   /**
    * @function _clearGameState
-   * @desc Clears the game state
+   * @description Clears the game state
    * @access private
    */
   _clearGameState() {
@@ -173,7 +173,7 @@ export default class GameController {
   }
   /**
    * @function _generateNewSeed
-   * @desc Generates a new seed and key
+   * @description Generates a new seed and key
    * @access private
    * @fires EventBus#update_key
    */
