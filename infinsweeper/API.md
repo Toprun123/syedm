@@ -945,6 +945,7 @@ Loads the game data from a file
 ## SipHash
 **Access**: package  
 **Important**: - Siphash implementation taken from https://github.com/jedisct1/siphash-js (minified browser version)  
+**Author**: Frank Denis  
 <a name="module_LZW"></a>
 
 ## LZW

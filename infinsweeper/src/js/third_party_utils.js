@@ -1,6 +1,7 @@
 /**
  *  @name SipHash
  *  @IMPORTANT - Siphash implementation taken from https://github.com/jedisct1/siphash-js (minified browser version)
+ *  @author Frank Denis
  *  @access package
  *  @exports SipHash
  */
