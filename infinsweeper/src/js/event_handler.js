@@ -18,7 +18,7 @@ import EventBus from "./event_bus.js";
 export default class EventHandler {
   /**
    * @constructs EventHandler
-   * @function
+   * @function constructor
    * @desc Initializes the event handler
    * @param {HTMLCanvasElement} canvas
    * @param {EventBus} bus

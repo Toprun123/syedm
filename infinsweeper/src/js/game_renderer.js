@@ -28,7 +28,7 @@ import EventBus from "./event_bus.js";
 export default class GameRenderer {
   /**
    * @constructs GameRenderer
-   * @function
+   * @function constructor
    * @desc Initializes the game renderer
    * @param {Image} img
    * @param {Object} game_pos

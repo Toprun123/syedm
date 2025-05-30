@@ -23,7 +23,7 @@ import EventBus from "./event_bus.js";
 export default class UIRenderer extends GameRenderer {
   /**
    * @constructs UIRenderer
-   * @function
+   * @function constructor
    * @desc Initializes the renderer
    * @param {Image} img
    * @param {Object} game_pos

@@ -27,7 +27,7 @@ import EventBus from "./event_bus.js";
 export default class GameLogic {
   /**
    * @constructs GameLogic
-   * @function
+   * @function constructor
    * @desc Initializes the game logic
    * @param {Object} game_pos
    * @param {Uint32Array} key

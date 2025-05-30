@@ -20,7 +20,7 @@ import GameController from "./game_controller.js";
 export default class Saver {
   /**
    * @constructs Saver
-   * @function
+   * @function constructor
    * @desc Initializes the game saver
    * @param {GameController} game
    * @param {EventBus} bus

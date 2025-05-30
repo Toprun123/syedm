@@ -14,7 +14,7 @@
 export default class EventBus {
   /**
    * @constructs EventBus
-   * @function
+   * @function constructor
    * @desc Initializes the event bus
    */
   constructor() {

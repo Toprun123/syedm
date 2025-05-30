@@ -28,7 +28,7 @@ import Saver from "./saver.js";
 export default class GameController {
   /**
    * @constructs GameController
-   * @function
+   * @function constructor
    * @desc Initializes the game controller
    * @param {string} seed - Seed for the game
    */

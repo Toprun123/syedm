@@ -41,7 +41,7 @@
 <dd></dd>
 <dt><a href="#module_LZW">LZW</a></dt>
 <dd></dd>
-<dt><a href="#module_UIRenderer">UIRenderer</a> ⇐ <code><a href="#GameRenderer">GameRenderer</a></code></dt>
+<dt><a href="#module_UIRenderer">UIRenderer</a> ⇐ <code>GameRenderer</code></dt>
 <dd></dd>
 <dt><a href="#module_DataHasher">DataHasher</a> : <code>object</code></dt>
 <dd><p>An object with methods <code>hash</code> and <code>generate_key</code>
@@ -66,34 +66,8 @@
 ## Members
 
 <dl>
-<dt><a href="#game">game</a> : <code><a href="#GameController">GameController</a></code></dt>
+<dt><a href="#game">game</a> : <code>GameController</code></dt>
 <dd><p>The game controller instance.</p>
-</dd>
-</dl>
-
-## Functions
-
-<dl>
-<dt><a href="#EventBus">EventBus()</a></dt>
-<dd><p>Initializes the event bus</p>
-</dd>
-<dt><a href="#EventHandler">EventHandler(canvas, bus)</a></dt>
-<dd><p>Initializes the event handler</p>
-</dd>
-<dt><a href="#GameController">GameController(seed)</a></dt>
-<dd><p>Initializes the game controller</p>
-</dd>
-<dt><a href="#GameLogic">GameLogic(game_pos, key, bus)</a></dt>
-<dd><p>Initializes the game logic</p>
-</dd>
-<dt><a href="#GameRenderer">GameRenderer(img, game_pos, key, bus)</a></dt>
-<dd><p>Initializes the game renderer</p>
-</dd>
-<dt><a href="#Saver">Saver(game, bus)</a></dt>
-<dd><p>Initializes the game saver</p>
-</dd>
-<dt><a href="#UIRenderer">UIRenderer(img, game_pos, key, bus)</a></dt>
-<dd><p>Initializes the renderer</p>
 </dd>
 </dl>
 
@@ -173,11 +147,18 @@
 **Access**: public  
 
 * [EventBus](#module_EventBus)
+    * [~constructor()](#module_EventBus..constructor)
     * [~on(event, callback)](#module_EventBus..on)
     * [~emit(event, ...args)](#module_EventBus..emit)
     * [~onRetrievable(event, callback)](#module_EventBus..onRetrievable)
     * [~get(event, ...args)](#module_EventBus..get) ⇒ <code>any</code> \| <code>undefined</code>
 
+<a name="module_EventBus..constructor"></a>
+
+### EventBus~constructor()
+Initializes the event bus
+
+**Kind**: inner method of [<code>EventBus</code>](#module_EventBus)  
 <a name="module_EventBus..on"></a>
 
 ### EventBus~on(event, callback)
@@ -233,6 +214,7 @@ Retrieves data from an event
 **Access**: public  
 
 * [EventHandler](#module_EventHandler)
+    * [~constructor(canvas, bus)](#module_EventHandler..constructor)
     * ["mousedown"](#event_mousedown)
     * ["mousemove"](#event_mousemove)
     * ["mouseup"](#event_mouseup)
@@ -243,6 +225,18 @@ Retrieves data from an event
     * ["resize"](#event_resize)
     * ["beforeunload"](#event_beforeunload)
     * ["visibilitychange"](#event_visibilitychange)
+
+<a name="module_EventHandler..constructor"></a>
+
+### EventHandler~constructor(canvas, bus)
+Initializes the event handler
+
+**Kind**: inner method of [<code>EventHandler</code>](#module_EventHandler)  
+
+| Param | Type |
+| --- | --- |
+| canvas | <code>HTMLCanvasElement</code> | 
+| bus | <code>EventBus</code> | 
 
 <a name="event_mousedown"></a>
 
@@ -301,6 +295,7 @@ Retrieves data from an event
         * [.seed](#module_GameController+seed) : <code>string</code>
         * [.key](#module_GameController+key) : <code>Uint32Array</code>
     * _inner_
+        * [~constructor(seed)](#module_GameController..constructor)
         * [~init()](#module_GameController..init)
         * [~loadImage()](#module_GameController..loadImage) ⇒ <code>Promise.&lt;void&gt;</code>
         * [~start(tries)](#module_GameController..start)
@@ -316,6 +311,17 @@ Retrieves data from an event
 
 ### gameController.key : <code>Uint32Array</code>
 **Kind**: instance property of [<code>GameController</code>](#module_GameController)  
+<a name="module_GameController..constructor"></a>
+
+### GameController~constructor(seed)
+Initializes the game controller
+
+**Kind**: inner method of [<code>GameController</code>](#module_GameController)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| seed | <code>string</code> | Seed for the game |
+
 <a name="module_GameController..init"></a>
 
 ### GameController~init()
@@ -362,6 +368,7 @@ Resets the game
 **Access**: public  
 
 * [GameLogic](#module_GameLogic)
+    * [~constructor(game_pos, key, bus)](#module_GameLogic..constructor)
     * [~click(x, y, button)](#module_GameLogic..click)
     * [~updateKey(key)](#module_GameLogic..updateKey)
     * [~buy(x, y, [s_x], [s_y])](#module_GameLogic..buy)
@@ -377,6 +384,19 @@ Resets the game
     * [~buildSectorCache(s_x, s_y)](#module_GameLogic..buildSectorCache) ⇒ <code>Array.&lt;Array.&lt;Array.&lt;number&gt;&gt;&gt;</code> \| <code>false</code>
     * [~cleanSectorCache()](#module_GameLogic..cleanSectorCache)
     * [~animate(key, type, is_tile, [duration])](#module_GameLogic..animate)
+
+<a name="module_GameLogic..constructor"></a>
+
+### GameLogic~constructor(game_pos, key, bus)
+Initializes the game logic
+
+**Kind**: inner method of [<code>GameLogic</code>](#module_GameLogic)  
+
+| Param | Type |
+| --- | --- |
+| game_pos | <code>Object</code> | 
+| key | <code>Uint32Array</code> | 
+| bus | <code>EventBus</code> | 
 
 <a name="module_GameLogic..click"></a>
 
@@ -594,6 +614,7 @@ Animate a tile or sector
         * [.canvas](#module_GameRenderer+canvas) : <code>HTMLCanvasElement</code>
         * [.ctx](#module_GameRenderer+ctx) : <code>CanvasRenderingContext2D</code>
     * _inner_
+        * [~constructor(img, game_pos, key, bus)](#module_GameRenderer..constructor)
         * [~getViewPos()](#module_GameRenderer..getViewPos) ⇒ <code>Object</code>
         * [~setViewPos(view_pos)](#module_GameRenderer..setViewPos)
         * [~draw()](#module_GameRenderer..draw)
@@ -616,6 +637,20 @@ Animate a tile or sector
 
 ### gameRenderer.ctx : <code>CanvasRenderingContext2D</code>
 **Kind**: instance property of [<code>GameRenderer</code>](#module_GameRenderer)  
+<a name="module_GameRenderer..constructor"></a>
+
+### GameRenderer~constructor(img, game_pos, key, bus)
+Initializes the game renderer
+
+**Kind**: inner method of [<code>GameRenderer</code>](#module_GameRenderer)  
+
+| Param | Type |
+| --- | --- |
+| img | <code>Image</code> | 
+| game_pos | <code>Object</code> | 
+| key | <code>Uint32Array</code> | 
+| bus | <code>EventBus</code> | 
+
 <a name="module_GameRenderer..getViewPos"></a>
 
 ### GameRenderer~getViewPos() ⇒ <code>Object</code>
@@ -782,6 +817,7 @@ Draws lost sector animations
     * _instance_
         * [.save_interval_id](#module_Saver+save_interval_id) : <code>number</code>
     * _inner_
+        * [~constructor(game, bus)](#module_Saver..constructor)
         * [~startAutosaver()](#module_Saver..startAutosaver)
         * [~stopAutosaver()](#module_Saver..stopAutosaver)
         * [~isSaved()](#module_Saver..isSaved)
@@ -797,6 +833,18 @@ Draws lost sector animations
 - ID of the autosave interval
 
 **Kind**: instance property of [<code>Saver</code>](#module_Saver)  
+<a name="module_Saver..constructor"></a>
+
+### Saver~constructor(game, bus)
+Initializes the game saver
+
+**Kind**: inner method of [<code>Saver</code>](#module_Saver)  
+
+| Param | Type |
+| --- | --- |
+| game | <code>GameController</code> | 
+| bus | <code>EventBus</code> | 
+
 <a name="module_Saver..startAutosaver"></a>
 
 ### Saver~startAutosaver()
@@ -863,15 +911,16 @@ Loads the game data from a file
 **Access**: package  
 <a name="module_UIRenderer"></a>
 
-## UIRenderer ⇐ [<code>GameRenderer</code>](#GameRenderer)
-**Extends**: [<code>GameRenderer</code>](#GameRenderer)  
+## UIRenderer ⇐ <code>GameRenderer</code>
+**Extends**: <code>GameRenderer</code>  
 **Access**: public  
 
-* [UIRenderer](#module_UIRenderer) ⇐ [<code>GameRenderer</code>](#GameRenderer)
+* [UIRenderer](#module_UIRenderer) ⇐ <code>GameRenderer</code>
     * _instance_
         * [.loop](#module_UIRenderer+loop) : <code>function</code>
         * [.frame_id](#module_UIRenderer+frame_id) : <code>number</code>
     * _inner_
+        * [~constructor(img, game_pos, key, bus)](#module_UIRenderer..constructor)
         * [~loop()](#module_UIRenderer..loop)
         * [~drag(x, y)](#module_UIRenderer..drag)
         * [~resize()](#module_UIRenderer..resize)
@@ -893,6 +942,20 @@ Loads the game data from a file
 - ID of the animation frame
 
 **Kind**: instance property of [<code>UIRenderer</code>](#module_UIRenderer)  
+<a name="module_UIRenderer..constructor"></a>
+
+### UIRenderer~constructor(img, game_pos, key, bus)
+Initializes the renderer
+
+**Kind**: inner method of [<code>UIRenderer</code>](#module_UIRenderer)  
+
+| Param | Type |
+| --- | --- |
+| img | <code>Image</code> | 
+| game_pos | <code>Object</code> | 
+| key | <code>Uint32Array</code> | 
+| bus | <code>EventBus</code> | 
+
 <a name="module_UIRenderer..loop"></a>
 
 ### UIRenderer~loop()
@@ -1225,93 +1288,11 @@ Get the type of a tile (mine or not) deterministically.
 
 <a name="game"></a>
 
-## game : [<code>GameController</code>](#GameController)
+## game : <code>GameController</code>
 The game controller instance.
 
 **Kind**: global variable  
 **Access**: public  
-<a name="EventBus"></a>
-
-## EventBus()
-Initializes the event bus
-
-**Kind**: global function  
-<a name="EventHandler"></a>
-
-## EventHandler(canvas, bus)
-Initializes the event handler
-
-**Kind**: global function  
-
-| Param | Type |
-| --- | --- |
-| canvas | <code>HTMLCanvasElement</code> | 
-| bus | [<code>EventBus</code>](#EventBus) | 
-
-<a name="GameController"></a>
-
-## GameController(seed)
-Initializes the game controller
-
-**Kind**: global function  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| seed | <code>string</code> | Seed for the game |
-
-<a name="GameLogic"></a>
-
-## GameLogic(game_pos, key, bus)
-Initializes the game logic
-
-**Kind**: global function  
-
-| Param | Type |
-| --- | --- |
-| game_pos | <code>Object</code> | 
-| key | <code>Uint32Array</code> | 
-| bus | [<code>EventBus</code>](#EventBus) | 
-
-<a name="GameRenderer"></a>
-
-## GameRenderer(img, game_pos, key, bus)
-Initializes the game renderer
-
-**Kind**: global function  
-
-| Param | Type |
-| --- | --- |
-| img | <code>Image</code> | 
-| game_pos | <code>Object</code> | 
-| key | <code>Uint32Array</code> | 
-| bus | [<code>EventBus</code>](#EventBus) | 
-
-<a name="Saver"></a>
-
-## Saver(game, bus)
-Initializes the game saver
-
-**Kind**: global function  
-
-| Param | Type |
-| --- | --- |
-| game | [<code>GameController</code>](#GameController) | 
-| bus | [<code>EventBus</code>](#EventBus) | 
-
-<a name="UIRenderer"></a>
-
-## UIRenderer(img, game_pos, key, bus)
-Initializes the renderer
-
-**Kind**: global function  
-
-| Param | Type |
-| --- | --- |
-| img | <code>Image</code> | 
-| game_pos | <code>Object</code> | 
-| key | <code>Uint32Array</code> | 
-| bus | [<code>EventBus</code>](#EventBus) | 
-
 <a name="event_DOMContentLoaded"></a>
 
 ## "DOMContentLoaded"
