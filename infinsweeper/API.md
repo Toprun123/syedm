@@ -372,7 +372,7 @@ Resets the game
         * [.start_time](#module_GameLogic+start_time) : <code>Date</code>
     * _inner_
         * [~constructor(game_pos, key, bus)](#module_GameLogic..constructor)
-        * [~time()](#module_GameLogic..time) ⇒ <code>Object</code>
+        * [~timeAndStats()](#module_GameLogic..timeAndStats) ⇒ <code>Object</code>
         * [~setStats(stats)](#module_GameLogic..setStats)
         * [~click(x, y, button)](#module_GameLogic..click)
         * [~updateKey(key)](#module_GameLogic..updateKey)
@@ -408,9 +408,9 @@ Initializes the game logic
 | key | <code>Uint32Array</code> | 
 | bus | <code>EventBus</code> | 
 
-<a name="module_GameLogic..time"></a>
+<a name="module_GameLogic..timeAndStats"></a>
 
-### GameLogic~time() ⇒ <code>Object</code>
+### GameLogic~timeAndStats() ⇒ <code>Object</code>
 Returns the current time in seconds
 
 **Kind**: inner method of [<code>GameLogic</code>](#module_GameLogic)  

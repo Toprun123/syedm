@@ -76,18 +76,17 @@ export default class Saver {
    * @description Saves the game data
    * @returns {string} - Compressed game data
    * @fires EventBus#view_pos
+   * @fires EventBus#time_and_stats
    */
   save() {
     if (this.delete_save) return;
-    let stats = this.bus.get("time_and_stats");
-    console.log(stats);
     const data = {
       game_pos: this.game.game_pos,
       goldmines: this.game.goldmines,
       seed: this.game.seed,
       difficulty: this.game.difficulty,
       view_pos: this.bus.get("view_pos"),
-      stats,
+      stats: this.bus.get("time_and_stats"),
     };
     const compressed = DataCompressor.zip(JSON.stringify(data));
     localStorage.setItem("save", compressed);
@@ -97,6 +96,7 @@ export default class Saver {
    * @function load
    * @description Loads the game data
    * @param {string} [compressed] - Compressed game data
+   * @fires EventBus#set_stats
    * @fires EventBus#set_view_pos
    * @fires EventBus#update_key
    * @fires EventBus#reset

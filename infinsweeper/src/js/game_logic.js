@@ -65,7 +65,7 @@ export default class GameLogic {
     this.bus.onRetrievable("time_and_stats", this.timeAndStats.bind(this));
   }
   /**
-   * @function time
+   * @function timeAndStats
    * @description Returns the current time in seconds
    * @returns {Object} - Time and stats
    */
