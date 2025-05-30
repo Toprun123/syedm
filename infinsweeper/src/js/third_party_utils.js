@@ -1,5 +1,8 @@
 /**
+ *  @name SipHash
  *  @IMPORTANT - Siphash implementation taken from https://github.com/jedisct1/siphash-js (minified browser version)
+ *  @access package
+ *  @exports SipHash
  */
 export const SipHash = (function () {
   "use strict";
@@ -115,8 +118,13 @@ export const SipHash = (function () {
   };
 })();
 
+/**
+ * @name LZW
+ * @access package
+ * @exports LZW
+ */
 export const LZW = {
-  zip: (uncompressed) => {
+  compress: (uncompressed) => {
     const dict = {};
     const data = (uncompressed + "").split("");
     const out = [];
@@ -137,21 +145,9 @@ export const LZW = {
       }
     }
     if (w !== "") out.push(dict[w]);
-    const uint16 = new Uint16Array(out);
-    const uint8 = new Uint8Array(uint16.buffer);
-    let binary = "";
-    for (let i = 0; i < uint8.length; i++) {
-      binary += String.fromCharCode(uint8[i]);
-    }
-    return btoa(binary);
+    return out;
   },
-  unzip: (compressed_bin) => {
-    const binary = atob(compressed_bin);
-    const uint8 = new Uint8Array(binary.length);
-    for (let i = 0; i < binary.length; i++) {
-      uint8[i] = binary.charCodeAt(i);
-    }
-    const compressed = new Uint16Array(uint8.buffer);
+  uncompress: (compressed) => {
     const dict = [];
     let dictSize = 256;
     for (let i = 0; i < 256; i++) {
