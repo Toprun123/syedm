@@ -32,7 +32,7 @@ export default class Saver {
     this.game = game;
     this.bus = bus;
     /** @listens EventBus#is_saved */
-    this.bus.on_retrievable("is_saved", this.isSaved.bind(this));
+    this.bus.onRetrievable("is_saved", this.isSaved.bind(this));
     /** @listens EventBus#save */
     this.bus.on("save", this.save.bind(this));
     /** @listens EventBus#load_save */
