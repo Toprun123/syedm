@@ -909,14 +909,14 @@ Saves the game data
 
 **Kind**: inner method of [<code>Saver</code>](#module_Saver)  
 **Returns**: <code>string</code> - - Compressed game data  
-**Emits**: <code>EventBus#event:view\_pos</code>  
+**Emits**: <code>EventBus#event:view\_pos</code>, <code>EventBus#event:time\_and\_stats</code>  
 <a name="module_Saver..load"></a>
 
 ### Saver~load([compressed])
 Loads the game data
 
 **Kind**: inner method of [<code>Saver</code>](#module_Saver)  
-**Emits**: <code>EventBus#event:set\_view\_pos</code>, <code>EventBus#event:update\_key</code>, <code>EventBus#event:reset</code>  
+**Emits**: <code>EventBus#event:set\_stats</code>, <code>EventBus#event:set\_view\_pos</code>, <code>EventBus#event:update\_key</code>, <code>EventBus#event:reset</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
