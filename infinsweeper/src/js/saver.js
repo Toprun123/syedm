@@ -74,19 +74,24 @@ export default class Saver {
   /**
    * @function save
    * @description Saves the game data
+   * @returns {string} - Compressed game data
    * @fires EventBus#view_pos
    */
   save() {
     if (this.delete_save) return;
+    let stats = this.bus.get("time_and_stats");
+    console.log(stats);
     const data = {
       game_pos: this.game.game_pos,
       goldmines: this.game.goldmines,
       seed: this.game.seed,
       difficulty: this.game.difficulty,
       view_pos: this.bus.get("view_pos"),
+      stats,
     };
     const compressed = DataCompressor.zip(JSON.stringify(data));
     localStorage.setItem("save", compressed);
+    return compressed;
   }
   /**
    * @function load
@@ -108,6 +113,7 @@ export default class Saver {
         key: DataHasher.generate_key(savedData.seed),
         difficulty: savedData.difficulty,
       });
+      this.bus.emit("set_stats", savedData.stats);
       this.bus.emit("set_view_pos", savedData.view_pos);
       this.bus.emit("update_key", this.game.key);
       const savedGamePos = savedData.game_pos || {};
@@ -128,14 +134,7 @@ export default class Saver {
    * @description Saves the game data to a file
    */
   saveToFile() {
-    const data = {
-      game_pos: this.game.game_pos,
-      goldmines: this.game.goldmines,
-      seed: this.game.seed,
-      difficulty: this.game.difficulty,
-      view_pos: this.bus.get("view_pos"),
-    };
-    let compressed = DataCompressor.zip(JSON.stringify(data));
+    const compressed = this.save();
     let url = URL.createObjectURL(
       new Blob([compressed], { type: "application/octet-stream" }),
       "save.txt",

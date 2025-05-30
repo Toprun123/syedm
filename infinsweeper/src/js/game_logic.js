@@ -37,21 +37,15 @@ export default class GameLogic {
     this.key = key;
     this.bus = bus;
     this.game_pos = game_pos;
-    // TODO: Make the stats work
     this.stats = {
       mines: 0,
       flags: 0,
       solved: 0,
-      1: 0,
-      2: 0,
-      3: 0,
-      4: 0,
-      5: 0,
-      6: 0,
-      7: 0,
-      8: 0,
+      numbers: Array(9).fill(0),
       time: 0,
     };
+    /** @type {Date} */
+    this.start_time = Date.now();
     this.goldmines = 0;
     /** @listens EventBus#click */
     this.bus.on("click", this.click.bind(this));
@@ -59,12 +53,39 @@ export default class GameLogic {
     this.bus.on("clean_cache", this.cleanSectorCache.bind(this));
     /** @listens EventBus#update_key */
     this.bus.on("update_key", this.updateKey.bind(this));
+    /** @listens EventBus#set_stats */
+    this.bus.on("set_stats", this.setStats.bind(this));
     /** @listens EventBus#reveal */
     this.bus.onRetrievable("reveal", this.reveal.bind(this));
     /** @listens EventBus#request_cache */
     this.bus.onRetrievable("request_cache", this.buildSectorCache.bind(this));
     /** @listens EventBus#is_clickable */
     this.bus.onRetrievable("is_clickable", this.isClickable.bind(this));
+    /** @listens EventBus#time */
+    this.bus.onRetrievable("time_and_stats", this.timeAndStats.bind(this));
+  }
+  /**
+   * @function time
+   * @description Returns the current time in seconds
+   * @returns {Object} - Time and stats
+   */
+  timeAndStats() {
+    this.stats.time += Date.now() - this.start_time;
+    this.start_time = Date.now();
+    return this.stats;
+  }
+  /**
+   * @function setStats
+   * @description Sets the stats
+   * @param {Object} stats - Stats from the save
+   */
+  setStats(stats) {
+    this.start_time = Date.now();
+    ["mines", "flags", "solved", "numbers", "time"].forEach((key) => {
+      if (stats.hasOwnProperty(key)) {
+        this.stats[key] = stats[key];
+      }
+    });
   }
   /**
    * @function click
@@ -169,6 +190,7 @@ export default class GameLogic {
           ),
         );
         this.animate(SECTOR_KEY, "lost", false);
+        this.stats.mines++;
         this.animate(
           `${SECTOR_KEY}:${x}:${y}`,
           "bombed",
@@ -213,14 +235,14 @@ export default class GameLogic {
       }
     }
     if (
-      this.isSectorSolved(s_x, s_y) &&
+      this.isSectorSolved(SECTOR_KEY) &&
       this.game_pos.data_sectors[SECTOR_KEY] !== SOLVED
     ) {
       if (this.game_pos.lost_sectors.hasOwnProperty(SECTOR_KEY))
         delete this.game_pos.lost_sectors[SECTOR_KEY];
       this.game_pos.data_sectors[SECTOR_KEY] = SOLVED;
       this.animate(SECTOR_KEY, "solved", false);
-      // TODO: Collect stats here
+      this.collectStats(s_x, s_y);
       this.goldmines++;
     }
     return recursed;
@@ -313,13 +335,11 @@ export default class GameLogic {
   /**
    * @function isSectorSolved
    * @description Checks if a sector is solved
-   * @param {number} s_x - X-coordinate of sector
-   * @param {number} s_y - Y-coordinate of sector
+   * @param {string} sector_key - Key of sector
    * @returns {boolean} - True if sector is solved, false otherwise
    */
-  isSectorSolved(s_x, s_y) {
-    const SECTOR_KEY = `${s_x}:${s_y}`;
-    const SECTOR = this.game_pos.data_sectors[SECTOR_KEY];
+  isSectorSolved(sector_key) {
+    const SECTOR = this.game_pos.data_sectors[sector_key];
     if (!SECTOR) return false;
     if (SECTOR === SOLVED) return true;
     return (
@@ -332,6 +352,28 @@ export default class GameLogic {
       }) ==
       SECTOR_SIZE ** 2
     );
+  }
+  /**
+   * @function collectStats
+   * @description Collects statistics about a solved sector into the stats object
+   * @param {number} s_x - X-coordinate of sector
+   * @param {number} s_y - Y-coordinate of sector
+   */
+  collectStats(s_x, s_y) {
+    const SECTOR_KEY = `${s_x}:${s_y}`;
+    if (!this.game_pos.data_sectors[SECTOR_KEY]) return null;
+    if (this.game_pos.data_sectors[SECTOR_KEY] != SOLVED) return null;
+    const SECTOR = this.buildSectorCache(s_x, s_y);
+    console.log(SECTOR);
+    this.stats.solved++;
+    LOOPS.overTilesInSector((x, y) => {
+      const [TILE_NUM, TILE_STATE] = SECTOR[y][x];
+      if (TILE_STATE === TILE_STATES.FLAGGED) {
+        this.stats.flags++;
+      } else if (TILE_STATE === TILE_STATES.REVEALED) {
+        this.stats.numbers[TILE_NUM]++;
+      }
+    });
   }
   /**
    * @function flagCount
@@ -432,7 +474,7 @@ export default class GameLogic {
    */
   buildSectorCache(s_x, s_y) {
     const SECTOR_KEY = `${s_x}:${s_y}`;
-    if (this.game_pos.data_sectors[SECTOR_KEY] !== 1) return false;
+    if (this.game_pos.data_sectors[SECTOR_KEY] !== SOLVED) return false;
     if (this.game_pos.cached_sectors.hasOwnProperty(SECTOR_KEY))
       return this.game_pos.cached_sectors[SECTOR_KEY];
     this.game_pos.cached_sectors[SECTOR_KEY] = Array.from(

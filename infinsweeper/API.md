@@ -368,23 +368,33 @@ Resets the game
 **Access**: public  
 
 * [GameLogic](#module_GameLogic)
-    * [~constructor(game_pos, key, bus)](#module_GameLogic..constructor)
-    * [~click(x, y, button)](#module_GameLogic..click)
-    * [~updateKey(key)](#module_GameLogic..updateKey)
-    * [~buy(x, y, [s_x], [s_y])](#module_GameLogic..buy)
-    * [~reveal(x, y, [s_x], [s_y], [no_animate])](#module_GameLogic..reveal) ⇒ <code>Promise.&lt;boolean&gt;</code>
-    * [~flag(x, y, [s_x], [s_y])](#module_GameLogic..flag)
-    * [~isClickable(x, y, [s_x], [s_y])](#module_GameLogic..isClickable) ⇒ <code>boolean</code>
-    * [~isFlagged(x, y, [s_x], [s_y])](#module_GameLogic..isFlagged) ⇒ <code>boolean</code>
-    * [~isRevealed(x, y, [s_x], [s_y])](#module_GameLogic..isRevealed) ⇒ <code>boolean</code>
-    * [~isSectorSolved(s_x, s_y)](#module_GameLogic..isSectorSolved) ⇒ <code>boolean</code>
-    * [~flagCount(x, y, [s_x], [s_y])](#module_GameLogic..flagCount) ⇒ <code>number</code>
-    * [~mineCount(x, y, [s_x], [s_y], [force])](#module_GameLogic..mineCount) ⇒ <code>number</code>
-    * [~buildSector(s_x, s_y)](#module_GameLogic..buildSector) ⇒ <code>Array.&lt;Array.&lt;Array.&lt;number&gt;&gt;&gt;</code>
-    * [~buildSectorCache(s_x, s_y)](#module_GameLogic..buildSectorCache) ⇒ <code>Array.&lt;Array.&lt;Array.&lt;number&gt;&gt;&gt;</code> \| <code>false</code>
-    * [~cleanSectorCache()](#module_GameLogic..cleanSectorCache)
-    * [~animate(key, type, is_tile, [duration])](#module_GameLogic..animate)
+    * _instance_
+        * [.start_time](#module_GameLogic+start_time) : <code>Date</code>
+    * _inner_
+        * [~constructor(game_pos, key, bus)](#module_GameLogic..constructor)
+        * [~time()](#module_GameLogic..time) ⇒ <code>Object</code>
+        * [~setStats(stats)](#module_GameLogic..setStats)
+        * [~click(x, y, button)](#module_GameLogic..click)
+        * [~updateKey(key)](#module_GameLogic..updateKey)
+        * [~buy(x, y, [s_x], [s_y])](#module_GameLogic..buy)
+        * [~reveal(x, y, [s_x], [s_y], [no_animate])](#module_GameLogic..reveal) ⇒ <code>Promise.&lt;boolean&gt;</code>
+        * [~flag(x, y, [s_x], [s_y])](#module_GameLogic..flag)
+        * [~isClickable(x, y, [s_x], [s_y])](#module_GameLogic..isClickable) ⇒ <code>boolean</code>
+        * [~isFlagged(x, y, [s_x], [s_y])](#module_GameLogic..isFlagged) ⇒ <code>boolean</code>
+        * [~isRevealed(x, y, [s_x], [s_y])](#module_GameLogic..isRevealed) ⇒ <code>boolean</code>
+        * [~isSectorSolved(sector_key)](#module_GameLogic..isSectorSolved) ⇒ <code>boolean</code>
+        * [~collectStats(s_x, s_y)](#module_GameLogic..collectStats)
+        * [~flagCount(x, y, [s_x], [s_y])](#module_GameLogic..flagCount) ⇒ <code>number</code>
+        * [~mineCount(x, y, [s_x], [s_y], [force])](#module_GameLogic..mineCount) ⇒ <code>number</code>
+        * [~buildSector(s_x, s_y)](#module_GameLogic..buildSector) ⇒ <code>Array.&lt;Array.&lt;Array.&lt;number&gt;&gt;&gt;</code>
+        * [~buildSectorCache(s_x, s_y)](#module_GameLogic..buildSectorCache) ⇒ <code>Array.&lt;Array.&lt;Array.&lt;number&gt;&gt;&gt;</code> \| <code>false</code>
+        * [~cleanSectorCache()](#module_GameLogic..cleanSectorCache)
+        * [~animate(key, type, is_tile, [duration])](#module_GameLogic..animate)
 
+<a name="module_GameLogic+start_time"></a>
+
+### gameLogic.start\_time : <code>Date</code>
+**Kind**: instance property of [<code>GameLogic</code>](#module_GameLogic)  
 <a name="module_GameLogic..constructor"></a>
 
 ### GameLogic~constructor(game_pos, key, bus)
@@ -397,6 +407,24 @@ Initializes the game logic
 | game_pos | <code>Object</code> | 
 | key | <code>Uint32Array</code> | 
 | bus | <code>EventBus</code> | 
+
+<a name="module_GameLogic..time"></a>
+
+### GameLogic~time() ⇒ <code>Object</code>
+Returns the current time in seconds
+
+**Kind**: inner method of [<code>GameLogic</code>](#module_GameLogic)  
+**Returns**: <code>Object</code> - - Time and stats  
+<a name="module_GameLogic..setStats"></a>
+
+### GameLogic~setStats(stats)
+Sets the stats
+
+**Kind**: inner method of [<code>GameLogic</code>](#module_GameLogic)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| stats | <code>Object</code> | Stats from the save |
 
 <a name="module_GameLogic..click"></a>
 
@@ -515,11 +543,22 @@ Checks if a tile is revealed
 
 <a name="module_GameLogic..isSectorSolved"></a>
 
-### GameLogic~isSectorSolved(s_x, s_y) ⇒ <code>boolean</code>
+### GameLogic~isSectorSolved(sector_key) ⇒ <code>boolean</code>
 Checks if a sector is solved
 
 **Kind**: inner method of [<code>GameLogic</code>](#module_GameLogic)  
 **Returns**: <code>boolean</code> - - True if sector is solved, false otherwise  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| sector_key | <code>string</code> | Key of sector |
+
+<a name="module_GameLogic..collectStats"></a>
+
+### GameLogic~collectStats(s_x, s_y)
+Collects statistics about a solved sector into the stats object
+
+**Kind**: inner method of [<code>GameLogic</code>](#module_GameLogic)  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -821,7 +860,7 @@ Draws lost sector animations
         * [~startAutosaver()](#module_Saver..startAutosaver)
         * [~stopAutosaver()](#module_Saver..stopAutosaver)
         * [~isSaved()](#module_Saver..isSaved)
-        * [~save()](#module_Saver..save)
+        * [~save()](#module_Saver..save) ⇒ <code>string</code>
         * [~load([compressed])](#module_Saver..load)
         * [~saveToFile()](#module_Saver..saveToFile)
         * [~deleteSave()](#module_Saver..deleteSave)
@@ -865,10 +904,11 @@ Checks if a save exists
 **Kind**: inner method of [<code>Saver</code>](#module_Saver)  
 <a name="module_Saver..save"></a>
 
-### Saver~save()
+### Saver~save() ⇒ <code>string</code>
 Saves the game data
 
 **Kind**: inner method of [<code>Saver</code>](#module_Saver)  
+**Returns**: <code>string</code> - - Compressed game data  
 **Emits**: <code>EventBus#event:view\_pos</code>  
 <a name="module_Saver..load"></a>
 
