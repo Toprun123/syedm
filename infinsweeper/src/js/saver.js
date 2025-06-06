@@ -67,6 +67,7 @@ export default class Saver {
   /**
    * @function isSaved
    * @description Checks if a save exists
+   * @returns {boolean} - Whether a save exists or not
    */
   isSaved() {
     return localStorage.getItem("save") !== null;

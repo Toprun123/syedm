@@ -92,16 +92,20 @@ export default class EventHandler {
      * @fires EventBus#zoom
      * @fires EventBus#clean_cache
      */
-    this.canvas.addEventListener("wheel", (e) => {
-      e.preventDefault();
-      this.disable_click = this.bus.get(
-        "zoom",
-        e.offsetX,
-        e.offsetY,
-        e.deltaY > 0 ? false : true,
-      );
-      this.bus.emit("clean_cache");
-    });
+    this.canvas.addEventListener(
+      "wheel",
+      (e) => {
+        e.preventDefault();
+        this.disable_click = this.bus.get(
+          "zoom",
+          e.offsetX,
+          e.offsetY,
+          e.deltaY > 0 ? false : true,
+        );
+        this.bus.emit("clean_cache");
+      },
+      { passive: false },
+    );
     /** @event click */
     this.canvas.addEventListener("click", (e) => {
       e.preventDefault();

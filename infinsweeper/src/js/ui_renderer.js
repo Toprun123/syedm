@@ -94,6 +94,7 @@ export default class UIRenderer extends GameRenderer {
    * @param {number} x - X-coordinate of center of zoom
    * @param {number} y - Y-coordinate of center of zoom
    * @param {boolean} is_zoom_in - True if zooming in, false if zooming out
+   * @returns {boolean} - True if details are hidden, false otherwise
    */
   zoom(x, y, is_zoom_in) {
     const NEW_TILE_SIZE = Math.max(

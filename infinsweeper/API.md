@@ -859,7 +859,7 @@ Draws lost sector animations
         * [~constructor(game, bus)](#module_Saver..constructor)
         * [~startAutosaver()](#module_Saver..startAutosaver)
         * [~stopAutosaver()](#module_Saver..stopAutosaver)
-        * [~isSaved()](#module_Saver..isSaved)
+        * [~isSaved()](#module_Saver..isSaved) ⇒ <code>boolean</code>
         * [~save()](#module_Saver..save) ⇒ <code>string</code>
         * [~load([compressed])](#module_Saver..load)
         * [~saveToFile()](#module_Saver..saveToFile)
@@ -898,10 +898,11 @@ Stops the autosave feature
 **Kind**: inner method of [<code>Saver</code>](#module_Saver)  
 <a name="module_Saver..isSaved"></a>
 
-### Saver~isSaved()
+### Saver~isSaved() ⇒ <code>boolean</code>
 Checks if a save exists
 
 **Kind**: inner method of [<code>Saver</code>](#module_Saver)  
+**Returns**: <code>boolean</code> - - Whether a save exists or not  
 <a name="module_Saver..save"></a>
 
 ### Saver~save() ⇒ <code>string</code>
@@ -966,7 +967,7 @@ Loads the game data from a file
         * [~drag(x, y)](#module_UIRenderer..drag)
         * [~resize()](#module_UIRenderer..resize)
         * [~updateKey(key)](#module_UIRenderer..updateKey)
-        * [~zoom(x, y, is_zoom_in)](#module_UIRenderer..zoom)
+        * [~zoom(x, y, is_zoom_in)](#module_UIRenderer..zoom) ⇒ <code>boolean</code>
         * [~isBuyButton(x, y)](#module_UIRenderer..isBuyButton) ⇒ <code>boolean</code>
         * [~sectorBounds()](#module_UIRenderer..sectorBounds) ⇒ <code>Array</code>
         * [~clickConvert(x, y)](#module_UIRenderer..clickConvert) ⇒ <code>Array</code>
@@ -1034,10 +1035,11 @@ Updates the key
 
 <a name="module_UIRenderer..zoom"></a>
 
-### UIRenderer~zoom(x, y, is_zoom_in)
+### UIRenderer~zoom(x, y, is_zoom_in) ⇒ <code>boolean</code>
 Zooms in or out
 
 **Kind**: inner method of [<code>UIRenderer</code>](#module_UIRenderer)  
+**Returns**: <code>boolean</code> - - True if details are hidden, false otherwise  
 
 | Param | Type | Description |
 | --- | --- | --- |
