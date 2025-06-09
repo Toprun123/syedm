@@ -88,13 +88,12 @@ export default class GameRenderer {
     this.hide_details = this.tile_size < DETAIL_THRESHOLD;
     if (this.hide_details) this.bus.emit("disable_click");
     this.border_width = this.hide_details ? 0 : this.tile_size * 0.065;
-    this.draw();
   }
   /**
-   * @function draw
+   * @function drawGame
    * @description Draws the main game frame
    */
-  draw() {
+  drawGame() {
     this.ctx.fillStyle = !this.hide_details
       ? COLORS.BACKGROUND
       : COLORS.BACKGROUND_ZOOMED;
@@ -223,23 +222,26 @@ export default class GameRenderer {
     const DIGIT_2 = this.game_pos.lost_sectors[KEY] % 10;
     const DIGIT_WIDTH = ((B_WIDTH / 13) * 3) / 5;
     const DIGIT_HEIGHT = B_WIDTH / 13;
-    this.ctx.drawImage(
-      this.img,
-      DIGIT_1 * 4,
-      6,
-      3,
-      5,
-      BASE_X +
-        this.sector_pixel_size / 2 -
-        WIDTH_BUTTON / 2 +
-        (WIDTH_BUTTON / 25) * 6,
-      BASE_Y +
-        this.sector_pixel_size / 2 -
-        HEIGHT_BUTTON / 2 +
-        (HEIGHT_BUTTON / 13) * 4,
-      DIGIT_WIDTH,
-      DIGIT_HEIGHT,
-    );
+    if (DIGIT_1 != 0) {
+      this.ctx.drawImage(
+        this.img,
+        DIGIT_1 * 4,
+        6,
+        3,
+        5,
+        BASE_X +
+          this.sector_pixel_size / 2 -
+          WIDTH_BUTTON / 2 +
+          (WIDTH_BUTTON / 25) * 6,
+        BASE_Y +
+          this.sector_pixel_size / 2 -
+          HEIGHT_BUTTON / 2 +
+          (HEIGHT_BUTTON / 13) * 4,
+        DIGIT_WIDTH,
+        DIGIT_HEIGHT,
+      );
+    }
+    const DIGIT_OFFSET = DIGIT_1 == 0 ? (WIDTH_BUTTON / 25) * 2 : 0;
     this.ctx.drawImage(
       this.img,
       DIGIT_2 * 4,
@@ -249,7 +251,8 @@ export default class GameRenderer {
       BASE_X +
         this.sector_pixel_size / 2 -
         WIDTH_BUTTON / 2 +
-        (WIDTH_BUTTON / 25) * 10,
+        (WIDTH_BUTTON / 25) * 10 -
+        DIGIT_OFFSET,
       BASE_Y +
         this.sector_pixel_size / 2 -
         HEIGHT_BUTTON / 2 +

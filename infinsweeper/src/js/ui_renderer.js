@@ -58,9 +58,15 @@ export default class UIRenderer extends GameRenderer {
    * @description Loops the animation frame and calls `draw`
    */
   loop() {
-    this.draw();
+    this.drawGame();
+    this.drawUI();
     this.frame_id = requestAnimationFrame(this.loop);
   }
+  /**
+   * @function drawUI
+   * @description Draws the UI
+   */
+  drawUI() {}
   /**
    * @function drag
    * @description Updates the offset

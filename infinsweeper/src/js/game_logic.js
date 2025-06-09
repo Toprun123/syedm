@@ -182,13 +182,13 @@ export default class GameLogic {
     if (TILE[1] != TILE_STATES.REVEALED) {
       if (TILE[0] == MINE) {
         TILE[1] = TILE_STATES.LOST;
-        this.game_pos.lost_sectors[SECTOR_KEY] = Math.max(
-          10,
+        this.game_pos.lost_sectors[SECTOR_KEY] =
+          3 +
           Math.floor(
-            DIFFICULTY ** 2 / 50 +
-              DataHasher.hash(this.key, `${SECTOR_KEY}`) * 20,
-          ),
-        );
+            ((DIFFICULTY - 14) / 10 +
+              DataHasher.hash(this.key, `${SECTOR_KEY}`)) *
+              5,
+          );
         this.animate(SECTOR_KEY, "lost", false);
         this.stats.mines++;
         this.animate(
@@ -364,7 +364,6 @@ export default class GameLogic {
     if (!this.game_pos.data_sectors[SECTOR_KEY]) return null;
     if (this.game_pos.data_sectors[SECTOR_KEY] != SOLVED) return null;
     const SECTOR = this.buildSectorCache(s_x, s_y);
-    console.log(SECTOR);
     this.stats.solved++;
     LOOPS.overTilesInSector((x, y) => {
       const [TILE_NUM, TILE_STATE] = SECTOR[y][x];
